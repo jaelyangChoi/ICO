@@ -28,10 +28,10 @@ class ModelByWord:
         return result
 
     def _preprocess(self, comment):
-        comment_decompose = text.decompose(comment)
-        result = list(filter(lambda word: word != ' ', comment_decompose.split(' ')))
-        result = list(filter(lambda element: element != '', result))
-        return result
+            comment_decompose = text.decompose(comment)
+            result = list(filter(lambda word: word != ' ', comment_decompose.split(' ')))
+            result = list(filter(lambda element: element != '', result))
+            return result
 
     def fit(self, input):
         word_list = self._preprocess(input)
