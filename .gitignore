@@ -200,4 +200,6 @@ fabric.properties
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator/
 
+DB/db_config.py
+
 # End of https://www.gitignore.io/api/flask,pycharm

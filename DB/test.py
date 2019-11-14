@@ -1,36 +1,41 @@
-from DAO import *
-from DTO import *
+from keyword_dao import *
+from comment_dao import *
+from comment_dto import *
 
-dao = DatabaseDAO()
-"""
-# 데이터 입력 확인 테스트
-data = CommentDataForInsert()
+cdao = CommentDAO()
+kdao = KeywordDAO()
+
+print('댓글 입력')
+data = Comment()
 
 text = input('input text : ')
-data.setText(text)
+data.set_text(text)
 
 propriety = int(input('input propriety : '))
-data.setPropriety(propriety)
+data.set_propriety(propriety)
 
 learning = int(input('input learning : '))
-data.setLearning(learning)
+data.set_learning(learning)
 
 URL = input('input URL : ')
-data.setURL(URL)
+data.set_url(URL)
 
 writer = input('input writer : ')
-data.setWriter(writer)
+data.set_writer(writer)
 
-dao.insertComment(data)
+cdao.insert_comment(data)
+print()
 
-# url 별 댓글 검색 테스트
-url = 'url2'
+print('url 댓글 검색')
+url = input('input URL : ')
 cnt = 1
 
-dataList = dao.selectCommentsByURL(url)
+data_list = cdao.select_comments_by_url(url)
 
-for i in dataList:
-    print(str(cnt) + "번 데이터 :")
+print()
+
+for i in data_list:
+    print("<" + str(cnt) + ">" + "번 데이터 :")
     cnt += 1
 
     print("comment index : " + str(i._index))
@@ -41,28 +46,32 @@ for i in dataList:
 
     print()
 
-# id의 pw 검색 테스트
-id = input('id : ')
-pw = dao.selectUserPassword(id)
-print('password : ' + pw)
-"""
-
+print('개인 키워드 입력')
 id = input('id : ')
 keyword = input('input keyword : ')
 
-"""
-# 개인 키워드 입력 테스트
-dao.insertPersonalKeyword(id, keyword)
-"""
+kdao.insert_personal_keyword(id, keyword)
 
-# 개인 키워드 삭제 테스트
-dao.deletePersonalKeywords(id, keyword)
-
-# 개인 키워드 검색 테스트
-id = input('id : ')
-keywordList = dao.selectPersonalKeywordsByUser(id)
+print('\n<' + id + '>의 개인 키워드 검색')
+keyword_list = kdao.select_personal_keywords_by_user(id)
 
 cnt = 1
-for i in keywordList:
+for i in keyword_list:
     print(str(cnt) + 'th keyword : ' + i)
     cnt += 1
+print()
+
+print('개인 키워드 삭제')
+id = input('id : ')
+keyword = input('input keyword : ')
+
+kdao.delete_personal_keyword(id, keyword)
+
+print('\n<' + id + '>의 개인 키워드 검색')
+keyword_list = kdao.select_personal_keywords_by_user(id)
+
+cnt = 1
+for i in keyword_list:
+    print(str(cnt) + 'th keyword : ' + i)
+    cnt += 1
+print()

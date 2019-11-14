@@ -1,34 +1,29 @@
+import db_config as config
 import pymysql
 
-# 클래스
-class db_connection:
-    conn = None
 
+# 클래스
+class DBConnection:
     # 생성자
     def __init__(self):
-        pass    # 함수에서 아무것도 안할 때 사용
+        pass  # 함수에서 아무것도 안할 때 사용
 
-    def getConnection(self):
+    def get_connection(self):
         # 예외처리
         try:
             # database에 접근
-            db_connection.conn = pymysql.connect(host='localhost',
-                                   user='root',
-                                   password='user1234',
-                                   db='icoservice',
-                                   charset='utf8')
+            self.conn = pymysql.connect(host=config.ICO_CONFIG['host'],
+                                        user=config.ICO_CONFIG['user'],
+                                        password=config.ICO_CONFIG['password'],
+                                        db=config.ICO_CONFIG['db'],
+                                        charset=config.ICO_CONFIG['charset'])
             # database를 사용하기 위한 cursor를 세팅
-#            cursor = conn.cursor()
+            #            cursor = conn.cursor()
 
-            return db_connection.conn
+            return self.conn
 
         except Exception as e:
             print(e)
 
-    def closeDB(self):
-        if db_connection.conn != None:
-            db_connection.conn.close()
-
-    # 소멸자
-    def __del__(self):
-        self.closeDB()
+    def close_db(self):
+        self.conn.close()
