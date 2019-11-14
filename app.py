@@ -1,6 +1,9 @@
 from flask import Flask, render_template
+from router import test
 
 app = Flask(__name__, template_folder="templates")
+
+app.register_blueprint(test.route_blue)
 
 
 @app.route('/')

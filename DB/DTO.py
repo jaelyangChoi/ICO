@@ -40,6 +40,7 @@ class CommentDataForInsert:
     def setWriter(self, writer):
         self._writer = writer
 
+
 class SelectedCommentData:
     def __init__(self):
         self._index = 0
@@ -71,3 +72,13 @@ class SelectedCommentData:
     def getTime(self):
         return self._time
 
+    def to_json(self):
+        result = {
+            "idx": self._index,
+            "text": self._text,
+            "propriety": self._propriety,
+            "writer": self._writer,
+            "time": self._time
+        }
+
+        return result
