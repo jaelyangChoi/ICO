@@ -13,18 +13,7 @@ class CommentDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            """sql = "SELECT _index FROM Articles WHERE URL = %s"
-            cursor.execute(sql, data.get_url())
-
-            result = cursor.fetchone()
-            url_index = result[0]"""
             url_dao = URL_DAO()
-
-            """sql = "SELECT _index FROM User WHERE id = %s"
-            cursor.execute(sql, data.get_writer())
-
-            result = cursor.fetchone()
-            writer_index = result[0]"""
             user_dao = UserDAO()
 
             sql = "INSERT INTO comments(text, propriety, MLlearning, URL, writer) VALUES(%s, %s, %s, %s, %s)"
@@ -34,6 +23,8 @@ class CommentDAO:
                                  url_dao.select_index(data.get_url()),
                                  user_dao.select_index(data.get_writer())))
             conn.commit()
+
+            self.db_conn.close_db()
 
         except Exception as e:
             print(e)
@@ -56,6 +47,8 @@ class CommentDAO:
                 data = Comment()
                 data.set_all(result)
                 data_list.append(data)
+
+            self.db_conn.close_db()
 
             return data_list
 

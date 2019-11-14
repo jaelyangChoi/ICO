@@ -13,6 +13,7 @@ class URL_DAO:
             cursor.execute(sql, url)
 
             result = cursor.fetchone()
+            self.db_conn.close_db()
             return result[0]
 
         except Exception as e:

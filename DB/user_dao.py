@@ -13,6 +13,7 @@ class UserDAO:
             cursor.execute(sql, writer)
 
             result = cursor.fetchone()
+            self.db_conn.close_db()
             return result[0]
 
         except Exception as e:

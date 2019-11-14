@@ -11,12 +11,14 @@ class KeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = """SELECT word FROM DefaultKeywords"""
+            sql = "SELECT word FROM DefaultKeywords"
             cursor.execute(sql)
 
             keyword_list = []
             for result in cursor.fetchall():
                 keyword_list.append(result[0])
+
+            self.db_conn.close_db()
 
             return keyword_list
 
@@ -28,16 +30,13 @@ class KeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            """sql = "SELECT _index From User WHERE id = %s"
-            cursor.execute(sql, id)
-
-            result = cursor.fetchone()
-            user_index = result[0]"""
             user_dao = UserDAO()
 
-            sql = """INSERT INTO PersonalKeywords(keyword, user) VALUES(%s, %s)"""
+            sql = "INSERT INTO PersonalKeywords(keyword, user) VALUES(%s, %s)"
             cursor.execute(sql, (keyword, user_dao.select_index(id)))
             conn.commit()
+
+            self.db_conn.close_db()
 
         except Exception as e:
             print(e)
@@ -56,6 +55,8 @@ class KeywordDAO:
             for result in cursor.fetchall():
                 keyword_list.append(result[0])
 
+            self.db_conn.close_db()
+
             return keyword_list
 
         except Exception as e:
@@ -66,17 +67,14 @@ class KeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            """sql = "SELECT _index FROM User WHERE id=%s"
-            cursor.execute(sql, id)
-
-            result = cursor.fetchone()
-            user_index = result[0]"""
             user_dao = UserDAO()
 
             sql = """DELETE FROM PersonalKeywords
                     WHERE user=%s AND keyword=%s"""
             cursor.execute(sql, (user_dao.select_index(id), keyword))
             conn.commit()
+
+            self.db_conn.close_db()
 
         except Exception as e:
             print(e)
