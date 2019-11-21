@@ -1,4 +1,5 @@
-from user_dao import *
+from DAO.user import *
+
 
 class KeywordDAO:
     # db_conn = None
@@ -70,8 +71,8 @@ class KeywordDAO:
             user_dao = UserDAO()
 
             sql = """DELETE FROM PersonalKeywords
-                    WHERE user=%s AND keyword=%s"""
-            cursor.execute(sql, (user_dao.select_index(id), keyword))
+                    WHERE keyword=%s AND user=%s"""
+            cursor.execute(sql, (keyword, user_dao.select_index(id)))
             conn.commit()
 
             self.db_conn.close_db()

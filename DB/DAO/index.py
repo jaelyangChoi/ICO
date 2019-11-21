@@ -1,16 +1,14 @@
 from db_connection import *
 
-class URL_DAO:
-    def __init__(self):
-        self.db_conn = DBConnection()
 
-    def select_index(self, url):
+class Index:
+
+    def select_index(self, input):
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = "SELECT _index FROM Articles WHERE URL = %s"
-            cursor.execute(sql, url)
+            cursor.execute(self.sql, input)
 
             result = cursor.fetchone()
             self.db_conn.close_db()

@@ -1,6 +1,7 @@
-from comment_dto import *
-from url_dao import *
-from user_dao import *
+from DTO.comment import *
+from DAO.url import *
+from DAO.user import *
+
 
 class CommentDAO:
     # db_conn = None

@@ -1,9 +1,12 @@
 from db_connection import *
+from DAO.index import *
 
-class UserDAO:
+class UserDAO(Index):
     def __init__(self):
         self.db_conn = DBConnection()
+        self.sql = "SELECT _index FROM User WHERE id = %s"
 
+"""
     def select_index(self, writer):
         try:
             conn = self.db_conn.get_connection()
@@ -18,3 +21,4 @@ class UserDAO:
 
         except Exception as e:
             print(e)
+"""

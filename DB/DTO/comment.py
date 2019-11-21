@@ -53,6 +53,7 @@ class Comment:
     def set_writer(self, writer):
         self._writer = writer
 
+
 COMMENT = {
     'index': 0,
     'text': '',
