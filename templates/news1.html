@@ -19,17 +19,15 @@
             margin-left: auto;
             margin-right: auto;
             width:60%;
-            padding:30px;
+            padding:15px;
         }
-        #commentInputArea{
-            margin:30px;
-        }
-        #commentoutputArea{
-            /*padding-top: 30px;
-            margin:30px;*/
-            border-top: 1px solid gray;
-        }
-        /*javascript*/
+         .commentArea h3{
+             padding-top: 5px;
+             padding-bottom: 5px;
+             margin: 0;
+         }
+
+
         /* The Modal (background) */
         .modal {
             display: none; /* Hidden by default */
@@ -65,93 +63,98 @@
             cursor: pointer;
         }
     </style>
-<script>
-    function InputKeywords (){
-        document.write('<textarea placeholder="차단하고 싶은 단어를 입력하세요"></textarea>');
-    }
-</script>
 </head>
 <body>
-<div id="title">
-    <a href="{{url_for('index')}}"><h1>ThisPatch</h1></a>
-    <h5> 뉴스는 '팩트'다</h5>
-</div>
-<div class="mainNews">
-    <img src="{{ url_for('static', filename='Image/news1.jpg') }}" class="center">
-    <h2 class="center">박성광 "송이 매니저, 악플로 고생하다 퇴사...정말 미안"</h2>
-    <div class="center">입력 : 2019.10.05 1:22 AM | 수정 : 2019.10.05 1:30 AM</div>
-</div>
-<div class="center">
-    <p><br>
-        개그맨 박성광이 ‘전참시’로 함께한 송이 매니저의 근황을 전했다. 악플로 고생한 그에게 박성광은 미안한 마음을 표했다.<br>
-        4일 방송된 JTBC2 ‘악플의 밤’에선 박성광이 게스트로 출연했다.<br>
-        이날 박성광은 ‘자상한 남자로 이미지 메이킹 하는 거 토 나와. 두드러기가 날 지경’이란 악플에 “이미지 메이킹을 하는 게 아니라 제작진들이 그런 부분을 부각시킬 뿐이다. 난 방송에서도 똑같다”라고 일축했다.
-    </p>
-    <img src="{{ url_for('static', filename='Image/news1_image.jpg') }}">
-    <p>
-        ‘배려의 아이콘’으로 제2의 전성기를 연 박성광은 “하루는 횡단보도를 건너다가 신호위반 차에 치였다. 정말 아팠는데 사람들이 날 지켜보고 있더라. ‘괜찮다. 아무렇지 않다’ 하면서 갔다”라며 부작용도 전했다. ‘밤도깨비’ 출연 때는 뉴이스트의 팬들을 응시해 김종현에게 자상하게 대하기도 했다고.<br>
-        매니저 덕을 봤다는 악플에 대해서도 박성광은 “인정한다. ‘박성광이 한 게 뭐가 있어. 다 매니저가 한 거지. 그 전엔 박지선 덕이고. 항상 누군가 있어서 잘 됐지, 혼자 잘된 건 없다’란 댓글도 봤다”라고 겸허하게 말했다.<br>
-        박성광은 “주변에서 말하길 ‘그것도 능력이다. 주변에 좋은 사람이 있는 것도 능력’이라고 해줬다. 나도 그렇게 생각한다. 확실하게 덕을 봤다”라고 거듭 인정했다.<br>
-    </p>
-    <p><br>
-        디쓰패치=최재량 기자 cjl0701@ThisPatch.co.kr / 사진 = ‘악플의 밤’ 방송화면 캡처<br>
-        &lt;기사제공 =티비리포트. 해당 글은 디스패치에서 퍼온 글입니다.&gt;
-    </p>
-</div>
-<div class="commentArea">
-    <button id="MDbtn">ICO 설정하기</button>
-    <div id="Modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <input type="button" value="On" onclick=InputKeywords()>
-            <input type="button" value="Off">
-
-        </div>
-        <div>
-            <textarea placeholder="차단하고 싶은 단어를 입력하세요"></textarea>
-        </div>
+    <div id="title">
+        <a href="{{url_for('index')}}"><h1>ThisPatch</h1></a>
+        <h5> 뉴스는 '팩트'다</h5>
     </div>
-    <br>
-    <form action="/commentInput" method="POST" id="commentInput" >
-        <input type="hidden" name="userID" value="userID">
-        <textarea rows="5" cols="70" name="comment" placeholder="댓글을 입력하십시오"></textarea>
-        <input type="submit" value="입력">
-    </form>
-    <br>
-</div>
-<script>
-    // Get the modal
-    var modal = document.getElementById('Modal');
+    <div class="mainNews">
+        <img src="{{ url_for('static', filename='Image/news1.jpg') }}" class="center">
+        <h2 class="center">박성광 "송이 매니저, 악플로 고생하다 퇴사...정말 미안"</h2>
+        <div class="center">입력 : 2019.10.05 1:22 AM | 수정 : 2019.10.05 1:30 AM</div>
+    </div>
+    <div class="center">
+        <p><br>
+            개그맨 박성광이 ‘전참시’로 함께한 송이 매니저의 근황을 전했다. 악플로 고생한 그에게 박성광은 미안한 마음을 표했다.<br>
+            4일 방송된 JTBC2 ‘악플의 밤’에선 박성광이 게스트로 출연했다.<br>
+            이날 박성광은 ‘자상한 남자로 이미지 메이킹 하는 거 토 나와. 두드러기가 날 지경’이란 악플에 “이미지 메이킹을 하는 게 아니라 제작진들이 그런 부분을 부각시킬 뿐이다. 난 방송에서도 똑같다”라고 일축했다.
+        </p>
+        <img src="{{ url_for('static', filename='Image/news1_image.jpg') }}">
+        <p>
+            ‘배려의 아이콘’으로 제2의 전성기를 연 박성광은 “하루는 횡단보도를 건너다가 신호위반 차에 치였다. 정말 아팠는데 사람들이 날 지켜보고 있더라. ‘괜찮다. 아무렇지 않다’ 하면서 갔다”라며 부작용도 전했다. ‘밤도깨비’ 출연 때는 뉴이스트의 팬들을 응시해 김종현에게 자상하게 대하기도 했다고.<br>
+            매니저 덕을 봤다는 악플에 대해서도 박성광은 “인정한다. ‘박성광이 한 게 뭐가 있어. 다 매니저가 한 거지. 그 전엔 박지선 덕이고. 항상 누군가 있어서 잘 됐지, 혼자 잘된 건 없다’란 댓글도 봤다”라고 겸허하게 말했다.<br>
+            박성광은 “주변에서 말하길 ‘그것도 능력이다. 주변에 좋은 사람이 있는 것도 능력’이라고 해줬다. 나도 그렇게 생각한다. 확실하게 덕을 봤다”라고 거듭 인정했다.<br>
+        </p>
+        <p><br>
+            디쓰패치=최재량 기자 cjl0701@ThisPatch.co.kr / 사진 = ‘악플의 밤’ 방송화면 캡처<br>
+            &lt;기사제공 =티비리포트. 해당 글은 디스패치에서 퍼온 글입니다.&gt;
+        </p>
+    </div>
 
-    // Get the button that opens the modal
-    var btn = document.getElementById("MDbtn");
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    <div class="commentArea">
+        <button id="MDbtn">ICO 설정하기</button>
+        <div id="Modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <input type="button" value="On">
+                <input type="button" value="Off">
+                <br>
+                <form action="/keywords" method="POST">
+                    <input type="hidden" name="userID" value="userID">
+                    <input type ="text" name="keywords" placeholder="차단하고 싶은 단어를 입력하세요">
+                    <input type="submit" value="입력">
+                </form>
+                <textarea>{{ keywords }}</textarea>
+            </div>
+        </div>
+        <br>
+        <form action="/commentInput" method="POST"  >
+            <input type="hidden" name="userID" value="userID">
+            <textarea rows="5" cols="70" name="comment" placeholder="댓글을 입력하십시오"></textarea>
+            <input type="submit" value="입력">
+        </form>
+        <!--new version--->
 
-    // When the user clicks on the button, open the modal
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
+        <!--new version--->
+        <br>
+    </div>
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
+    <script>
+        // Get the modal
+        var modal = document.getElementById('Modal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("MDbtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on the button, open the modal
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
             modal.style.display = "none";
         }
-    }
-</script>
-<div class="commentArea">
-    {% if form %}
-        <h3>{{ form['userID'] }}</h3>
-        <textarea rows="4" cols="109">{{ form['comment'] }}</textarea>
-    {% endif %}
-</div>
-</div>
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+    <div class="commentArea">
+        {% if form %}
+            <h3>{{ form['userID'] }}</h3>
+            <textarea rows="4" cols="109">{{ form['comment'] }}</textarea>
+        {% endif %}
+    </div>
 </body>
 </html>
