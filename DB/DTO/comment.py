@@ -6,6 +6,17 @@ class Comment:
         self._writer = ""
         self._time = ""
 
+    def to_json(self):
+        result = {
+            "idx": self._index,
+            "text": self._text,
+            "propriety": self._propriety,
+            "writer": self._writer,
+            "time": self._time
+        }
+
+        return result
+
     # getter
     def get_index(self):
         return self._index
@@ -52,12 +63,3 @@ class Comment:
 
     def set_writer(self, writer):
         self._writer = writer
-
-
-COMMENT = {
-    'index': 0,
-    'text': '',
-    'propriety': 0,
-    'writer': '',
-    'time': ''
-}
