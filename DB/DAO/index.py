@@ -1,6 +1,3 @@
-from db_connection import *
-
-
 class Index:
 
     def select_index(self, input):

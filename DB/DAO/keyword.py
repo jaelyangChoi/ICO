@@ -47,9 +47,9 @@ class KeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = """SELECT keyword FROM PersonalKeywords, User
-                    WHERE PersonalKeywords.user = User._index
-                    AND User.id = %s"""
+            sql = """SELECT keyword FROM PersonalKeywords, Users
+                    WHERE PersonalKeywords.user = Users._index
+                    AND Users.id = %s"""
             cursor.execute(sql, id)
 
             keyword_list = []
@@ -71,7 +71,7 @@ class KeywordDAO:
             user_dao = UserDAO()
 
             sql = """DELETE FROM PersonalKeywords
-                    WHERE keyword=%s AND user=%s"""
+                    WHERE keyword = %s AND user = %s"""
             cursor.execute(sql, (keyword, user_dao.select_index(id)))
             conn.commit()
 

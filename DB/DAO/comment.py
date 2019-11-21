@@ -3,7 +3,6 @@ from DAO.url import *
 from DAO.user import *
 
 
-
 class CommentDAO:
     # db_conn = None
 
@@ -36,9 +35,9 @@ class CommentDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = """SELECT Comments._index, text, propriety, User.id, time
-                    FROM Comments, User, Articles
-                    WHERE Comments.writer = User._index
+            sql = """SELECT Comments._index, text, propriety, Users.id, time
+                    FROM Comments, Users, Articles
+                    WHERE Comments.writer = Users._index
                     AND Comments.URL = Articles._index
                     AND Articles.URL = %s"""
             cursor.execute(sql, url)
