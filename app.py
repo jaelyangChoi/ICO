@@ -8,7 +8,7 @@ app.register_blueprint(test.route_blue)
 
 @app.route('/')
 def index():
-    return render_template('index')
+    return render_template('index.html')
 
 
 @app.route('/news')
