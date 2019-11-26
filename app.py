@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 
+from block import block
 from router import test
 from router.view import view_blueprint
 
@@ -8,9 +9,8 @@ app = Flask(__name__, template_folder="templates")
 app.register_blueprint(test.route_blue)
 app.register_blueprint(view_blueprint)
 
+app.register_blueprint(block.block_print)
 
-# app.register_blueprint(db_connection.db_blue)
-# app.register_blueprint(block.block_blue)
 
 @app.route('/')
 def index():
