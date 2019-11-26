@@ -10,21 +10,21 @@ from tensorflow.keras import metrics
 from tensorflow.keras.models import model_from_json
 
 
-class CommentClassifyModel:
+class CommentPredict:
     def __init__(self):
-        json_file = open("./ml_hyewon/model.json", "r")
+        json_file = open("./model.json", "r")
         loaded_model_json = json_file.read()
         json_file.close()
         self.model = model_from_json(loaded_model_json)
-        self.model.load_weights("./ml_hyewon/model.h5")
+        self.model.load_weights("./model.h5")
         self.model.compile(optimizer=optimizers.RMSprop(lr=0.001),
-                  loss=losses.binary_crossentropy,
-                  metrics=[metrics.binary_accuracy])
+                           loss=losses.binary_crossentropy,
+                           metrics=[metrics.binary_accuracy])
 
     def read_csv_file(self, csv_file_name):
         """csv파일을 dataframe 형식으로 가져오기"""
 
-        df = pd.read_csv("./ml_hyewon/" + csv_file_name + ".csv")
+        df = pd.read_csv("./" + csv_file_name + ".csv")
         return df
 
     def tokenize(self, sentence):
@@ -33,15 +33,15 @@ class CommentClassifyModel:
         okt = Okt()
         return okt.pos(sentence, norm=True, stem=True)
 
-    def delete_non_meaning_pumsa(token_label_sentences):
+    def delete_non_meaning_pumsa(self, token_label_sentences):
         """의미없는 품사 제거"""
 
         deleted_pumsa_data = []
         pumsa_list = ["Adjective", "Adverb", "Alpha", "Determiner", "Exclamation",
                       "KoreanParticle", "Noun", "Verb"]
 
-        # token_label_sentences ex)([('마녀', 'Noun'), ('같다', 'Adjective')], '0')
-        for row in token_label_sentences:
+        for row in token_label_sentences: # token_label_sentences ex)[([('마녀', 'Noun'), ('같다', 'Adjective')], '0')]
+
             for token_word in row[0]:
                 if token_word[1] in pumsa_list:
                     deleted_pumsa_data.append([token_word[0], token_word[1], row[1]])
@@ -71,29 +71,26 @@ class CommentClassifyModel:
         """단어 빈도수 측정"""
 
         token_words = []
-        for token_word in token_sentence:  # token_sentence: [('분위기', 'Noun'), ('달리다', 'Verb')]
+        for token_word in token_sentence:  # token_sentence: [['분위기', 'Noun','0')], ['달리다', 'Verb','0']]
             token_words.append(token_word[0])  # 단어+품사에서 단어만 추가
         return [token_words.count(word) for word in selected_words]
 
     def data_preprocessing(self, data):
         """데이터 전처리"""
 
-        f = open("./ml_hyewon/commonwords.pkl", "rb")
-        selected_tokens=pickle.load(f)
+        f = open("./commonwords.pkl", "rb")
+        selected_tokens = pickle.load(f)
         f.close()
-        token_data = [(self.tokenize(data), '0')]  # data 토큰화, 단어+품사+임의의 라벨
-        test_data = self.count_word_frequency(token_data[0][0], selected_tokens)
-        return np.asarray(test_data).astype('float32')
+        token_data=self.remain_meaning_token([(self.tokenize(data), '0')])
+        test_data = self.count_word_frequency(token_data, selected_tokens)
+        return np.expand_dims(np.asarray(test_data).astype('float32'), axis=0)
 
     def predict(self, comment):
         """예측"""
 
-        pre_data=self.data_preprocessing(comment)
-        data=np.expand_dims(pre_data, axis=0)
+        data = self.data_preprocessing(comment)
         score = float(self.model.predict(data))
-        print(score)
-        if (score > 0.7):
+        if score > 0.7:
             return "1"
         else:
             return "0"
-
