@@ -5,117 +5,26 @@
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id"
+          content="989019791931-7sknrf9kk5eotfrtmfjimj2fhlsfr6u7.apps.googleusercontent.com">
+    {#google login OAuth2.0 script#}
     <script>
-        const checkLoginStatus = function (response) {
-            console.log(response);
-            // statusChangeCallback(response);
-            if (response.status === 'connected') {
-                document.querySelector('#authBtn').value = 'Logout';
-            } else {
-                document.querySelector('#authBtn').value = 'Login';
-            }
-        };
-
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '208194043382302',
-                cookie: true,  // enable cookies to allow the server to access
-                               // the session
-                xfbml: true,  // parse social plugins on this page
-                version: 'v3.1' // use graph api version 2.8
-            });
-            // Now that we've initialized the JavaScript SDK, we call
-            // FB.getLoginStatus().  This function gets the state of the
-            // person visiting this page and can return one of three states to
-            // the callback you provide.  They can be:
-            //
-            // 1. Logged into your app ('connected')
-            // 2. Logged into Facebook, but not your app ('not_authorized')
-            // 3. Not logged into Facebook and can't tell if they are logged into
-            //    your app or not.
-            //
-            // These three cases are handled in the callback function.
-            FB.getLoginStatus(checkLoginStatus);
-        };
-        // Load the SDK asynchronously
-        (function (d, s, id) {
-            let js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s);
-            js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+        /* google login OAuth2.0 */
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        }
     </script>
-    <style>
-        #category h4 {
-            display: block;
-            border-left: 2px solid blue;
-            padding-left: 5px;
 
-        }
-
-        #category div {
-            border: 1px solid gray;
-            padding: 30px;
-            margin: 30px;
-        }
-
-        @media (min-width: 1000px) {
-            #category {
-                padding: 100px;
-                padding-top: 50px;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .mainNews {
-            border: 5px solid black;
-            background-color: black;
-            filter: alpha(opacity=80);
-            opacity: 0.85;
-        }
-
-        .RankingNews {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            margin-bottom: 10px;
-        }
-
-        #photoCategory div {
-            padding-top: 0;
-            padding-left: 0;
-            border: none;
-        }
-
-        #photoCategory img {
-            padding-top: 5px;
-            margin-bottom: 10px;
-        }
-
-        #category p {
-            margin-left: 30px;
-        }
-    </style>
 </head>
 <body>
 <div id="title">
-    <input type="button" id="authBtn" value="checking..." onclick="
-          if(this.value === 'Login'){
-            // now logout
-            FB.login(function(res){
-              console.log('login =>', res);
-              checkLoginStatus(res);
-            });
-          } else {
-            // now login
-            FB.logout(function(res){
-              console.log('logout =>', res);
-              checkLoginStatus(res);
-            });
-          }
-      ">
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <a href="{{ url_for('index') }}"><h1>ThisPatch</h1></a>
     <h5> 뉴스는 '팩트'다</h5>
 </div>
