@@ -2,10 +2,10 @@ from DAO.user import *
 
 
 class KeywordDAO:
-    # db_conn = None
 
     def __init__(self):
         self.db_conn = DBConnection()
+        self.sql = ""
 
     def select_default_keywords(self):
         try:
@@ -22,22 +22,6 @@ class KeywordDAO:
             self.db_conn.close_db()
 
             return keyword_list
-
-        except Exception as e:
-            print(e)
-
-    def insert_personal_keyword(self, id, keyword):
-        try:
-            conn = self.db_conn.get_connection()
-            cursor = conn.cursor()
-
-            user_dao = UserDAO()
-
-            sql = "INSERT INTO PersonalKeywords(keyword, user) VALUES(%s, %s)"
-            cursor.execute(sql, (keyword, user_dao.select_index(id)))
-            conn.commit()
-
-            self.db_conn.close_db()
 
         except Exception as e:
             print(e)
@@ -63,16 +47,23 @@ class KeywordDAO:
         except Exception as e:
             print(e)
 
+    def insert_personal_keyword(self, id, keyword):
+        self.sql = "INSERT INTO PersonalKeywords(keyword, user) VALUES(%s, %s)"
+        self.control_personal_keyword(id, keyword)
+
     def delete_personal_keyword(self, id, keyword):
+        self.sql = """DELETE FROM PersonalKeywords
+                      WHERE keyword = %s AND user = %s"""
+        self.control_personal_keyword(id, keyword)
+
+    def control_personal_keyword(self, id, keyword):
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
             user_dao = UserDAO()
 
-            sql = """DELETE FROM PersonalKeywords
-                    WHERE keyword = %s AND user = %s"""
-            cursor.execute(sql, (keyword, user_dao.select_index(id)))
+            cursor.execute(self.sql, (keyword, user_dao.select_index(id)))
             conn.commit()
 
             self.db_conn.close_db()

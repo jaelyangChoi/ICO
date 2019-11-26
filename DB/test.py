@@ -78,7 +78,7 @@ print()
 """
 
 url = input("URL : ")
-url_dao = URL_DAO()
+url_dao = UrlDAO()
 print("index : " + str(url_dao.select_index(url)))
 
 print()

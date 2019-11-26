@@ -1,7 +1,8 @@
+from DAO.keyword import *
 from DAO.user import *
 
 
-class DefaultKeywordDAO:
+class DefaultKeywordDAO():
 
     def __init__(self):
         self.db_conn = DBConnection()

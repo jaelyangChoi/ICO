@@ -14,7 +14,7 @@ class CommentDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            url_dao = URL_DAO()
+            url_dao = UrlDAO()
             user_dao = UserDAO()
 
             sql = "INSERT INTO comments(text, propriety, MLlearning, URL, writer) VALUES(%s, %s, %s, %s, %s)"
