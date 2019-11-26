@@ -1,16 +1,12 @@
-import csv
+import pickle
+
+import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
 import pandas as pd
 from konlpy.tag import Okt  # Okt(Open Korean Text) 클래스
-import nltk  # 자연어 처리 패키지 문서탐색용, Test 클래스
-import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
-import pickle
-from tensorflow.keras import models
-from tensorflow.keras import layers
-from tensorflow.keras import optimizers
 from tensorflow.keras import losses
 from tensorflow.keras import metrics
+from tensorflow.keras import optimizers
 from tensorflow.keras.models import model_from_json
-import tensorflow as tf
 
 
 class CommentClassifyModel:
