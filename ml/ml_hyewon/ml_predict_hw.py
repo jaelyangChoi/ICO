@@ -90,6 +90,7 @@ class CommentClassifyModel:
         pre_data=self.data_preprocessing(comment)
         data=np.expand_dims(pre_data, axis=0)
         score = float(self.model.predict(data))
+        print(score)
         if (score > 0.7):
             return "1"
         else:
