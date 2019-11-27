@@ -3,6 +3,7 @@
 <head>
     <title>news1</title>
     <meta charset="utf-8" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/news_layout.css') }}">
@@ -44,101 +45,98 @@
     </style>
 </head>
 <body>
-    <div id="title">
-        <a href="{{url_for('index')}}"><h1>ThisPatch</h1></a>
-        <h5> 뉴스는 '팩트'다</h5>
-    </div>
-    <div class="mainNews">
-        {% block headline %}
-        {% endblock %}
-    </div>
-    <div class="center">
-        {% block content %}
-        {% endblock %}
-    </div>
+<div id="title">
+    <a href="{{url_for('index')}}"><h1>ThisPatch</h1></a>
+    <h5> 뉴스는 '팩트'다</h5>
+</div>
+<div class="mainNews">
+    {% block headline %}
+    {% endblock %}
+</div>
+<div class="center">
+    {% block content %}
+    {% endblock %}
+</div>
 
-    <div class="commentArea">
-         {# Modal window #}
-        <button id="MDbtn">ICO 설정하기</button>
-        <div id="Modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <input type="button" value="On">
-                <input type="button" value="Off">
-                <br>
-                <form action="{{ url_for('keyword') }}" method="POST">
-                    <input type="hidden" name="userID" value="userID">
-                    <input type ="text" name="keyword" placeholder="차단하고 싶은 단어를 입력하세요">
-                    <input type="submit" value="입력" onclick="fetchKeywords()">
-                </form>
-                <textarea>{{ keywords }}</textarea>
-            </div>
+<div class="commentArea">
+    {# Modal window #}
+    <button id="MDbtn">ICO 설정하기</button>
+    <div id="Modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <input type="button" value="On">
+            <input type="button" value="Off">
+            <br>
+            <form id="keyword">
+                <input type="hidden" class="data" name="userID" value="userID">
+                <input type ="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단하고 싶은 단어를 입력하세요">
+                <input type="button" value="입력" onclick="updateKeyword()">
+            </form>
+            <textarea id="kwOutputWindow">{{ keywords }}</textarea>
         </div>
-        <br>
-
-        {# Comment Input #}
-        <form action="{{ url_for('comment') }}" method="POST"  >
-            <input type="hidden" name="userID" value="userID">
-            <textarea rows="5" cols="70" name="comment" placeholder="댓글을 입력하십시오"></textarea>
-            <input type="submit" value="입력">
-        </form>
-        <br>
-{#         <input type="button" name="fetch" value="fetch" onclick="fetch('/comment').then(function(response){#}
-{#      console.log(response);#}
-{#    });">#}
     </div>
+    <br>
 
-    {# Comments Area #}
-    <div class="commentArea">
-        {% if comments %}
-            {% for comment in comments %}
-                <h3>{{ comment['userID'] }}</h3>
-                <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea>
-            {% endfor %}
-        {% endif %}
-    </div>
+    {# Comment Input #}
+     <form action="{{ url_for('commentInput') }}" method="POST"  >
+        <input type="hidden" name="userID" value="tempID">
+        <textarea rows="5" cols="70" name="comment" placeholder="댓글을 입력하십시오"></textarea>
+        <input type="submit" value="입력">
+    </form>
+    <br>
+</div>
 
-     {# Modal #}
-  <script>
-        // Get the modal
-        var modal = document.getElementById('Modal');
+{# Comments Area #}
+<div class="commentArea">
+    {% if comments %}
+        {% for comment in comments %}
+            <h3>{{ comment['userID'] }}</h3>
+            <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea>
+        {% endfor %}
+    {% endif %}
+</div>
 
-        // Get the button that opens the modal
-        var btn = document.getElementById("MDbtn");
+{# Modal #}
+<script>
+    // Get the modal
+    var modal = document.getElementById('Modal');
 
-        // Get the <span> element that closes the modal
-        var close = document.getElementsByClassName("close")[0];
+    // Get the button that opens the modal
+    var btn = document.getElementById("MDbtn");
 
-        // When the user clicks on the button, open the modal
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
+    // Get the <span> element that closes the modal
+    var close = document.getElementsByClassName("close")[0];
 
-        // When the user clicks on <span> (x), close the modal
-        close.onclick = function() {
+    // When the user clicks on the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    close.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
             modal.style.display = "none";
         }
+    }
 
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+    function updateKeyword() {
+        $.ajax({
+            type:'POST',
+            url:'/keywordInput',
+            data: $('#keyword .data'), {#서버로 데이터 전송시#}
+            {#dataType: 'JSON',{#서버에서 데이터 전송시#}
+            success: function (data){
+                $('#kwInputWindow').val('');
+                $('#kwOutputWindow').val(data);
             }
-        }
-        function fetchKeywords() {
-            fetch(keywords).then(function (response) {
-                response.text().then(function (text) {
-                    document.querySelector('#keywords').innerHTML = text;
-                })
-            })
-        }
-        function fetchComments() {
-            fetch(comments).then(function (response) {
-                response.text().then(function (text) {
-                    document.querySelector('#commentsList').innerHTML = text;
-                })
-            })
-        }
-    </script>
+        })
+    }
+
+</script>
 </body>
 </html>
