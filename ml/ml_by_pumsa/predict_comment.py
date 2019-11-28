@@ -15,6 +15,8 @@ class CommentPredict:
         json_file = open("./model.json", "r")
         loaded_model_json = json_file.read()
         json_file.close()
+        self.predict_score = 0
+        self.predict_result = 0
         self.model = model_from_json(loaded_model_json)
         self.model.load_weights("./model.h5")
         self.model.compile(optimizer=optimizers.RMSprop(lr=0.001),
@@ -90,7 +92,10 @@ class CommentPredict:
 
         data = self.data_preprocessing(comment)
         score = float(self.model.predict(data))
+        self.predict_score = score
         if score > 0.7:
+            self.predict_result = 1
             return "1"
         else:
+            self.predict_result = 0
             return "0"
