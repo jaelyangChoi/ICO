@@ -1,13 +1,14 @@
 from flask import Flask, render_template, Blueprint, request, redirect,url_for, jsonify
 
 from router.update import update_bp
-
+from router import test
 # from block import block
 # from router import test
 
 app = Flask(__name__, template_folder="templates")
 
 app.register_blueprint(update_bp)
+app.register_blueprint(test.route_blue)
 # app.register_blueprint(db_connection.db_blue)
 # app.register_blueprint(block.block_blue)
 
