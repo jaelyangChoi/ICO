@@ -9,8 +9,6 @@ app = Flask(__name__, template_folder="templates")
 app.register_blueprint(test.route_blue)
 app.register_blueprint(view_blueprint)
 
-app.register_blueprint(block.block_print)
-
 
 @app.route('/')
 def index():
