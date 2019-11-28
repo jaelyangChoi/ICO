@@ -27,7 +27,8 @@
             margin: 15% auto; /* 15% from the top and centered */
             padding: 20px;
             border: 1px solid #888;
-            width: 50%; /* Could be more or less, depending on screen size */
+            width: 30%; /* Could be more or less, depending on screen size */
+            height: 25%;
         }
         /* The Close Button */
         .close {
@@ -67,27 +68,28 @@
             <input type="button" value="On">
             <input type="button" value="Off">
             <br>
-            <form id="keyword">
+            <form id="keywordForm">
                 <input type="hidden" class="data" name="userID" value="userID">
                 <input type ="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단하고 싶은 단어를 입력하세요">
                 <input type="button" value="입력" onclick="updateKeyword()">
             </form>
-            <textarea id="kwOutputWindow">{{ keywords }}</textarea>
+            <textarea id="kwOutputWindow" rows="6" cols="40" >{{ keywords }}</textarea>
         </div>
     </div>
     <br>
 
     {# Comment Input #}
-     <form action="{{ url_for('commentInput') }}" method="POST"  >
-        <input type="hidden" name="userID" value="tempID">
-        <textarea rows="5" cols="70" name="comment" placeholder="댓글을 입력하십시오"></textarea>
-        <input type="submit" value="입력">
+{#     <form action="{{ url_for('commentInput') }}" method="POST"  >#}
+    <form id="commentForm">
+        <input type="hidden" class="data" name="userID" value="tempID">
+        <textarea id="cmInputWindow" class="data" rows="5" cols="70" name="comment" placeholder="댓글을 입력하십시오"></textarea>
+        <input type="button" value="입력" onclick="updateComment()">
     </form>
     <br>
 </div>
 
-{# Comments Area #}
-<div class="commentArea">
+{# Comments Area  -js innerHTML#}
+<div class="commentArea" id="cmOutputWindow">
     {% if comments %}
         {% for comment in comments %}
             <h3>{{ comment['userID'] }}</h3>
@@ -95,6 +97,7 @@
         {% endfor %}
     {% endif %}
 </div>
+
 
 {# Modal #}
 <script>
@@ -127,8 +130,8 @@
     function updateKeyword() {
         $.ajax({
             type:'POST',
-            url:'/keywordInput',
-            data: $('#keyword .data'), {#서버로 데이터 전송시#}
+            url:'/updateKeyword',
+            data: $('#keywordForm .data'), {#서버로 데이터 전송시#}
             {#dataType: 'JSON',{#서버에서 데이터 전송시#}
             success: function (data){
                 $('#kwInputWindow').val('');
@@ -136,7 +139,24 @@
             }
         })
     }
-
+    function updateComment() {
+        $.ajax({
+            type:'POST',
+            url:'/updateComment',
+            data: $('#commentForm .data'), {#서버로 데이터 전송시#}
+            dataType: 'JSON',{#서버에서 데이터 전송시#}
+            success: function (data){
+                $('#cmInputWindow').val('');
+                var comments = '';
+                var i=0;
+                while(i<data.length){
+                    comments = comments +'<h3>'+ data[i].userID +'</h3><textarea rows="4" cols="109">'+data[i].comment+'</textarea>';
+                    i++;
+                }
+                $('#cmOutputWindow').html(comments);
+            }
+        })
+    }
 </script>
 </body>
 </html>
