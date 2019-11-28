@@ -3,6 +3,7 @@ from flask import Blueprint, request, render_template, flash, redirect, url_for
 from openpyxl import load_workbook, Workbook
 from konlpy.tag import Okt
 import difflib
+import pymysql
 
 def tokenize(comment):
     print("**품사 분리 시작**")
@@ -20,7 +21,7 @@ def StringMatch(comment):
 
     for j in range(0, len(comment)):
         # 댓글 길이만큼 for문
-        if hgtk.checker.is_hangul(comment[j]):
+        if hgtk.checker.is_hangul(comment[j]) | comment == ' ':
             _comment += comment[j]
         #     코멘트 한글자마다 한글인지 파악
         #     한글일 경우 새 String인자에 추가
@@ -43,6 +44,7 @@ def StringMatch(comment):
         return "OK"
 #String 일치함수
 
+
 def filteringSynk(comment):
     _comment = ""
     load_wb = load_workbook("/Users/77520769/Documents/문해긔/기본키워드_분리3.xlsx", data_only=True)
@@ -52,6 +54,7 @@ def filteringSynk(comment):
     print("**2차 필터링 시작**")
     for j in comment:
         _comment = hgtk.text.decompose(j).replace("ᴥ", "")
+
         for i in range(1,824):
             matchRatio = difflib.SequenceMatcher(None,load_ws['A' + str(i)].value, _comment).ratio()
 
@@ -92,21 +95,21 @@ for i in range(2,910):
     if filtering1 == "OK":
         # 1차 성공시 2차 필터링 시작
         print("OK")
-        # testTokenComment = tokenize(testComment)
-        # print(testTokenComment)
-        # # 품사분리(명사만 추출)
-        #
-        # filtering2 = filteringSynk(testTokenComment)
-        # # 자모음 분리 후 2차 필터링
-        #
-        # if filtering2 == "OK":
-        #     print(testComment)
-        write_ws['B' + str(i)] = '2'
+        testTokenComment = tokenize(testComment)
+        print(testTokenComment)
+        # 품사분리(명사만 추출)
+
+        filtering2 = filteringSynk(testTokenComment)
+        # 자모음 분리 후 2차 필터링
+
+        if filtering2 == "OK":
+            print(testComment)
+            write_ws['B' + str(i)] = '2'
         # 2차도 OK면 클린
-        # else:
-        #     write_ws['B' + str(i)] = '1'
-        #     write_ws['C' + str(i)] = filtering2
-        #     print("차단되었습니다.")
+        else:
+            write_ws['B' + str(i)] = '1'
+            write_ws['C' + str(i)] = filtering2
+            print("차단되었습니다.")
 
         # 2차에서 걸리면 중간
     else:
@@ -114,7 +117,7 @@ for i in range(2,910):
         write_ws['C' + str(i)] = filtering1
         print("차단되었습니다.")
 
-write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링2.xlsx')
+write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_new.xlsx')
 
 # -----------------필터링메인----------------
 

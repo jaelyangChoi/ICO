@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, redirect, url_for
 from router import test
 
@@ -9,7 +8,7 @@ app.register_blueprint(test.route_blue)
 
 @app.route('/')
 def index():
-    return render_template('index')
+    return render_template('index.html')
 
 
 @app.route('/news')
