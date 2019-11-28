@@ -1,87 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>news1</title>
-    <meta charset="utf-8" >
-    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
-    <style>
-        .mainNews{
-            border-bottom:1px solid gray;
-        }
-        .mainNews h2{
-            margin-top:3px;
-            margin-bottom:3px;
-        }
-        .commentArea{
-            display:block;
-            border-top: 1px solid gray;
-            margin-left: auto;
-            margin-right: auto;
-            width:60%;
-            padding:30px;
-        }
-        #commentInputArea{
-            margin:30px;
-        }
-        #commentoutputArea{
-            /*padding-top: 30px;
-            margin:30px;*/
-            border-top: 1px solid gray;
-        }
-        /*javascript*/
-        /* The Modal (background) */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-        /* Modal Content/Box */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%; /* Could be more or less, depending on screen size */
-        }
-        /* The Close Button */
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
-<script>
-    function InputKeywords (){
-        document.write('<textarea placeholder="차단하고 싶은 단어를 입력하세요"></textarea>');
-    }
-</script>
-</head>
-<body>
-<div id="title">
-    <a href="{{url_for('index')}}"><h1>ThisPatch</h1></a>
-    <h5> 뉴스는 '팩트'다</h5>
-</div>
-<div class="mainNews">
+{% extends 'news_layout.html' %}
+
+{% block headline %}
     <img src="{{ url_for('static', filename='Image/news1.jpg') }}" class="center">
     <h2 class="center">박성광 "송이 매니저, 악플로 고생하다 퇴사...정말 미안"</h2>
     <div class="center">입력 : 2019.10.05 1:22 AM | 수정 : 2019.10.05 1:30 AM</div>
-</div>
-<div class="center">
+{% endblock %}
+
+{% block content %}
     <p><br>
         개그맨 박성광이 ‘전참시’로 함께한 송이 매니저의 근황을 전했다. 악플로 고생한 그에게 박성광은 미안한 마음을 표했다.<br>
         4일 방송된 JTBC2 ‘악플의 밤’에선 박성광이 게스트로 출연했다.<br>
@@ -97,61 +22,4 @@
         디쓰패치=최재량 기자 cjl0701@ThisPatch.co.kr / 사진 = ‘악플의 밤’ 방송화면 캡처<br>
         &lt;기사제공 =티비리포트. 해당 글은 디스패치에서 퍼온 글입니다.&gt;
     </p>
-</div>
-<div class="commentArea">
-    <button id="MDbtn">ICO 설정하기</button>
-    <div id="Modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <input type="button" value="On" onclick=InputKeywords()>
-            <input type="button" value="Off">
-
-        </div>
-        <div>
-            <textarea placeholder="차단하고 싶은 단어를 입력하세요"></textarea>
-        </div>
-    </div>
-    <br>
-    <form action="/commentInput" method="POST" id="commentInput" >
-        <input type="hidden" name="userID" value="userID">
-        <textarea rows="5" cols="70" name="comment" placeholder="댓글을 입력하십시오"></textarea>
-        <input type="submit" value="입력">
-    </form>
-    <br>
-</div>
-<script>
-    // Get the modal
-    var modal = document.getElementById('Modal');
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("MDbtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks on the button, open the modal
-    btn.onclick = function() {
-        modal.style.display = "block";
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
-<div class="commentArea">
-    {% if form %}
-        <h3>{{ form['userID'] }}</h3>
-        <textarea rows="4" cols="109">{{ form['comment'] }}</textarea>
-    {% endif %}
-</div>
-</div>
-</body>
-</html>
+{% endblock %}

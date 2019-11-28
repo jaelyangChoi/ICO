@@ -4,6 +4,42 @@ from openpyxl import load_workbook, Workbook
 from konlpy.tag import Okt
 import difflib
 import pymysql
+import urllib.request
+from bs4 import BeautifulSoup
+
+def searchWord(word):
+
+    #사전 검색 url
+    url = "https://stdict.korean.go.kr/api/search.do"
+    option = "?certkey_no=1112&key=A8476D8061FAC1B57C5BCE8DA4CDCF28&method=exact"
+    query = "&q=" + urllib.parse.quote(word)
+    url_query = url + option + query
+
+    #Open API 검색 요청 개체 설정
+    request = urllib.request.Request(url_query)
+
+    #검색 요청 및 처리
+    response = urllib.request.urlopen(request)
+    rescode = response.getcode()
+    if(rescode == 200):
+        return response.read().decode('utf-8')
+    else:
+        return None
+
+
+def wordExistCheck(comment):
+    #검색 질의 요청
+    res = searchWord(comment)
+    xmlsoup = BeautifulSoup(res,'html.parser')
+    items = xmlsoup.find_all('item')
+    # 단어의 존재 여부 확인
+    if len(items) == 0:
+        #단어가 없는 경우
+        return False
+    else:
+        #단어가 있는 경우
+     return True
+
 
 def tokenize(comment):
     print("**품사 분리 시작**")
@@ -19,17 +55,7 @@ def StringMatch(comment):
     _comment = ""
     print("**1차 필터링 시작**")
 
-    for j in range(0, len(comment)):
-        # 댓글 길이만큼 for문
-        if hgtk.checker.is_hangul(comment[j]) | comment == ' ':
-            _comment += comment[j]
-        #     코멘트 한글자마다 한글인지 파악
-        #     한글일 경우 새 String인자에 추가
-        else:
-            continue
-        #      한글이 아니면 추가X
-
-    print(_comment)
+    _comment = onlyHangul(comment)
 
     for i in range(1, 1103):
         # 차단 키워드 갯수만큼 for문
@@ -44,6 +70,20 @@ def StringMatch(comment):
         return "OK"
 #String 일치함수
 
+def onlyHangul(comment):
+#특수문자 제거 함수
+    _comment = ""
+    for j in range(0, len(comment)):
+        # 댓글 길이만큼 for문
+        if hgtk.checker.is_hangul(comment[j]) | comment == ' ':
+            _comment += comment[j]
+        #     코멘트 한글자마다 한글인지 파악
+        #     한글일 경우 새 String인자에 추가
+        else:
+            continue
+        #      한글이 아니면 추가X
+    return _comment
+#띄어쓰기,특수문자 제외 한글만 추출하는 함수
 
 def filteringSynk(comment):
     _comment = ""
@@ -59,11 +99,16 @@ def filteringSynk(comment):
             matchRatio = difflib.SequenceMatcher(None,load_ws['A' + str(i)].value, _comment).ratio()
 
             if matchRatio > 0.75:
-                print("기본 키워드: " + load_ws['A' + str(i)].value)
-                print("댓글 내 단어: " + _comment)
-                print("일치율: " + str(matchRatio*100) + "%")
-                block = block + 1
-                break
+                # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
+                if wordExistCheck(j):
+                    print("\t 존재하는 단어 :" + j + "이므로 차단하지 않습니다")
+                    continue
+                else:
+                    print("기본 키워드: " + load_ws['A' + str(i)].value)
+                    print("댓글 내 단어: " + _comment)
+                    print("일치율: " + str(matchRatio*100) + "%")
+                    block = block + 1
+                    break
         if block !=0:
             break
     if block !=0:
@@ -78,13 +123,13 @@ load_ws = load_wb['시트1']
 # 댓글 불러오기
 write_wb = Workbook()
 write_ws = write_wb.active
-# 저장할 새 엑셀
+# # 저장할 새 엑셀
+#
+# ##################엑셀 대신에 DB에서 욕 불러와야함#####################
+# ##################체크도 DB에있는거랑 하기,댓글&키워드#################
+#
 
-##################엑셀 대신에 DB에서 욕 불러와야함#####################
-##################체크도 DB에있는거랑 하기,댓글&키워드#################
-
-
-for i in range(2,910):
+for i in range(2,1800):
     testComment = load_ws['A' + str(i)].value
     write_ws['A' + str(i)] = testComment
 # 새 엑셀에 댓글 저장
@@ -117,7 +162,22 @@ for i in range(2,910):
         write_ws['C' + str(i)] = filtering1
         print("차단되었습니다.")
 
-write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_new.xlsx')
+write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_new2.xlsx')
 
-# -----------------필터링메인----------------
+########################필터링메인#######################
 
+
+
+# load_wb = load_workbook("/Users/77520769/Documents/문해긔/기본키워드_수정.xlsx", data_only=True)
+# load_ws = load_wb['Sheet']
+#
+# write_wb = Workbook()
+# write_ws = write_wb.active
+#
+# for i in range(1, 837):
+#     testKeyword = load_ws['A' + str(i)].value
+#     write_ws['A' + str(i)] = hgtk.text.decompose(testKeyword).replace("ᴥ","")
+#
+#
+# write_wb.save('/Users/77520769/Documents/문해긔/기본키워드_분리3.xlsx')
+#---------------기본키워드추가삭제용-----------------

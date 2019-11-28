@@ -17,8 +17,6 @@ class DBConnection:
                                         password=config.ICO_CONFIG['password'],
                                         db=config.ICO_CONFIG['db'],
                                         charset=config.ICO_CONFIG['charset'])
-            # database를 사용하기 위한 cursor를 세팅
-            #            cursor = conn.cursor()
 
             return self.conn
 
@@ -27,3 +25,7 @@ class DBConnection:
 
     def close_db(self):
         self.conn.close()
+
+    # 소멸자
+    def __del__(self):
+        pass

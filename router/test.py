@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify, request
-from DB import comment_dao
+from DB.DAO import comment
 
 from ml.model_by_word import model
 
 route_blue = Blueprint('route_blue', __name__)
 
-dao = comment_dao.CommentDAO()
+dao = comment.CommentDAO()
 
 
 @route_blue.route('/test/comments/<url>')

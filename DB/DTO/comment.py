@@ -3,6 +3,8 @@ class Comment:
         self._index = 0
         self._text = ""
         self._propriety = 0
+        self._learning = 0
+        self._url = ""
         self._writer = ""
         self._time = ""
 
@@ -11,6 +13,8 @@ class Comment:
             "idx": self._index,
             "text": self._text,
             "propriety": self._propriety,
+            "ML_learning": self._learning,
+            "url": self._url,
             "writer": self._writer,
             "time": self._time
         }
@@ -51,15 +55,15 @@ class Comment:
         self._text = txt
 
     def set_propriety(self, propriety):
-        if propriety >= 0 and propriety <= 2:
+        if 0 <= propriety <= 2:
             self._propriety = propriety
 
     def set_learning(self, learning):
         if learning == 0 or learning == 1:
             self._learning = learning
 
-    def set_url(self, URL):
-        self._url = URL
+    def set_url(self, url):
+        self._url = url
 
     def set_writer(self, writer):
         self._writer = writer
