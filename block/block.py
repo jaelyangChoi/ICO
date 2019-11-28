@@ -75,7 +75,9 @@ def onlyHangul(comment):
     _comment = ""
     for j in range(0, len(comment)):
         # 댓글 길이만큼 for문
-        if hgtk.checker.is_hangul(comment[j]) | comment == ' ':
+        if hgtk.checker.is_hangul(comment[j]) :
+            _comment += comment[j]
+        elif comment[j] == ' ':
             _comment += comment[j]
         #     코멘트 한글자마다 한글인지 파악
         #     한글일 경우 새 String인자에 추가
@@ -98,7 +100,7 @@ def filteringSynk(comment):
         for i in range(1,824):
             matchRatio = difflib.SequenceMatcher(None,load_ws['A' + str(i)].value, _comment).ratio()
 
-            if matchRatio > 0.75:
+            if matchRatio >= 0.75:
                 # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
                 if wordExistCheck(j):
                     print("\t 존재하는 단어 :" + j + "이므로 차단하지 않습니다")
@@ -118,66 +120,31 @@ def filteringSynk(comment):
 #유사도판별함수
 
 
-load_wb = load_workbook("/Users/77520769/Documents/문해긔/댓글 수집.xlsx", data_only=True)
-load_ws = load_wb['시트1']
-# 댓글 불러오기
-write_wb = Workbook()
-write_ws = write_wb.active
-# # 저장할 새 엑셀
-#
-# ##################엑셀 대신에 DB에서 욕 불러와야함#####################
-# ##################체크도 DB에있는거랑 하기,댓글&키워드#################
-#
+def runBlockComment():
+    #** 파라미터 추가 여부**
+    for i in range(2, 3):
+        # 댓글 수 만큼 반복합니다
+        testComment ="테스트 댓글입니다. DB에서 댓글하나씩 가져오는걸로"
+        #################################################### 댓글 불러오기
 
-for i in range(2,1800):
-    testComment = load_ws['A' + str(i)].value
-    write_ws['A' + str(i)] = testComment
-# 새 엑셀에 댓글 저장
+        filtering1 = StringMatch(testComment)
+        # 1차 필터링~String일치로 판별
 
-    filtering1 = StringMatch(testComment)
-    #1차 필터링~String일치로 판별
+        if filtering1 == "OK":
+            # 1차 성공시 2차 필터링 시작
+            testTokenComment = tokenize(testComment)
+            # 품사분리(명사만 추출)
+            filtering2 = filteringSynk(testTokenComment)
+            # 자모음 분리 후 2차 필터링
 
-    if filtering1 == "OK":
-        # 1차 성공시 2차 필터링 시작
-        print("OK")
-        testTokenComment = tokenize(testComment)
-        print(testTokenComment)
-        # 품사분리(명사만 추출)
-
-        filtering2 = filteringSynk(testTokenComment)
-        # 자모음 분리 후 2차 필터링
-
-        if filtering2 == "OK":
-            print(testComment)
-            write_ws['B' + str(i)] = '2'
-        # 2차도 OK면 클린
+            if filtering2 == "OK":
+                print(testComment)
+            ################################# 2차도 OK면 클린, ML로 댓글 넘기는 부분 필요합니다
+            else:
+                print("차단되었습니다.2")
+            # 2차에서 걸린경우
         else:
-            write_ws['B' + str(i)] = '1'
-            write_ws['C' + str(i)] = filtering2
-            print("차단되었습니다.")
+            print("차단되었습니다.1")
+            # 1차에서 걸린경우
 
-        # 2차에서 걸리면 중간
-    else:
-        write_ws['B' + str(i)] = '0'
-        write_ws['C' + str(i)] = filtering1
-        print("차단되었습니다.")
-
-write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_new2.xlsx')
-
-########################필터링메인#######################
-
-
-
-# load_wb = load_workbook("/Users/77520769/Documents/문해긔/기본키워드_수정.xlsx", data_only=True)
-# load_ws = load_wb['Sheet']
-#
-# write_wb = Workbook()
-# write_ws = write_wb.active
-#
-# for i in range(1, 837):
-#     testKeyword = load_ws['A' + str(i)].value
-#     write_ws['A' + str(i)] = hgtk.text.decompose(testKeyword).replace("ᴥ","")
-#
-#
-# write_wb.save('/Users/77520769/Documents/문해긔/기본키워드_분리3.xlsx')
-#---------------기본키워드추가삭제용-----------------
+runBlockComment()
