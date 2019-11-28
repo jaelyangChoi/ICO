@@ -1,8 +1,10 @@
 from flask import Flask, render_template, Blueprint, request, redirect,url_for, jsonify
 
 from router.update import update_bp
+
 from block import block
-from dao import db_connection
+from router import test
+from router.view import view_blueprint
 
 app = Flask(__name__, template_folder="templates")
 
