@@ -11,6 +11,7 @@ def updateComment():
     new_comment = {"userID": request.form['userID'], "comment": request.form['comment']}
     comments.insert(0, new_comment)
     return jsonify(comments)
+    #redirect
 
 
 @update_bp.route('/updateKeyword', methods=['POST'])
