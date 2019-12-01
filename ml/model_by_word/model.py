@@ -9,6 +9,8 @@ class ModelByWord:
     def __init__(self):
         text.decompose = self.__decompose
         self._model = joblib.load("./dataset/model_sgd.pkl")
+        self._word_list = [CHOSUNG_LIST, JUNGSUNG_LIST, JONGSUNG_LIST,
+                           SPECIAL_CHARACTERS_LIST, NUMBER_LIST, ALPHABET_LIST]
 
     @staticmethod
     def __decompose(text, latin_filter=True, compose_code=u" "):
@@ -32,18 +34,15 @@ class ModelByWord:
         return result
 
     def _preprocess(self, comment):
+        df_list = ["cho", "jung", "jong", "special_characters", "number", "alphabet"]
+
         comment_decompose = text.decompose(comment)
         result = list(filter(lambda word: word != ' ', comment_decompose.split(' ')))
         result = list(filter(lambda element: element != '', result))
 
-        df_cho = pd.DataFrame(0, columns=CHOSUNG_LIST, index=range(1), dtype=float)
-        df_jung = pd.DataFrame(0, columns=JUNGSUNG_LIST, index=range(1), dtype=float)
-        df_jong = pd.DataFrame(0, columns=JONGSUNG_LIST, index=range(1), dtype=float)
-        df_special_characters = pd.DataFrame(0, columns=SPECIAL_CHARACTERS_LIST, index=range(1), dtype=float)
-        df_number = pd.DataFrame(0, columns=NUMBER_LIST, index=range(1), dtype=float)
-        df_alphabet = pd.DataFrame(0, columns=ALPHABET_LIST, index=range(1), dtype=float)
-
-        df_list = [df_cho, df_jung, df_jong, df_special_characters, df_number, df_alphabet]
+        df_dict = {}
+        for key, word_type in zip(df_list, self._word_list):
+            df_dict[key] = pd.DataFrame(0, columns=word_type, index=range(1), dtype=float)
 
         for word in result:
             total_letter_count = 0
@@ -52,37 +51,37 @@ class ModelByWord:
                 length = len(word)
 
                 if length == 3:
-                    df_cho[word[0]] += 1
-                    df_jung[word[1]] += 1
-                    df_jong[word[2]] += 1
+                    df_dict['cho'][word[0]] += 1
+                    df_dict['jung'][word[1]] += 1
+                    df_dict['jong'][word[2]] += 1
                     total_letter_count += 3
                 elif length == 2:
-                    df_cho[word[0]] += 1
-                    df_jung[word[1]] += 1
-                    df_jong[' '] += 1
+                    df_dict['cho'][word[0]] += 1
+                    df_dict['jung'][word[1]] += 1
+                    df_dict['jong'][' '] += 1
                     total_letter_count += 3
                 else:
                     if word in CHOSUNG_LIST:
-                        df_cho[word[0]] += 1
+                        df_dict['cho'][word[0]] += 1
                     elif word in JUNGSUNG_LIST:
-                        df_jung[word[0]] += 1
+                        df_dict['jung'][word[0]] += 1
                     else:
-                        df_jong[word[0]] += 1
+                        df_dict['jong'][word[0]] += 1
 
                     total_letter_count += 1
             else:
                 if word.lower() in ALPHABET_LIST:
                     word = word.lower()
-                    df_alphabet[word] += 1
+                    df_dict['alphabet'][word] += 1
                 elif word in NUMBER_LIST:
-                    df_number[word] += 1
+                    df_dict['number'][word] += 1
                 else:
                     if word in SPECIAL_CHARACTERS_LIST:
-                        df_special_characters[word] += 1
+                        df_dict['special_characters'][word] += 1
                     else:
-                        df_special_characters['etc'] += 1
+                        df_dict['special_characters']['etc'] += 1
 
-        df_result = pd.concat(df_list, axis=1)
+        df_result = pd.concat(df_dict, axis=1)
 
         return df_result
 
