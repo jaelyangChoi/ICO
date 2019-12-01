@@ -1,31 +1,48 @@
 from flask import Flask, render_template, Blueprint, request, redirect,url_for, jsonify
 
-from router.update import update_bp
+from router.update_comment import update_comment_bp
+from router.update_keyword import update_keyword_bp
 from router import test
+from DB.DAO.personal_keyword import PersonalKeywordDAO
 # from block import block
-# from router import test
 
 app = Flask(__name__, template_folder="templates")
 
-app.register_blueprint(update_bp)
+app.register_blueprint(update_comment_bp)
+app.register_blueprint(update_keyword_bp)
 app.register_blueprint(test.route_blue)
 # app.register_blueprint(db_connection.db_blue)
 # app.register_blueprint(block.block_blue)
 
 comments = [{'userID': 'cjl', 'comment': 'test data'},]
 keywords = ['sibal', 'byungsin']
-
+mode = '개인 필터 on'
+personal_keywordDB = PersonalKeywordDAO()
 
 @app.route('/googleCallback')
 @app.route('/')
 def index():
    return render_template('index.html')
 
+#DB로부터 댓글과 키워드를 전달 받아야함
 @app.route('/news', methods=["GET", "POST"])
 def news():
-    # posts = Post.query.all()
-    keywordStr = ', '.join(keywords)
-    return render_template('news1.html', comments=comments, keywords=keywordStr)
+    global mode
+    #DB로부터 댓글과 키워드 받아옴
+    #personal_keywordDB.insert_keyword('abc','shit')
+    #keywords = personal_keywordDB.select_keywords('abc')
+    #print(keywords)
+    keywords_str = ', '.join(keywords)
+    if mode == '개인 필터 on':
+        print(mode)
+        #3차 필터링 함수
+    return render_template('news1.html', comments=comments, keywords=keywords_str, mode = mode)
+
+@app.route('/filter_mode', methods=['POST'])
+def filter_mode():
+    global mode
+    mode = request.form['mode']
+    return redirect(url_for('news'))
 
 #redirect방식
 # @app.route('/commentInput', methods=['POST'])
