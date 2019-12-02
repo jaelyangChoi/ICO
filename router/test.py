@@ -1,8 +1,8 @@
-from flask import Blueprint, jsonify, request, render_template, url_for, redirect, session
-from DB.DAO import comment
+from flask import Blueprint, jsonify, request, url_for, redirect, session
 
-from ml.model_by_word import model
+from DB.DAO import comment
 from login import googleLogin
+from ml.model_by_word import model
 
 route_blue = Blueprint('route_blue', __name__)
 
