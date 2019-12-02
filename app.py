@@ -5,6 +5,8 @@ from flask import Flask, render_template, request, redirect, url_for
 
 from router import test
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 app = Flask(__name__, template_folder="templates")
 app.secret_key = 'abcdseijvxi'
 
@@ -52,8 +54,4 @@ def keyword():
 
 
 if __name__ == '__main__':
-    print("main1")
     app.run()
-else:
-    print(__name__)
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
