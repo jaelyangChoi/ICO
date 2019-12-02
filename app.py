@@ -2,6 +2,7 @@ from flask import Flask, render_template, Blueprint, request, redirect,url_for, 
 
 from router.update_comment import update_comment_bp
 from router.update_keyword import update_keyword_bp
+
 from router import test
 from DB.DAO.personal_keyword import PersonalKeywordDAO
 # from block import block
