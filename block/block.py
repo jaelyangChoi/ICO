@@ -8,7 +8,6 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 def searchWord(word):
-
     #사전 검색 url
     url = "https://stdict.korean.go.kr/api/search.do"
     option = "?certkey_no=1112&key=A8476D8061FAC1B57C5BCE8DA4CDCF28&method=exact"
@@ -49,7 +48,7 @@ def tokenize(comment):
 
 def StringMatch(comment):
 
-    load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
+    load_wb = load_workbook("`/Users/77520769/Documents/문해긔/공용keyword-3.xlsx`", data_only=True)
     load_ws = load_wb['Sheet1']
     block = 0
     _comment = ""
@@ -68,7 +67,7 @@ def StringMatch(comment):
         return load_ws['A' + str(i)].value
     else:
         return "OK"
-#String 일치함수
+#String 일치함수, 1차필터링
 
 def onlyHangul(comment):
 #특수문자 제거 함수
@@ -117,15 +116,12 @@ def filteringSynk(comment):
         return load_ws['A' + str(i)].value + " & " + _comment + str(matchRatio*100) + "%"
     else:
         return "OK"
-#유사도판별함수
+#유사도판별함수, 2차필터링
 
 
-def runBlockComment():
-    #** 파라미터 추가 여부**
-    for i in range(2, 3):
-        # 댓글 수 만큼 반복합니다
-        testComment ="테스트 댓글입니다. DB에서 댓글하나씩 가져오는걸로"
-        #################################################### 댓글 불러오기
+def runBlockComment(testComment):
+
+        blokcedComment = "차단되었습니다."
 
         filtering1 = StringMatch(testComment)
         # 1차 필터링~String일치로 판별
@@ -138,13 +134,11 @@ def runBlockComment():
             # 자모음 분리 후 2차 필터링
 
             if filtering2 == "OK":
-                print(testComment)
+                return testComment
             ################################# 2차도 OK면 클린, ML로 댓글 넘기는 부분 필요합니다
             else:
-                print("차단되었습니다.2")
+                return blokcedComment
             # 2차에서 걸린경우
         else:
-            print("차단되었습니다.1")
+            return blokcedComment
             # 1차에서 걸린경우
-
-runBlockComment()
