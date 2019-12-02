@@ -1,6 +1,8 @@
 from flask import Flask, render_template, Blueprint, request, redirect,url_for, jsonify
 
 from router.update import update_bp
+
+from block import block
 from router import test
 # from block import block
 # from router import test
