@@ -1,8 +1,12 @@
+import joblib
 import pandas as pd
 from hgtk import text, letter, checker
-from sklearn.externals import joblib
 
 from .const import ALPHABET_LIST, CHOSUNG_LIST, JONGSUNG_LIST, JUNGSUNG_LIST, NUMBER_LIST, SPECIAL_CHARACTERS_LIST
+
+CHOSUNG = 3
+JUNGSUNG = 2
+JONGSUNG = 1
 
 
 class ModelByWord:
@@ -34,54 +38,11 @@ class ModelByWord:
         return result
 
     def _preprocess(self, comment):
-        df_list = ["cho", "jung", "jong", "special_characters", "number", "alphabet"]
-
         comment_decompose = text.decompose(comment)
-        result = list(filter(lambda word: word != ' ', comment_decompose.split(' ')))
-        result = list(filter(lambda element: element != '', result))
+        removed_space_word = list(filter(lambda word: word != ' ', comment_decompose.split(' ')))
+        split_word = list(filter(lambda element: element != '', removed_space_word))
 
-        df_dict = {}
-        for key, word_type in zip(df_list, self._word_list):
-            df_dict[key] = pd.DataFrame(0, columns=word_type, index=range(1), dtype=float)
-
-        for word in result:
-            total_letter_count = 0
-
-            if checker.is_hangul(word):
-                length = len(word)
-
-                if length == 3:
-                    df_dict['cho'][word[0]] += 1
-                    df_dict['jung'][word[1]] += 1
-                    df_dict['jong'][word[2]] += 1
-                    total_letter_count += 3
-                elif length == 2:
-                    df_dict['cho'][word[0]] += 1
-                    df_dict['jung'][word[1]] += 1
-                    df_dict['jong'][' '] += 1
-                    total_letter_count += 3
-                else:
-                    if word in CHOSUNG_LIST:
-                        df_dict['cho'][word[0]] += 1
-                    elif word in JUNGSUNG_LIST:
-                        df_dict['jung'][word[0]] += 1
-                    else:
-                        df_dict['jong'][word[0]] += 1
-
-                    total_letter_count += 1
-            else:
-                if word.lower() in ALPHABET_LIST:
-                    word = word.lower()
-                    df_dict['alphabet'][word] += 1
-                elif word in NUMBER_LIST:
-                    df_dict['number'][word] += 1
-                else:
-                    if word in SPECIAL_CHARACTERS_LIST:
-                        df_dict['special_characters'][word] += 1
-                    else:
-                        df_dict['special_characters']['etc'] += 1
-
-        df_result = pd.concat(df_dict, axis=1)
+        df_result = self._word_store_in_dataframe(split_word)
 
         return df_result
 
@@ -90,3 +51,58 @@ class ModelByWord:
         predict = self._model.predict(data)
 
         return predict
+
+    def _word_store_in_dataframe(self, split_word):
+        df_list = ["cho", "jung", "jong", "special_characters", "number", "alphabet"]
+
+        temp_dict = {}
+        for key, word_type in zip(df_list, self._word_list):
+            temp_dict[key] = pd.DataFrame(0, columns=word_type, index=range(1), dtype=float)
+
+        total_letter_count = 0
+        for word in split_word:
+            temp_dict, letter_count = self._insert_dataframe(temp_dict, word)
+            total_letter_count += letter_count
+
+        result = pd.concat(temp_dict, axis=1) / total_letter_count
+
+        return result
+
+    def _insert_dataframe(self, temp_dict, word):
+        letter_count = 0
+
+        if checker.is_hangul(word):
+            length = len(word)
+
+            if length == CHOSUNG:
+                temp_dict['cho'][word[0]] += 1
+                temp_dict['jung'][word[1]] += 1
+                temp_dict['jong'][word[2]] += 1
+                letter_count += 3
+            elif length == JUNGSUNG:
+                temp_dict['cho'][word[0]] += 1
+                temp_dict['jung'][word[1]] += 1
+                temp_dict['jong'][' '] += 1
+                letter_count += 3
+            else:
+                if word in CHOSUNG_LIST:
+                    temp_dict['cho'][word[0]] += 1
+                elif word in JUNGSUNG_LIST:
+                    temp_dict['jung'][word[0]] += 1
+                else:
+                    temp_dict['jong'][word[0]] += 1
+
+                letter_count += 1
+        else:
+            if word.lower() in ALPHABET_LIST:
+                word = word.lower()
+                temp_dict['alphabet'][word] += 1
+            elif word in NUMBER_LIST:
+                temp_dict['number'][word] += 1
+            else:
+                if word in SPECIAL_CHARACTERS_LIST:
+                    temp_dict['special_characters'][word] += 1
+                else:
+                    temp_dict['special_characters']['etc'] += 1
+
+        return temp_dict, letter_count
