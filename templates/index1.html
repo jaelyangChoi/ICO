@@ -6,60 +6,10 @@
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+    <meta name="google-signin-client_id" content={{ cilent_id }}>
+    <script src="../static/js/loginScript.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <meta name="google-signin-client_id" content={{ cilent_id }}>
-    <script>
-        function onSignUp(googleUser) {
-            const id_token = googleUser.getAuthResponse().id_token;
-
-            let data = {'id_token': id_token};
-
-            $.ajax({
-                url: 'googleCallback',
-                type: 'post',
-                data: data,
-                dataType: 'text',
-                success: (result) => {
-                    alert(result);
-                    localStorage['id_token'] = id_token;
-                },
-                error: (result) => {
-                    alert(result);
-                }
-            });
-        }
-
-        function onSignIn(googleUser) {
-            const id_token = googleUser.getAuthResponse().id_token;
-
-            let data = {'id_token': id_token};
-
-            $.ajax({
-                url: 'googleCallback',
-                type: 'post',
-                data: data,
-                dataType: 'text',
-                success: (result) => {
-                    alert(result);
-                    localStorage['id_token'] = id_token;
-                },
-                error: (result) => {
-                    alert(result);
-                }
-            });
-        }
-
-        function signOut() {
-            localStorage.removeItem('id_token')
-        }
-
-        function storeToken(id_token) {
-            alert('111');
-            localStorage.setItem('id_token', id_token)
-        }
-    </script>
-
 </head>
 <body>
 <div id="title">
