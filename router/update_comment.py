@@ -14,10 +14,13 @@ def print_cm(str):
 def update_comment():
     new_comment = {"userID": request.form['userID'], "comment": request.form['comment']}
     print_cm(new_comment) #임시 테스트
-    comments.insert(0, new_comment) #이 과정 대신에 필터링 함수 호출하여 리턴값 받음
+    comments.insert(0, new_comment) #이 과정 대신에 DB에 댓글 입력
     #받은 리턴값을 DB에 보냄
     #DB에서 댓글 전체 가져옴
     #만약 개인 필터링 모드가 on 이라면
+    global mode
+    print(mode, 'in bp')
+
       #개인 키워드를 DB에서 가져오고
      #3차 필터링 함수 호출하여 comments에 담음
 

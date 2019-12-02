@@ -17,6 +17,8 @@ app.register_blueprint(test.route_blue)
 comments = [{'userID': 'cjl', 'comment': 'test data'},]
 keywords = ['sibal', 'byungsin']
 mode = '개인 필터 on'
+
+#db클래스 생성
 personal_keywordDB = PersonalKeywordDAO()
 
 @app.route('/googleCallback')
@@ -25,7 +27,7 @@ def index():
    return render_template('index.html')
 
 #DB로부터 댓글과 키워드를 전달 받아야함
-@app.route('/news', methods=["GET", "POST"])
+@app.route('/news', methods=["POST"])
 def news():
     global mode
     #DB로부터 댓글과 키워드 받아옴
