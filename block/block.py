@@ -48,7 +48,7 @@ def tokenize(comment):
 
 def StringMatch(comment):
 
-    load_wb = load_workbook("`/Users/77520769/Documents/문해긔/공용keyword-3.xlsx`", data_only=True)
+    load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
     load_ws = load_wb['Sheet1']
     block = 0
     _comment = ""
@@ -142,3 +142,5 @@ def runBlockComment(testComment):
         else:
             return blokcedComment
             # 1차에서 걸린경우
+
+runBlockComment("안녕하세요")
