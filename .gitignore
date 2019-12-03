@@ -203,5 +203,6 @@ fabric.properties
 DB/db_config.py
 
 dataset/*
+credentials.json
 
 # End of https://www.gitignore.io/api/flask,pycharm

@@ -1,19 +1,25 @@
+import json
+import os
+
 from flask import Flask, render_template, request, redirect, url_for
 
-
-from block import block
 from router import test
-from router.view import view_blueprint
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__, template_folder="templates")
+app.secret_key = 'abcdseijvxi'
 
 app.register_blueprint(test.route_blue)
-app.register_blueprint(view_blueprint)
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    with open('credentials.json') as json_file:
+        json_data = json.load(json_file)
+
+    data = json_data['web']
+    return render_template('index1.html', cilent_id=data['client_id'])
 
 
 @app.route('/news', methods=["GET", "POST"])
@@ -46,16 +52,6 @@ def keyword():
     keywordList = ', '.join(keywords)
     return render_template('news1.html', keywords=keywordList)
 
-
-# return redirect(url_for('news'), code=307)
-# form 요소:ImmutableMultiDict([('userID', 'userID'), ('comment', 'zzz\r\n')])
-
-
-# @app.route('/fetchtest', methods=['POST'])
-# def fetchtest():
-#     keywords = ['test', 'byungsin']
-#     keywordList = ', '.join(keywords)
-#     return keywordList
 
 if __name__ == '__main__':
     app.run()
