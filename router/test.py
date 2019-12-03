@@ -47,6 +47,6 @@ def googleCallback():
 @route_blue.route('/logout')
 def logout():
     if 'state' in session:
-        del session['state']
+        del session
 
     return redirect(url_for('index'))
