@@ -1,8 +1,7 @@
-from DAO.keyword import *
 from DAO.user import *
 
 
-class PersonalKeywordDAO():
+class PersonalKeywordDAO:
 
     def __init__(self):
         self.db_conn = DBConnection()
@@ -27,7 +26,7 @@ class PersonalKeywordDAO():
             return keyword_list
 
         except Exception as e:
-            print(e)
+            return -1
 
     def insert_keyword(self, id, keyword):
         self.sql = "INSERT INTO PersonalKeywords(keyword, user) VALUES(%s, %s)"
@@ -51,4 +50,4 @@ class PersonalKeywordDAO():
             self.db_conn.close_db()
 
         except Exception as e:
-            print(e)
+            return -1

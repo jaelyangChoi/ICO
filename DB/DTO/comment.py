@@ -1,69 +1,65 @@
 class Comment:
     def __init__(self):
-        self._index = 0
-        self._text = ""
-        self._propriety = 0
-        self._learning = 0
-        self._url = ""
-        self._writer = ""
-        self._time = ""
-
-    def to_json(self):
-        result = {
-            "idx": self._index,
-            "text": self._text,
-            "propriety": self._propriety,
-            "ML_learning": self._learning,
-            "url": self._url,
-            "writer": self._writer,
-            "time": self._time
+        self._comment = {
+            "idx": 0,
+            "text": "",
+            "propriety": "+",
+            "ML_learning": 0,
+            "url": "",
+            "writer": "",
+            "time": ""
         }
 
-        return result
-
     # getter
+    def get_comment(self):
+        return self._comment
+
     def get_index(self):
-        return self._index
+        return self._comment['idx']
 
     def get_text(self):
-        return self._text
+        return self._comment['text']
 
     def get_propriety(self):
-        return self._propriety
+        return self._comment['propriety']
 
     def get_learning(self):
-        return self._learning
+        return self._comment['ML_learning']
 
     def get_url(self):
-        return self._url
+        return self._comment['url']
 
     def get_writer(self):
-        return self._writer
+        return self._comment['writer']
 
     def get_time(self):
-        return self._time
+        return self._comment['time']
 
     # setter
     def set_all(self, data):
-        self._index = data[0]
-        self._text = data[1]
-        self._propriety = data[2]
-        self._writer = data[3]
-        self._time = data[4]
+        self._comment['idx'] = data[0]
+        self._comment['text'] = data[1]
+        self._comment['propriety'] = data[2]
+        self._comment['writer'] = data[3]
+        self._comment['time'] = data[4]
 
     def set_text(self, txt):
-        self._text = txt
+        self._comment['text'] = txt
 
     def set_propriety(self, propriety):
-        if 0 <= propriety <= 2:
-            self._propriety = propriety
+        if propriety == '+' or propriety == '-':
+            self._comment['propriety'] = propriety
+        else:
+            return -1
 
     def set_learning(self, learning):
         if learning == 0 or learning == 1:
-            self._learning = learning
+            self._comment['ML_learning'] = learning
+        else:
+            return -1
 
     def set_url(self, url):
-        self._url = url
+        self._comment['url'] = url
 
     def set_writer(self, writer):
-        self._writer = writer
+        self._comment['writer'] = writer
