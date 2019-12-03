@@ -64,7 +64,6 @@
     {% endif %}
 </div>
 
-
 <script>
     //새로운 키워드를 반영하여 리로드
     function updateKeyword() {
@@ -117,10 +116,10 @@
 
     //개인 필터 버튼을 클릭하면 버튼의 내용을 바꾸고 서버로 모드 정보 전송
     function filterMode(self) {
-        if (self.value === '개인 필터 on')
-            self.value = '개인 필터 off';
+        if (self.value === 'ICO Service on')
+            self.value = 'ICO Service off';
         else
-            self.value = '개인 필터 on';
+            self.value = 'ICO Service on';
         sendPost("{{ url_for('filter_mode') }}", self.value);
     }
 </script>

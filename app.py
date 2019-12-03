@@ -6,8 +6,16 @@ from router.update_keyword import update_keyword_bp
 from router import test
 from DB.DAO.personal_keyword import PersonalKeywordDAO
 # from block import block
+import json
+import os
+
+
+from router import test
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 app = Flask(__name__, template_folder="templates")
+app.secret_key = 'abcdseijvxi'
 
 app.register_blueprint(update_comment_bp)
 app.register_blueprint(update_keyword_bp)
@@ -17,27 +25,32 @@ app.register_blueprint(test.route_blue)
 
 comments = [{'userID': 'cjl', 'comment': 'test data'},]
 keywords = ['sibal', 'byungsin']
-mode = '개인 필터 on'
+mode = 'ICO Service off'
 
-#db클래스 생성
+#키워드 db클래스 생성
 personal_keywordDB = PersonalKeywordDAO()
 
 @app.route('/googleCallback')
 @app.route('/')
 def index():
-   return render_template('index.html')
+    with open('credentials.json') as json_file:
+        json_data = json.load(json_file)
+
+    data = json_data['web']
+    return render_template('index1.html', cilent_id=data['client_id'])
+
 
 #DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
 @app.route('/news')
 def news():
     global mode
-    personal_keywordDB.insert_keyword('abc','shit!!!')
     keywords = personal_keywordDB.select_keywords('abc')
-    print(keywords)
     keywords_str = ', '.join(keywords)
     print(keywords_str)
-    if mode == '개인 필터 on':
+
+    if mode == 'ICO Service on':
         print(mode)
+        #필터링 함수 ->1차,2차
         #3차 필터링 함수
     return render_template('news1.html', comments=comments, keywords=keywords_str, mode = mode)
 
@@ -57,6 +70,7 @@ def filter_mode():
 
 
 #form 요소:ImmutableMultiDict([('userID', 'userID'), ('comment', 'zzz\r\n')])
+
 
 if __name__ == '__main__':
     app.run()
