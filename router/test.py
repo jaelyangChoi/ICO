@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request, url_for, redirect, session
 from DB.DAO import comment
 from login import googleLogin
 from ml.model_by_word import model
+from ml import ml_predict
 
 route_blue = Blueprint('route_blue', __name__)
 
@@ -24,10 +25,11 @@ def select_comments(url):
 
 @route_blue.route('/test/ml')
 def ml_comment():
+    predict =ml_predict.ModelCombine()
     comment = request.args.get('comment')
-    ml = model.ModelByWord()
+    result = predict.total_predict(comment)
 
-    result = ml.predict(comment)
+    # result = ml.predict(comment)
 
     return str(result)
 
