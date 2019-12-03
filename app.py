@@ -1,17 +1,13 @@
-from flask import Flask, render_template, Blueprint, request, redirect,url_for, jsonify
-
-from router.update_comment import update_comment_bp
-from router.update_keyword import update_keyword_bp
-
-from router import test
-from DB.DAO.personal_keyword import PersonalKeywordDAO
 # from block import block
 import json
 import os
 
 from flask import Flask, render_template, request, redirect, url_for
+
+from DB.DAO.personal_keyword import PersonalKeywordDAO
 from router import test
-from block import block
+from router.update_comment import update_comment_bp
+from router.update_keyword import update_keyword_bp
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -24,12 +20,13 @@ app.register_blueprint(test.route_blue)
 # app.register_blueprint(db_connection.db_blue)
 # app.register_blueprint(block.block_blue)
 
-comments = [{'userID': 'cjl', 'comment': 'test data'},]
+comments = [{'userID': 'cjl', 'comment': 'test data'}, ]
 keywords = ['sibal', 'byungsin']
 mode = 'ICO Service off'
 
-#키워드 db클래스 생성
+# 키워드 db클래스 생성
 personal_keywordDB = PersonalKeywordDAO()
+
 
 @app.route('/googleCallback')
 @app.route('/')
@@ -41,7 +38,7 @@ def index():
     return render_template('index1.html', cilent_id=data['client_id'])
 
 
-#DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
+# DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
 @app.route('/news')
 def news():
     global mode
@@ -51,9 +48,10 @@ def news():
 
     if mode == 'ICO Service on':
         print(mode)
-        #필터링 함수 ->1차,2차
-        #3차 필터링 함수
-    return render_template('news1.html', comments=comments, keywords=keywords_str, mode = mode)
+        # 필터링 함수 ->1차,2차
+        # 3차 필터링 함수
+    return render_template('news1.html', comments=comments, keywords=keywords_str, mode=mode)
+
 
 @app.route('/filter_mode', methods=['POST'])
 def filter_mode():
@@ -61,7 +59,8 @@ def filter_mode():
     mode = request.form['mode']
     return redirect(url_for('news'))
 
-#redirect방식
+
+# redirect방식
 # @app.route('/commentInput', methods=['POST'])
 # def commentInput():
 #     new_comment = {"userID": request.form['userID'], "comment": request.form['comment']}
@@ -69,8 +68,7 @@ def filter_mode():
 #     return redirect(url_for('news')) #, code=307 => 원래 전송 된대로 요청 유형을 보존
 
 
-
-#form 요소:ImmutableMultiDict([('userID', 'userID'), ('comment', 'zzz\r\n')])
+# form 요소:ImmutableMultiDict([('userID', 'userID'), ('comment', 'zzz\r\n')])
 
 
 if __name__ == '__main__':
