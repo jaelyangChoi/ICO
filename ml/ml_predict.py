@@ -18,6 +18,4 @@ class ModelCombine:
             else:
                 return pumsa_ml_result
 
-# mp=ModelCombine()
-# print(mp.total_predict("이 씨바로마"))
 

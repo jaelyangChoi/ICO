@@ -11,13 +11,13 @@ from tensorflow.keras.models import model_from_json
 
 class CommentPredict:
     def __init__(self):
-        json_file = open("./model.json", "r")
+        json_file = open("./ml/ml_by_pumsa/model.json", "r")
         loaded_model_json = json_file.read()
         json_file.close()
         self.predict_score = 0
         self.predict_result = 0
         self.model = model_from_json(loaded_model_json)
-        self.model.load_weights("./model.h5")
+        self.model.load_weights("./ml/ml_by_pumsa/model.h5")
         self.model.compile(optimizer=optimizers.RMSprop(lr=0.001),
                            loss=losses.binary_crossentropy,
                            metrics=[metrics.binary_accuracy])
@@ -25,7 +25,7 @@ class CommentPredict:
     def read_csv_file(self, csv_file_name):
         """csv파일을 dataframe 형식으로 가져오기"""
 
-        df = pd.read_csv("./" + csv_file_name + ".csv")
+        df = pd.read_csv("./ml/ml_by_pumsa/" + csv_file_name + ".csv")
         return df
 
     def tokenize(self, sentence):
@@ -79,7 +79,7 @@ class CommentPredict:
     def data_preprocessing(self, data):
         """데이터 전처리"""
 
-        f = open("./commonwords.pkl", "rb")
+        f = open("./ml/ml_by_pumsa/commonwords.pkl", "rb")
         selected_tokens = pickle.load(f)
         f.close()
         token_data=self.remain_meaning_token([(self.tokenize(data), '0')])
