@@ -4,7 +4,6 @@ from DAO.user import *
 
 
 class CommentDAO:
-    # db_conn = None
 
     def __init__(self):
         self.db_conn = DBConnection()
