@@ -13,9 +13,9 @@ class PersonalKeywordDAO():
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = """SELECT keyword FROM PersonalKeywords, Users
-                     WHERE PersonalKeywords.user = Users._index
-                     AND Users.id = %s"""
+            sql = """SELECT keyword FROM PersonalKeywords, User
+                     WHERE PersonalKeywords.user = User._index
+                     AND User.id = %s"""
             cursor.execute(sql, id)
 
             keyword_list = []

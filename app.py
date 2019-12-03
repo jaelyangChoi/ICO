@@ -27,15 +27,15 @@ personal_keywordDB = PersonalKeywordDAO()
 def index():
    return render_template('index.html')
 
-#DB로부터 댓글과 키워드를 전달 받아야함
-@app.route('/news', methods=["POST"])
+#DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
+@app.route('/news')
 def news():
     global mode
-    #DB로부터 댓글과 키워드 받아옴
-    #personal_keywordDB.insert_keyword('abc','shit')
-    #keywords = personal_keywordDB.select_keywords('abc')
-    #print(keywords)
+    personal_keywordDB.insert_keyword('abc','shit!!!')
+    keywords = personal_keywordDB.select_keywords('abc')
+    print(keywords)
     keywords_str = ', '.join(keywords)
+    print(keywords_str)
     if mode == '개인 필터 on':
         print(mode)
         #3차 필터링 함수

@@ -66,6 +66,7 @@
 
 
 <script>
+    //새로운 키워드를 반영하여 리로드
     function updateKeyword() {
         $.ajax({
             type: 'POST',
@@ -79,6 +80,7 @@
         })
     }
 
+    //새로운 댓글을 반영하여 리로드
     function updateComment() {
         $.ajax({
             type: 'POST',
@@ -98,6 +100,7 @@
         })
     }
 
+    //개인 필터링 mode에 대한 정보를 서버로 전송
     function sendPost(action, mode) {
         var form = document.createElement('form');
         form.setAttribute('method', 'post');
@@ -112,6 +115,7 @@
         form.submit();
     }
 
+    //개인 필터 버튼을 클릭하면 버튼의 내용을 바꾸고 서버로 모드 정보 전송
     function filterMode(self) {
         if (self.value === '개인 필터 on')
             self.value = '개인 필터 off';
