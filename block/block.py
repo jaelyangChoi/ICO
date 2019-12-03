@@ -108,7 +108,7 @@ def filteringSynk(comment):
     for j in comment:
         _comment = hgtk.text.decompose(j).replace("ᴥ", "")
 
-        for i in range(1, 824):
+        for i in range(1, 1072):
             matchRatio = difflib.SequenceMatcher(None, load_ws['A' + str(i)].value, _comment).ratio()
 
             if matchRatio >= 0.75:

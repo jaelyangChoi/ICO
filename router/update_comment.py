@@ -13,6 +13,8 @@ personal_keywordDB = PersonalKeywordDAO()
 
 #임시 db
 comments = [{'userID': 'cjl', 'comment': 'test data', 'property':'+'}]
+#임시 keyword
+keywords = ['sibal', 'byungsin']
 
 def print_cm(str):
     print(str)
@@ -32,16 +34,19 @@ def update_comment():
     ##댓글 리로드
     # 전체 댓글 호출
     #if mode == 'ICO Service on':
-        #keywords = personal_keywordDB.select_keywords('abc') #id값 주기
-        # 3차 필터링 함수 호출
+    keywords = personal_keywordDB.select_keywords('abc') #id값 주기
+    # 3차 필터링 함수 호출
+    labeled_comments = block.privateKeywordMatch(comments, keywords)
+    filterd_comments = filtering(labeled_comments)
 
-    return jsonify(comments)
+    return jsonify(filterd_comments)
 
 #적절성 유무 판단 함수
 
 
 #댓글 필터링 함수
-def filering(comments):
-
-
+def filtering(comments):
+    for comment in comments:
+        if comment['property'] == '-' :
+            comment['comment'] = '부적절한 댓글입니다.'
     return comments
