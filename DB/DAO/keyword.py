@@ -24,7 +24,7 @@ class KeywordDAO:
             return keyword_list
 
         except Exception as e:
-            print(e)
+            return -1
 
     def select_personal_keywords_by_user(self, id):
         try:
@@ -45,7 +45,7 @@ class KeywordDAO:
             return keyword_list
 
         except Exception as e:
-            print(e)
+            return -1
 
     def insert_personal_keyword(self, id, keyword):
         self.sql = "INSERT INTO PersonalKeywords(keyword, user) VALUES(%s, %s)"
@@ -69,4 +69,4 @@ class KeywordDAO:
             self.db_conn.close_db()
 
         except Exception as e:
-            print(e)
+            return -1
