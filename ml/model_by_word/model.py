@@ -1,6 +1,5 @@
 import joblib
 import pandas as pd
-import os
 from hgtk import text, letter, checker
 
 from .const import ALPHABET_LIST, CHOSUNG_LIST, JONGSUNG_LIST, JUNGSUNG_LIST, NUMBER_LIST, SPECIAL_CHARACTERS_LIST
@@ -13,7 +12,6 @@ JONGSUNG = 1
 class ModelByWord:
     def __init__(self):
         text.decompose = self.__decompose
-        print(os.getcwd())
         self._model = joblib.load("./dataset/model_sgd.pkl")
         self._word_list = [CHOSUNG_LIST, JUNGSUNG_LIST, JONGSUNG_LIST,
                            SPECIAL_CHARACTERS_LIST, NUMBER_LIST, ALPHABET_LIST]

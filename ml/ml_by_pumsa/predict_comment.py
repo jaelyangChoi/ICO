@@ -1,4 +1,3 @@
-import os
 import pickle
 
 import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
@@ -92,7 +91,6 @@ class CommentPredict:
 
         data = self.data_preprocessing(comment)
         score = float(self.model.predict(data))
-        print(score)
         self.predict_score = score
         if score > 0.7:
             self.predict_result = 1
