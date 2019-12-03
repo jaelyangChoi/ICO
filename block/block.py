@@ -55,11 +55,14 @@ def tokenize(comment):
 
 
 # 댓글 품사분리함수(명사만 처리)
-
-
 def StringMatch(comment):
+<<<<<<< HEAD
     # load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
     # load_ws = load_wb['Sheet1']
+=======
+    load_wb = load_workbook("C:/Users/JAELYANG/Desktop/ICO/basic_keyword/공용keyword-3.xlsx", data_only=True)
+    load_ws = load_wb['Sheet1']
+>>>>>>> 8b7c165376178161bccbf1380153068f727fade0
     block = 0
     _comment = ""
     keywords = default_keyword.DefaultKeywordDAO()
@@ -103,15 +106,18 @@ def onlyHangul(comment):
 
 def filteringSynk(comment):
     _comment = ""
+
     # load_wb = load_workbook("/Users/77520769/Documents/문해긔/기본키워드_분리3.xlsx", data_only=True)
     # load_ws = load_wb['Sheet']
 
     keywords = default_keyword.DefaultKeywordDAO()
+
     block = 0
 
     print("**2차 필터링 시작**")
     for j in comment:
         _comment = hgtk.text.decompose(j).replace("ᴥ", "")
+
 
         for i in keywords.select_split_keywords():
 
