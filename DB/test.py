@@ -1,6 +1,6 @@
-from DAO.keyword import *
 from DAO.comment import *
-from DTO.comment import *
+from DTO import *
+
 """
 cdao = CommentDAO()
 kdao = KeywordDAO()
@@ -75,7 +75,6 @@ for i in keyword_list:
     print(str(cnt) + 'th keyword : ' + i)
     cnt += 1
 print()
-"""
 
 url = input("URL : ")
 url_dao = UrlDAO()
@@ -86,4 +85,4 @@ print()
 user = input("Id : ")
 user_dao = UserDAO()
 print("index : " + str(user_dao.select_index(user)))
-
+"""

@@ -28,7 +28,7 @@ class CommentDAO:
             self.db_conn.close_db()
 
         except Exception as e:
-            print(e)
+            return -1
 
     def select_comments_by_url(self, url):
         try:
@@ -54,4 +54,4 @@ class CommentDAO:
             return data_list
 
         except Exception as e:
-            print(e)
+            return -1
