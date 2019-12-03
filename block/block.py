@@ -119,6 +119,32 @@ def filteringSynk(comment):
 #유사도판별함수, 2차필터링
 
 
+
+def privateKeywordMatch(comment, keywords):
+
+    blokcedComment = "차단되었습니다."
+    block = 0
+    _comment = ""
+    print("**개인 키워드 필터링 시작**")
+
+    _comment = onlyHangul(comment)
+
+    for i in keywords:
+        # 기본 키워드 갯수만큼 for문
+        if _comment.find(i) != -1:
+            block = block + 1
+            print("매치된 개인 키워드: " + i)
+            break
+    #    한글 이외의 것을 제거한 댓글과 키워드 매치
+
+    if block != 0:
+        return blokcedComment
+    else:
+        return comment
+#개인키워드, 3차필터링
+
+
+
 def runBlockComment(testComment):
 
         blokcedComment = "차단되었습니다."
@@ -143,4 +169,6 @@ def runBlockComment(testComment):
             return blokcedComment
             # 1차에서 걸린경우
 
-runBlockComment("안녕하세요")
+print(runBlockComment("안녕하세요"))
+
+print(privateKeywordMatch("안녕하세요",["안뇽","안용","안녕"]))
