@@ -6,8 +6,8 @@ import difflib
 import pymysql
 import urllib.request
 from bs4 import BeautifulSoup
-from ml import ml_predict
 from ml.ml_predict import ModelCombine
+from DB.DAO import default_keyword
 
 
 def searchWord(word):
@@ -58,19 +58,20 @@ def tokenize(comment):
 
 
 def StringMatch(comment):
-    load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
-    load_ws = load_wb['Sheet1']
+    # load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
+    # load_ws = load_wb['Sheet1']
     block = 0
     _comment = ""
+    keywords = default_keyword.DefaultKeywordDAO()
     print("**1차 필터링 시작**")
 
     _comment = onlyHangul(comment)
 
-    for i in range(1, 1103):
+    for i in keywords.select_keywords():
         # 차단 키워드 갯수만큼 for문
-        if _comment.find(str(load_ws['A' + str(i)].value)) != -1:
+        if _comment.find(i) != -1:
             block = block + 1
-            print("매치된 기본 키워드: " + load_ws['A' + str(i)].value)
+            print("매치된 기본 키워드: " + i)
             break
     #    한글 이외의 것을 제거한 댓글과 키워드 매치
     if block != 0:
@@ -102,16 +103,19 @@ def onlyHangul(comment):
 
 def filteringSynk(comment):
     _comment = ""
-    load_wb = load_workbook("/Users/77520769/Documents/문해긔/기본키워드_분리3.xlsx", data_only=True)
-    load_ws = load_wb['Sheet']
+    # load_wb = load_workbook("/Users/77520769/Documents/문해긔/기본키워드_분리3.xlsx", data_only=True)
+    # load_ws = load_wb['Sheet']
+
+    keywords = default_keyword.DefaultKeywordDAO()
     block = 0
 
     print("**2차 필터링 시작**")
     for j in comment:
         _comment = hgtk.text.decompose(j).replace("ᴥ", "")
 
-        for i in range(1, 824):
-            matchRatio = difflib.SequenceMatcher(None, load_ws['A' + str(i)].value, _comment).ratio()
+        for i in keywords.select_split_keywords():
+
+            matchRatio = difflib.SequenceMatcher(None, str(i), _comment).ratio()
 
             if matchRatio >= 0.75:
                 # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
@@ -119,9 +123,9 @@ def filteringSynk(comment):
                     print("\t 존재하는 단어 :" + j + "이므로 차단하지 않습니다")
                     continue
                 else:
-                    print("기본 키워드: " + load_ws['A' + str(i)].value)
-                    print("댓글 내 단어: " + _comment)
-                    print("일치율: " + str(matchRatio * 100) + "%")
+                    # print("기본 키워드: " + load_ws['A' + str(i)].value)
+                    # print("댓글 내 단어: " + _comment)
+                    # print("일치율: " + str(matchRatio * 100) + "%")
                     block = block + 1
                     break
         if block != 0:
@@ -170,7 +174,7 @@ def privateKeywordMatch(comments, keywords):
 
 
 def runBlockComment(testComment):
-    ml = ModelCombine.total_predict()
+    ml = ModelCombine()
 
     filtering1 = StringMatch(testComment)
     # 1차 필터링~String일치로 판별
@@ -183,7 +187,7 @@ def runBlockComment(testComment):
         # 자모음 분리 후 2차 필터링
 
         if filtering2 == "+":
-            if ml.total_predict(testComment) == 1:
+            if ml.total_predict(testComment) == '1':
                 return "+"
             else:
                 return "-"
@@ -196,7 +200,7 @@ def runBlockComment(testComment):
         # 1차에서 걸린경우
 
 
-# print(runBlockComment("안녕하세요"))
-print(privateKeywordMatch([{'userID': 'cjl', 'comment': 'test data', 'property':'+'},{'userID': 'cjl2', 'comment': '안녕', 'property':'+'}], ["안뇽", "안용", "안녕"]))
+print(runBlockComment("어머~ 두분 점점 닮아가세요. 보기좋아요"))
+# print(privateKeywordMatch([{'userID': 'cjl', 'comment': 'test data', 'property':'+'},{'userID': 'cjl2', 'comment': '안녕', 'property':'+'}], ["안뇽", "안용", "안녕"]))
 
 #### return 값:: + 긍정  - 부정
