@@ -1,14 +1,13 @@
-from flask import Flask, render_template, Blueprint, request, redirect,url_for, jsonify
+from flask import Flask, render_template, Blueprint, request, redirect, url_for, jsonify, session
 
 from router.update_comment import update_comment_bp
 from router.update_keyword import update_keyword_bp
 
-from router import test
 from DB.DAO.personal_keyword import PersonalKeywordDAO
-# from block import block
+from block import filtering
 import json
 import os
-
+from DB.DAO.comment import CommentDAO
 from flask import Flask, render_template, request, redirect, url_for
 from router import test
 from block import block
@@ -24,44 +23,54 @@ app.register_blueprint(test.route_blue)
 # app.register_blueprint(db_connection.db_blue)
 # app.register_blueprint(block.block_blue)
 
-comments = [{'userID': 'cjl', 'comment': 'test data'},]
-keywords = ['sibal', 'byungsin']
-mode = 'ICO Service off'
+# 임시 댓글, 키워드
+# comments = [{'userID': session['id'], 'comment': 'test data'},]
+# keywords = ['sibal', 'byungsin']
 
-#키워드 db클래스 생성
+# 댓글, 키워드 db클래스 생성
+CommentDAO = CommentDAO()
 personal_keywordDB = PersonalKeywordDAO()
+
 
 @app.route('/googleCallback')
 @app.route('/')
 def index():
     with open('credentials.json') as json_file:
         json_data = json.load(json_file)
-
     data = json_data['web']
-    return render_template('index1.html', cilent_id=data['client_id'])
+    return render_template('index.html', cilent_id=data['client_id'])
 
 
-#DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
+# DB로부터 댓글과 키워드 받아와 필터링해 반환
 @app.route('/news')
 def news():
-    global mode
-    keywords = personal_keywordDB.select_keywords('abc')
+    keywords = personal_keywordDB.select_keywords('1')
     keywords_str = ', '.join(keywords)
     print(keywords_str)
 
-    if mode == 'ICO Service on':
-        print(mode)
-        #필터링 함수 ->1차,2차
-        #3차 필터링 함수
-    return render_template('news1.html', comments=comments, keywords=keywords_str, mode = mode)
+    # 전체 댓글 리로드
+    comments = CommentDAO.select_comments_by_url('url')
+    # for comment in comments:
+    #   print(comment.get_comment()) 반환 값 {'idx': 1, 'text': '왜구들이 미쳐 날뛰네', 'propriety': 0, 'ML_learning': 0, 'url': '', 'writer': '1', 'time': datetime.datetime(2019, 12, 2, 19, 5, 19)}
+
+    # 필터링 서비스
+    if session['mode'] == 'ICO Service on':
+        comments = filtering(comments)
+
+    return render_template('news1.html', comments=comments, keywords=keywords_str, mode=mode)
+
 
 @app.route('/filter_mode', methods=['POST'])
 def filter_mode():
     global mode
-    mode = request.form['mode']
+    session['mode'] = request.form['mode']
     return redirect(url_for('news'))
 
-#redirect방식
+
+if __name__ == '__main__':
+    app.run()
+
+# redirect방식
 # @app.route('/commentInput', methods=['POST'])
 # def commentInput():
 #     new_comment = {"userID": request.form['userID'], "comment": request.form['comment']}
@@ -69,9 +78,4 @@ def filter_mode():
 #     return redirect(url_for('news')) #, code=307 => 원래 전송 된대로 요청 유형을 보존
 
 
-
-#form 요소:ImmutableMultiDict([('userID', 'userID'), ('comment', 'zzz\r\n')])
-
-
-if __name__ == '__main__':
-    app.run()
+# form 요소:ImmutableMultiDict([('userID', 'userID'), ('comment', 'zzz\r\n')])

@@ -16,9 +16,9 @@ class CommentDAO:
             url_dao = UrlDAO()
             user_dao = UserDAO()
 
-            sql = "INSERT INTO comments(text, propriety, MLlearning, URL, writer) VALUES(%s, %s, %s, %s, %s)"
+            sql = "INSERT INTO comments(text, property, MLlearning, URL, writer) VALUES(%s, %s, %s, %s, %s)"
             cursor.execute(sql, (data.get_text(),
-                                 data.get_propriety(),
+                                 data.get_property(),
                                  data.get_learning(),
                                  url_dao.select_index(data.get_url()),
                                  user_dao.select_index(data.get_writer())))
@@ -34,7 +34,7 @@ class CommentDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = """SELECT Comments._index, text, propriety, User.id, time
+            sql = """SELECT Comments._index, text, property, User.id, time
                     FROM Comments, User, Articles
                     WHERE Comments.writer = User._index
                     AND Comments.URL = Articles._index
