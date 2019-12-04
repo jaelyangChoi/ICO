@@ -1,5 +1,19 @@
 from DAO.comment import *
 from DTO import *
+from db_connection import *
+
+try:
+    db = DBConnection()
+    conn = db.get_connection()
+
+    if conn == -1:
+        print('-1')
+    else:
+        print('0')
+except Exception as e:
+    print(e)
+else:
+    print('끗')
 
 """
 cdao = CommentDAO()
@@ -38,10 +52,10 @@ for i in data_list:
     print("<" + str(cnt) + ">" + "번 데이터 :")
     cnt += 1
 
-    print("comment index_pre.html : " + str(i._index))
+    print("comment index.html : " + str(i._index))
     print("text : " + i._text)
     print("propriety level : " + str(i._propriety))
-    print("writer index_pre.html: " + i._writer)
+    print("writer index.html: " + i._writer)
     print(i._time)
 
     print()

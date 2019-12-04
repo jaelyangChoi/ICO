@@ -10,10 +10,10 @@ personal_keywordDB = PersonalKeywordDAO()
 @update_keyword_bp.route('/update_keyword', methods=['POST'])
 def update_keyword():
     #db에 추출한 keyword, id 넣기
-    personal_keywordDB.insert_keyword('1', request.form['keyword'])
+    personal_keywordDB.insert_keyword('cjl0701', request.form['keyword'])
 
-    #id가 1인 키워드 전부 출력
-    keywords = personal_keywordDB.select_keywords('1')
+    #id가 cjl0701인 키워드 전부 출력
+    keywords = personal_keywordDB.select_keywords('cjl0701')
 
     #키워드를 string으로
     keywords_str = ', '.join(keywords)

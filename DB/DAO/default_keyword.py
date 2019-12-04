@@ -56,7 +56,6 @@ class DefaultKeywordDAO:
                 keyword_list.append(result)
 
             self.db_conn.close_db()
-
             return keyword_list
 
         except Exception as e:
