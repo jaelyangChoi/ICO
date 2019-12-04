@@ -7,6 +7,7 @@ from router.update_comment import update_comment_bp
 from router.update_keyword import update_keyword_bp
 import json
 import os
+
 app = Flask(__name__, template_folder="templates")
 app.secret_key = 'abcdseijvxi'
 
@@ -17,24 +18,23 @@ app.register_blueprint(test.route_blue)
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 
-
 # 댓글, 키워드 db클래스 생성
 CommentDAO = CommentDAO()
 personal_keywordDB = PersonalKeywordDAO()
 
 
-@app.route('/googleCallback')
 @app.route('/')
 def index():
     with open('credentials.json') as json_file:
         json_data = json.load(json_file)
     data = json_data['web']
+
     return render_template('index.html', cilent_id=data['client_id'])
 
 
 @app.route('/news')
 def news():
-    mode =True
+    mode = True
     keywords = personal_keywordDB.select_keywords('cjl0701')
     keywords_str = ', '.join(keywords)
     print(keywords_str)
@@ -47,7 +47,7 @@ def news():
     if session['mode'] == 'on':
         comments = filtering(comments)
 
-    return render_template('news1.html', comments=comments, keywords=keywords_str, mode='on')
+    return render_template('news1.html', comments=comments, keywords=keywords_str, mode=session['mode'])
 
 
 @app.route('/filter_mode', methods=['POST'])

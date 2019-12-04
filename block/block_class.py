@@ -52,7 +52,7 @@ class Block:
         return [t for t in okt.nouns(comment)]
 
     # 댓글 품사분리함수(명사만 처리)
-    def _StringMatch(self,comment):
+    def _StringMatch(self, comment):
         # load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
         # load_ws = load_wb['Sheet1']
 

@@ -1,11 +1,9 @@
-# coding=utf-8
-from flask import Flask, Blueprint, render_template, request, jsonify, session
+from flask import Blueprint, request, jsonify, session
+from DB.DAO.comment import CommentDAO
+from DB.DAO.personal_keyword import PersonalKeywordDAO
+from DB.DTO.comment import Comment
 from block.block import runBlockComment
 from block.filtering import filtering
-from DB.DAO.personal_keyword import PersonalKeywordDAO
-
-from DB.DAO.comment import CommentDAO
-from DB.DTO.comment import Comment
 
 update_comment_bp = Blueprint('update_comment', __name__)
 

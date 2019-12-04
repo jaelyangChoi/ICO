@@ -164,9 +164,9 @@ def privateKeywordMatch(comments, keywords):
             #    한글 이외의 것을 제거한 댓글과 키워드 매치
 
             if block != 0:
-                comment['property'] = '+'
-                #차단할 개인 키워드가 있으면 -로 바꿈
-
+                comment['property'] = '-'
+                # 차단할 개인 키워드가 있으면 -로 바꿈
+            else:
                 continue
                 # 아니면 그대로
 
