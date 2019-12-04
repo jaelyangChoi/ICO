@@ -38,10 +38,10 @@ for i in data_list:
     print("<" + str(cnt) + ">" + "번 데이터 :")
     cnt += 1
 
-    print("comment index.html : " + str(i._index))
+    print("comment index_pre.html : " + str(i._index))
     print("text : " + i._text)
     print("propriety level : " + str(i._propriety))
-    print("writer index.html: " + i._writer)
+    print("writer index_pre.html: " + i._writer)
     print(i._time)
 
     print()

@@ -33,6 +33,7 @@ class GoogleLogin:
     def google_callback(self):
         session['state'] = True
         session['mode'] = 'off'
+        session['id'] = 'tempID'
 
         flow = Flow.from_client_secrets_file(self._path, scopes=SCOPES)
         flow.redirect_uri = url_for('route_blue.googleCallback', _external=True)

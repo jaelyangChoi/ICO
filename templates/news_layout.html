@@ -32,7 +32,7 @@
             <span class="close">&times;</span>
             <br>
             <form id="keywordForm">
-                <input type="hidden" class="data" name="userID" value="userID">
+{#                <input type="hidden" class="data" name="userID" value="userID">#}
                 <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
                 <input type="button" value="입력" onclick="updateKeyword()">
             </form>
@@ -46,7 +46,7 @@
 
     {# Comment Input #}
     <form id="commentForm">
-        <input type="hidden" class="data" name="userID" value="tempID">
+{#        <input type="hidden" class="data" name="userID" value="tempID">#}
         <textarea id="cmInputWindow" class="data" rows="5" cols="70" name="comment"
                   placeholder="댓글을 입력하십시오"></textarea>
         <input type="button" value="입력" onclick="updateComment()">
