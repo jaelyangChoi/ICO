@@ -172,7 +172,7 @@ class Block:
             # 품사분리(명사만 추출)
             print(tokenComment)
             filtering2 = self._stringSynk(tokenComment)
-            # 자모음 분리 후 2차 필터링
+            # 자모음 분리 후s 2차 필터링
 
             if filtering2 == "+":
                 if str(ml.total_predict(comment)) == '1':
