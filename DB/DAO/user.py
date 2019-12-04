@@ -9,10 +9,9 @@ class UserDAO(Index):
                                                FROM User
                                                WHERE id = %s""")
 
-    def is_correct_emial(self, emial):
-        if self.execute_sql_for_one_result(emial,
-                                           """SELECT *
+    def is_existing_email(self, email):
+        return self.execute_sql_for_one_result(email,
+                                           """SELECT EXISTS (
+                                           SELECT *
                                            FROM User
-                                           WHERE email = %s""") is None:
-            return -1;
-        return 0
+                                           WHERE email = %s)""")
