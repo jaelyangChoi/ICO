@@ -12,7 +12,7 @@ class UserDAO(Index):
     def is_correct_emial(self, emial):
         if self.execute_sql_for_one_result(emial,
                                            """SELECT *
-                                        FROM User
-                                        WHERE email = %s""") is None:
+                                           FROM User
+                                           WHERE email = %s""") is None:
             return -1;
         return 0

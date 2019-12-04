@@ -1,3 +1,4 @@
+
 import pickle
 
 import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
@@ -11,13 +12,13 @@ from tensorflow.keras.models import model_from_json
 
 class CommentPredict:
     def __init__(self):
-        json_file = open("./ml/ml_by_pumsa/model.json", "r")
+        json_file = open("./dataset_pumsa_ml/model.json", "r")
         loaded_model_json = json_file.read()
         json_file.close()
         self.predict_score = 0
         self.predict_result = 0
         self.model = model_from_json(loaded_model_json)
-        self.model.load_weights("./ml/ml_by_pumsa/model.h5")
+        self.model.load_weights("./dataset_pumsa_ml/model.h5")
         self.model.compile(optimizer=optimizers.RMSprop(lr=0.001),
                            loss=losses.binary_crossentropy,
                            metrics=[metrics.binary_accuracy])
@@ -25,7 +26,7 @@ class CommentPredict:
     def read_csv_file(self, csv_file_name):
         """csv파일을 dataframe 형식으로 가져오기"""
 
-        df = pd.read_csv("./ml/ml_by_pumsa/" + csv_file_name + ".csv")
+        df = pd.read_csv("./dataset_pumsa_ml/" + csv_file_name + ".csv")
         return df
 
     def tokenize(self, sentence):
@@ -79,7 +80,7 @@ class CommentPredict:
     def data_preprocessing(self, data):
         """데이터 전처리"""
 
-        f = open("./ml/ml_by_pumsa/commonwords.pkl", "rb")
+        f = open("./dataset_pumsa_ml/commonwords.pkl", "rb")
         selected_tokens = pickle.load(f)
         f.close()
         token_data=self.remain_meaning_token([(self.tokenize(data), '0')])
@@ -92,9 +93,9 @@ class CommentPredict:
         data = self.data_preprocessing(comment)
         score = float(self.model.predict(data))
         self.predict_score = score
-        if score > 0.7:
-            self.predict_result = 1
+        if score > 0.5:
+            self.predict_result = "1"
             return "1"
         else:
-            self.predict_result = 0
+            self.predict_result = "0"
             return "0"

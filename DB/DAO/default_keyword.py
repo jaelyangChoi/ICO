@@ -8,11 +8,11 @@ class DefaultKeywordDAO:
 
     def select_keywords(self):
         return self.execute_sql_for_list("""SELECT keyword
-                                            FROM DefaultKeywords""")
+                                            FROM DefaultKeyword""")
 
     def select_split_keywords(self):
         return self.execute_sql_for_list("""SELECT splited_keyword
-                                            FROM DefaultKeywords""")
+                                            FROM DefaultKeyword""")
 
     def execute_sql_for_list(self, sql):
         try:

@@ -1,5 +1,4 @@
 import csv
-import os
 import pandas as pd
 from konlpy.tag import Okt  # Okt(Open Korean Text) 클래스
 import nltk  # 자연어 처리 패키지 문서탐색용, Test 클래스
@@ -14,8 +13,7 @@ import pickle
 
 def read_csv_file(csv_file_name):
     """csv파일을 dataframe 형식으로 가져오기"""
-
-    df = pd.read_csv("./" + csv_file_name + ".csv")
+    df = pd.read_csv("../../dataset_pumsa_ml/" + csv_file_name + ".csv")
     return df
 
 
@@ -105,7 +103,7 @@ def data_preprocessing(data_file):
     text = nltk.Text(tokens, name='NMSC')
     selected_tokens = [common_word[0] for common_word in text.vocab().most_common(100)]  # 자주쓰이는 단어
 
-    f=open("./commonwords.pkl", "wb")
+    f=open("../../dataset_pumsa_ml/commonwords.pkl", "wb")
     pickle.dump(selected_tokens, f)
     f.close()
 
@@ -142,9 +140,9 @@ def learning_ml():
 
 
     model_json = model.to_json()
-    with open("./model.json", "w") as json_file: #학습된 모델저장
+    with open("../../dataset_pumsa_ml/model.json", "w") as json_file: #학습된 모델저장
         json_file.write(model_json)
-    model.save_weights("./model.h5") #가중치저장
+    model.save_weights("../../dataset_pumsa_ml/model.h5") #가중치저장
 
     return model
 
