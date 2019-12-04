@@ -54,7 +54,6 @@ def tokenize(comment):
 
 
 # 댓글 품사분리함수(명사만 처리)
-<<<<<<< HEAD
 
 def onlyHangul(comment):
     # 특수문자 제거 함수
@@ -76,11 +75,7 @@ def onlyHangul(comment):
 # 숫자, 영어, 특수문자 제외 한글만 추출하는 함수
 
 def stringMatch(comment):
-=======
-def StringMatch(comment):
-    # load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
-    # load_ws = load_wb['Sheet1']
->>>>>>> b734b317a72beebefb08b458d5316a65cf3346fe
+
 
     block = 0
     _comment = ""
@@ -114,18 +109,11 @@ def stringSynk(comment):
     print("**2차 필터링 시작**")
     for j in comment:
 
-<<<<<<< HEAD
         _comment = hgtk.text.decompose(j).replace("ᴥ", "")
 
         for i in keywords.select_split_keywords():
 
             matchRatio = difflib.SequenceMatcher(None, str(i), _comment).ratio()
-=======
-        default_keyword_list = keywords.select_split_keywords()
-        for keyword in default_keyword_list:
-            data = keyword.to_json()
-            matchRatio = difflib.SequenceMatcher(None, data['split_keyword'], _comment).ratio()
->>>>>>> b734b317a72beebefb08b458d5316a65cf3346fe
 
             if matchRatio >= 0.75:
                 # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
