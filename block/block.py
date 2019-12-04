@@ -201,9 +201,3 @@ def runBlockComment(testComment):
     else:
         return 0
         # 1차에서 걸린경우
-
-
-print(runBlockComment("어머~ 두분 점점 닮아가세요. 보기좋아요"))
-# print(privateKeywordMatch([{'userID': 'cjl', 'comment': 'test data', 'property':'+'},{'userID': 'cjl2', 'comment': '안녕', 'property':'+'}], ["안뇽", "안용", "안녕"]))
-
-#### return 값:: + 긍정  - 부정
