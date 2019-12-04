@@ -1,7 +1,6 @@
 import os
 
 from flask import redirect, url_for, request
-from flask import session
 from google_auth_oauthlib.flow import Flow
 
 from config import get_credentials_path
@@ -31,10 +30,6 @@ class GoogleLogin:
         return redirect(authorization_url)
 
     def google_callback(self):
-        session['state'] = True
-        session['mode'] = 'off'
-        session['id'] = 'tempID'
-
         flow = Flow.from_client_secrets_file(self._path, scopes=SCOPES)
         flow.redirect_uri = url_for('route_blue.googleCallback', _external=True)
 

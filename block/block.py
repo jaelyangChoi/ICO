@@ -157,7 +157,7 @@ def privateKeywordMatch(comments, keywords):
 
     for comment in comments:
 
-        if comment['property'] == 0:
+        if comment['property'] == '-':
             continue
         # 이미 차단된 댓글인 경우 판단하지 않음
         else:
@@ -173,7 +173,7 @@ def privateKeywordMatch(comments, keywords):
             #    한글 이외의 것을 제거한 댓글과 키워드 매치
 
             if block != 0:
-                comment['property'] = 0
+                comment['property'] = '+'
                 # 차단할 개인 키워드가 있으면 -로 바꿈
             else:
                 continue
@@ -198,15 +198,15 @@ def runBlockComment(testComment):
         filtering2 = stringSynk(testTokenComment)
         # 자모음 분리 후 2차 필터링
 
-        if filtering2 == 1:
+        if filtering2 == '+':
             if ml.total_predict(testComment) == 1:
-                return 1
+                return '+'
             else:
-                return 0
+                return '-'
         ####################**********ML로 댓글 넘김***********#############
         else:
-            return 0
+            return '-'
         # 2차에서 걸린경우
     else:
-        return 0
+        return '-'
         # 1차에서 걸린경우

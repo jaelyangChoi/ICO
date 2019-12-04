@@ -27,11 +27,22 @@ url = 'http://localhost:5000/news'
 
 data_list = cdao.select_comments_by_url(url)
 for i in data_list:
+<<<<<<< HEAD
     print("index : <" + str(i.get_index()) + ">")
     print("text : " + i.get_comment())
     print("property : " + str(i.get_property()))
     print("user id: " + i.get_user_id())
     print(i.get_time())
+=======
+    print("<" + str(cnt) + ">" + "번 데이터 :")
+    cnt += 1
+
+    print("comment index.html : " + str(i._index))
+    print("text : " + i._text)
+    print("propriety level : " + str(i._propriety))
+    print("writer index.html: " + i._writer)
+    print(i._time)
+>>>>>>> 90a197fbb809ba11af0865a3321d23bb960b81e7
 
     print()
 

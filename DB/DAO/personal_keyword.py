@@ -44,10 +44,11 @@ class PersonalKeywordDAO:
 
             user_dao = UserDAO()
 
-            cursor.execute(self.sql, (keyword, user_dao.select_index(id)))
+            user_index = user_dao.select_index(id)
+            cursor.execute(self.sql, (keyword, user_index))
             conn.commit()
 
             self.db_conn.close_db()
 
         except Exception as e:
-            return -1
+            print(e)

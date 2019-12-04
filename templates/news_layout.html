@@ -86,7 +86,7 @@
             url: '/update_comment',
             data: $('#commentForm .data'), {#서버로 데이터 전송시#}
             dataType: 'JSON', {#서버에서 데이터 전송시#}
-            success: function (data) {
+            "success": function (data) {
                 $('#cmInputWindow').val('');
                 var comments = '';
                 var i = 0;
