@@ -11,7 +11,7 @@ class UserDAO(Index):
 
     def is_existing_email(self, email):
         return self.execute_sql_for_one_result(email,
-                                           """SELECT EXISTS (
-                                           SELECT *
-                                           FROM User
-                                           WHERE email = %s)""")
+                                               """SELECT EXISTS (
+                                               SELECT *
+                                               FROM User
+                                               WHERE email = %s)""")
