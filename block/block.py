@@ -1,12 +1,11 @@
-import hgtk
-from flask import Blueprint, request, render_template, flash, redirect, url_for
-from openpyxl import load_workbook, Workbook
-from konlpy.tag import Okt
 import difflib
-import pymysql
 import urllib.request
+
+import hgtk
 from bs4 import BeautifulSoup
-from ml import ml_predict
+from konlpy.tag import Okt
+from openpyxl import load_workbook
+
 from ml.ml_predict import ModelCombine
 
 
@@ -129,11 +128,11 @@ def filteringSynk(comment):
     else:
         return "+"
 
+
 # 유사도판별함수, 2차필터링
 
 
 def privateKeywordMatch(comments, keywords):
-
     block = 0
     _comment = ""
 
@@ -158,12 +157,14 @@ def privateKeywordMatch(comments, keywords):
 
             if block != 0:
                 comment['property'] = '+'
-                #차단할 개인 키워드가 있으면 -로 바꿈
+                # 차단할 개인 키워드가 있으면 -로 바꿈
             else:
                 continue
-                #아니면 그대로
+                # 아니면 그대로
 
     return comments
+
+
 # 개인키워드, 3차필터링
 
 
@@ -192,9 +193,3 @@ def runBlockComment(testComment):
     else:
         return '-'
         # 1차에서 걸린경우
-
-
-# print(runBlockComment("안녕하세요"))
-print(privateKeywordMatch([{'userID': 'cjl', 'comment': 'test data', 'property':'+'},{'userID': 'cjl2', 'comment': '안녕', 'property':'+'}], ["안뇽", "안용", "안녕"]))
-
-#### return 값:: + 긍정  - 부정

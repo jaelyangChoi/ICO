@@ -1,13 +1,14 @@
+import json
+import os
+
 from flask import Flask, render_template, request, redirect, url_for, session
-from router.update_comment import update_comment_bp
-from router.update_keyword import update_keyword_bp
+
 from DB.DAO.comment import CommentDAO
 from DB.DAO.personal_keyword import PersonalKeywordDAO
 from block.filtering import filtering
-import json
-import os
 from router import test
-from block import block
+from router.update_comment import update_comment_bp
+from router.update_keyword import update_keyword_bp
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -29,7 +30,6 @@ CommentDAO = CommentDAO()
 personal_keywordDB = PersonalKeywordDAO()
 
 
-@app.route('/googleCallback')
 @app.route('/')
 def index():
     with open('credentials.json') as json_file:
@@ -41,7 +41,7 @@ def index():
 # DB로부터 댓글과 키워드 받아와 필터링해 반환
 @app.route('/news')
 def news():
-    mode =True
+    mode = True
     keywords = personal_keywordDB.select_keywords('cjl0701')
     keywords_str = ', '.join(keywords)
     print(keywords_str)

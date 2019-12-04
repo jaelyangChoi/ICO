@@ -39,14 +39,13 @@ def google_login():
 
 @route_blue.route('/googleCallback')
 def googleCallback():
-    result = gl.google_callback
+    result = gl.google_callback()
     session['id_token'] = result['id_token']
     return redirect('/')
 
 
 @route_blue.route('/logout')
 def logout():
-    if 'state' in session:
-        del session['state']
+    session.clear()
 
     return redirect(url_for('index'))
