@@ -34,14 +34,12 @@ def index():
 
 @app.route('/news')
 def news():
-    mode = True
-    keywords = personal_keywordDB.select_keywords('cjl0701')
+    user_info = session['info']
+    keywords = personal_keywordDB.select_keywords(user_info['id'])
     keywords_str = ', '.join(keywords)
     print(keywords_str)
     # 전체 댓글 리로드
-    comments = CommentDAO.select_comments_by_url('http://localhost:5000/news')
-    # for comment in comments:
-    #   print(comment.get_comment()) 반환 값 {'idx': 1, 'text': '왜구들이 미쳐 날뛰네', 'propriety': 0, 'ML_learning': 0, 'url': '', 'writer': '1', 'time': datetime.datetime(2019, 12, 2, 19, 5, 19)}
+    comments = CommentDAO.select_comments_by_url(url_for('news'))
 
     # 필터링 서비스
     if session['mode'] == 'on':

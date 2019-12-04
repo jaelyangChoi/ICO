@@ -22,3 +22,5 @@ class UserDAO(Index):
         result = self.execute_sql_for_one_result(email, UserDAO.__CHECK_BY_EMAIL)
         print(result)
         user = User(result[1], result[2], result[3], result[0])
+
+        return user
