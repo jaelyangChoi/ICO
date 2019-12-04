@@ -1,54 +1,39 @@
 from DAO.comment import *
-from DTO import *
-from db_connection import *
+from DTO.comment import *
+from DAO.default_keyword import *
+from DAO.personal_keyword import *
+from DAO.user import *
 
-try:
-    db = DBConnection()
-    conn = db.get_connection()
-
-    if conn == -1:
-        print('-1')
-    else:
-        print('0')
-except Exception as e:
-    print(e)
-else:
-    print('끗')
-
-"""
 cdao = CommentDAO()
-kdao = KeywordDAO()
-
-print('댓글 입력')
 data = Comment()
+dkdoa = DefaultKeywordDAO()
+pkdao = PersonalKeywordDAO()
+udao = UserDAO()
+"""
+print('댓글 입력')
+data.set_comment(input('input comment : '))
 
-text = input('input text : ')
-data.set_text(text)
-
-propriety = int(input('input propriety : '))
-data.set_propriety(propriety)
-
-learning = int(input('input learning : '))
-data.set_learning(learning)
-
-URL = input('input URL : ')
-data.set_url(URL)
-
-writer = input('input writer : ')
-data.set_writer(writer)
+data.set_property('+')
+data.set_learning(0)
+data.set_url('http://localhost:5000/news')
+data.set_user_id('any980418')
 
 cdao.insert_comment(data)
+
 print()
 
 print('url 댓글 검색')
-url = input('input URL : ')
-cnt = 1
+url = 'http://localhost:5000/news'
 
 data_list = cdao.select_comments_by_url(url)
-
-print()
-
 for i in data_list:
+<<<<<<< HEAD
+    print("index : <" + str(i.get_index()) + ">")
+    print("text : " + i.get_comment())
+    print("property : " + str(i.get_property()))
+    print("user id: " + i.get_user_id())
+    print(i.get_time())
+=======
     print("<" + str(cnt) + ">" + "번 데이터 :")
     cnt += 1
 
@@ -57,17 +42,20 @@ for i in data_list:
     print("propriety level : " + str(i._propriety))
     print("writer index.html: " + i._writer)
     print(i._time)
+>>>>>>> 90a197fbb809ba11af0865a3321d23bb960b81e7
 
     print()
 
 print('개인 키워드 입력')
-id = input('id : ')
+id = 'any980418'
 keyword = input('input keyword : ')
 
-kdao.insert_personal_keyword(id, keyword)
+pkdao.insert_keyword(id, keyword)
+
+id = 'any980418'
 
 print('\n<' + id + '>의 개인 키워드 검색')
-keyword_list = kdao.select_personal_keywords_by_user(id)
+keyword_list = pkdao.select_keywords(id)
 
 cnt = 1
 for i in keyword_list:
@@ -76,27 +64,36 @@ for i in keyword_list:
 print()
 
 print('개인 키워드 삭제')
-id = input('id : ')
 keyword = input('input keyword : ')
 
-kdao.delete_personal_keyword(id, keyword)
+pkdao.delete_keyword(id, keyword)
 
 print('\n<' + id + '>의 개인 키워드 검색')
-keyword_list = kdao.select_personal_keywords_by_user(id)
+keyword_list = pkdao.select_keywords(id)
 
 cnt = 1
 for i in keyword_list:
     print(str(cnt) + 'th keyword : ' + i)
     cnt += 1
-print()
 
-url = input("URL : ")
-url_dao = UrlDAO()
-print("index : " + str(url_dao.select_index(url)))
+print("none : " + str(udao.is_existing_email('none')))
+print("any980418@naver.com : " + str(udao.is_existing_email('any980418@naver.com')))
 
-print()
+print("return -1 : " + str(data.set_property('!')))
 
-user = input("Id : ")
-user_dao = UserDAO()
-print("index : " + str(user_dao.select_index(user)))
+keyword_list = dkdoa.select_keywords()
+cnt = 1
+for i in keyword_list:
+    print(str(cnt) + 'th keyword : ' + i)
+    cnt += 1
+
+keyword_list = dkdoa.select_split_keywords()
+cnt = 1
+for i in keyword_list:
+    print(str(cnt) + 'th keyword : ' + i)
+    cnt += 1
 """
+
+result = dkdoa.select_all()
+for k in result:
+    print(k.to_json())

@@ -1,8 +1,13 @@
 class DefaultKeyword:
-    def __init__(self, index=None, keyword=None, split_keyword=None):
-        self._index = index
-        self._keyword = keyword
-        self._split_keyword = split_keyword
+    def __init__(self):
+        self._index = None
+        self._keyword = None
+        self._split_keyword = None
+
+    def set_all(self, data):
+        self._index = data[0]
+        self._keyword = data[1]
+        self._split_keyword = data[2]
 
     def set_keyword(self, keyword):
         self._keyword = keyword

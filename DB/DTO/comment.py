@@ -69,6 +69,3 @@ class Comment:
 
     def set_user_id(self, userID):
         self._data['userID'] = userID
-
-    def set_insert_comment(self, new_comment):
-        pass

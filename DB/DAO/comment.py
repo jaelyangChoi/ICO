@@ -42,14 +42,12 @@ class CommentDAO:
             cursor.execute(sql, url)
 
             data_list = []
-
             for result in cursor.fetchall():
                 data = Comment()
                 data.set_all(result)
                 data_list.append(data)
 
             self.db_conn.close_db()
-
             return data_list
 
         except Exception as e:

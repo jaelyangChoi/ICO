@@ -93,9 +93,9 @@ class CommentPredict:
         data = self.data_preprocessing(comment)
         score = float(self.model.predict(data))
         self.predict_score = score
-        if score > 0.7:
-            self.predict_result = 1
+        if score > 0.5:
+            self.predict_result = "1"
             return "1"
         else:
-            self.predict_result = 0
+            self.predict_result = "0"
             return "0"

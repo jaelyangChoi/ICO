@@ -54,9 +54,33 @@ def tokenize(comment):
 
 
 # 댓글 품사분리함수(명사만 처리)
+<<<<<<< HEAD
+
+def onlyHangul(comment):
+    # 특수문자 제거 함수
+    _comment = ""
+    for j in range(0, len(comment)):
+        # 댓글 길이만큼 for문
+        if hgtk.checker.is_hangul(comment[j]):
+            _comment += comment[j]
+        elif comment[j] == ' ':
+            _comment += comment[j]
+        #     코멘트 한글자마다 한글인지 파악
+        #     한글 or 띄어쓰기일 경우 새 String인자에 추가
+        else:
+            continue
+        #      한글이 아니면 추가X
+    return _comment
+
+
+# 숫자, 영어, 특수문자 제외 한글만 추출하는 함수
+
+def stringMatch(comment):
+=======
 def StringMatch(comment):
     # load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
     # load_ws = load_wb['Sheet1']
+>>>>>>> b734b317a72beebefb08b458d5316a65cf3346fe
 
     block = 0
     _comment = ""
@@ -80,43 +104,28 @@ def StringMatch(comment):
 
 # String 일치함수, 1차필터링
 
-def onlyHangul(comment):
-    # 특수문자 제거 함수
+
+def stringSynk(comment):
+
     _comment = ""
-    for j in range(0, len(comment)):
-        # 댓글 길이만큼 for문
-        if hgtk.checker.is_hangul(comment[j]):
-            _comment += comment[j]
-        elif comment[j] == ' ':
-            _comment += comment[j]
-        #     코멘트 한글자마다 한글인지 파악
-        #     한글일 경우 새 String인자에 추가
-        else:
-            continue
-        #      한글이 아니면 추가X
-    return _comment
-
-
-# 띄어쓰기,특수문자 제외 한글만 추출하는 함수
-
-def filteringSynk(comment):
-    _comment = ""
-
-    # load_wb = load_workbook("/Users/77520769/Documents/문해긔/기본키워드_분리3.xlsx", data_only=True)
-    # load_ws = load_wb['Sheet']
-
     keywords = default_keyword.DefaultKeywordDAO()
-
     block = 0
 
     print("**2차 필터링 시작**")
     for j in comment:
+
+<<<<<<< HEAD
         _comment = hgtk.text.decompose(j).replace("ᴥ", "")
 
+        for i in keywords.select_split_keywords():
+
+            matchRatio = difflib.SequenceMatcher(None, str(i), _comment).ratio()
+=======
         default_keyword_list = keywords.select_split_keywords()
         for keyword in default_keyword_list:
             data = keyword.to_json()
             matchRatio = difflib.SequenceMatcher(None, data['split_keyword'], _comment).ratio()
+>>>>>>> b734b317a72beebefb08b458d5316a65cf3346fe
 
             if matchRatio >= 0.75:
                 # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
@@ -124,9 +133,9 @@ def filteringSynk(comment):
                     print("\t 존재하는 단어 :" + j + "이므로 차단하지 않습니다")
                     continue
                 else:
-                    # print("기본 키워드: " + load_ws['A' + str(i)].value)
-                    # print("댓글 내 단어: " + _comment)
-                    # print("일치율: " + str(matchRatio * 100) + "%")
+                    print("기본 키워드: " + i)
+                    print("댓글 내 단어: " + _comment)
+                    print("일치율: " + str(matchRatio * 100) + "%")
                     block = block + 1
                     break
         if block != 0:
@@ -177,14 +186,14 @@ def privateKeywordMatch(comments, keywords):
 def runBlockComment(testComment):
     ml = ModelCombine()
 
-    filtering1 = StringMatch(testComment)
+    filtering1 = stringMatch(testComment)
     # 1차 필터링~String일치로 판별
 
     if filtering1 == "+":
         # 1차 성공시 2차 필터링 시작
         testTokenComment = tokenize(testComment)
         # 품사분리(명사만 추출)
-        filtering2 = filteringSynk(testTokenComment)
+        filtering2 = stringSynk(testTokenComment)
         # 자모음 분리 후 2차 필터링
 
         if filtering2 == '+':

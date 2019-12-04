@@ -1,5 +1,5 @@
 from DAO.user import *
-from DTO.defaultKeyword import DefaultKeyword
+from DTO.defaultKeyword import *
 
 
 class DefaultKeywordDAO:
@@ -11,49 +11,39 @@ class DefaultKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = "SELECT _index, keyword, split_keyword FROM DefaultKeywords"
+            sql = "SELECT * FROM DefaultKeyword"
             cursor.execute(sql)
 
-            devide_keyword_list = []
-            for index, keyword, split_keyword in cursor.fetchall():
-                default_keyword = DefaultKeyword(index, keyword, split_keyword)
-                devide_keyword_list.append(default_keyword)
-            self.db_conn.close_db()
-
-            return devide_keyword_list
-
-        except Exception as e:
-            return -1
-
-    def select_split_keywords(self):
-        try:
-            conn = self.db_conn.get_connection()
-            cursor = conn.cursor()
-
-            sql = "SELECT splited_keyword FROM DefaultKeywords"
-            cursor.execute(sql)
-
-            devide_keyword_list = []
+            keyword_list = []
             for result in cursor.fetchall():
-                devide_keyword_list.append(result)
-            self.db_conn.close_db()
+                default_keyword = DefaultKeyword()
+                default_keyword.set_all(result)
+                keyword_list.append(default_keyword)
 
-            return devide_keyword_list
+            self.db_conn.close_db()
+            return keyword_list
 
         except Exception as e:
             return -1
 
     def select_keywords(self):
+        return self.execute_sql_for_one_component_list("""SELECT keyword
+                                            FROM DefaultKeyword""")
+
+    def select_split_keywords(self):
+        return self.execute_sql_for_one_component_list("""SELECT splited_keyword
+                                            FROM DefaultKeyword""")
+
+    def execute_sql_for_one_component_list(self, sql):
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = "SELECT keyword FROM DefaultKeywords"
             cursor.execute(sql)
 
             keyword_list = []
             for result in cursor.fetchall():
-                keyword_list.append(result)
+                keyword_list.append(result[0])
 
             self.db_conn.close_db()
             return keyword_list

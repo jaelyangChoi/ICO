@@ -8,7 +8,7 @@ class ModelCombine:
         word_ml = wml.ModelByWord()
 
         pumsa_ml_result = pumsa_ml.predict(comment)
-        word_ml_result = word_ml.predict(comment)[0]
+        word_ml_result = str(word_ml.predict(comment)[0])
 
         print(pumsa_ml_result, word_ml_result, pumsa_ml.predict_score)
 
