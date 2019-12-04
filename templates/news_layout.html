@@ -32,8 +32,7 @@
             <span class="close">&times;</span>
             <br>
             <form id="keywordForm">
-{#                <input type="hidden" class="data" name="userID" value="userID">#}
-                <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
+                <input type="text" id="kwInputWindow" class="data" name="keyword" placeholder="차단할 단어를 입력하세요">
                 <input type="button" value="입력" onclick="updateKeyword()">
             </form>
             <br>
@@ -46,9 +45,8 @@
 
     {# Comment Input #}
     <form id="commentForm">
-{#        <input type="hidden" class="data" name="userID" value="tempID">#}
-        <textarea id="cmInputWindow" class="data" rows="5" cols="70" name="comment"
-                  placeholder="댓글을 입력하십시오"></textarea>
+        <input type="hidden" class="data" name="url" value="{{ url_for('news') }}">
+        <textarea id="cmInputWindow" class="data" name="comment" placeholder="댓글을 입력하십시오" rows="5" cols="70"></textarea>
         <input type="button" value="입력" onclick="updateComment()">
     </form>
     <br>
@@ -64,65 +62,8 @@
     {% endif %}
 </div>
 
-<script>
-    //새로운 키워드를 반영하여 리로드
-    function updateKeyword() {
-        $.ajax({
-            type: 'POST',
-            url: '/update_keyword',
-            data: $('#keywordForm .data'), {#서버로 데이터 전송시#}
-            {#dataType: 'JSON',{#서버에서 데이터 전송시#}
-            success: function (data) {
-                $('#kwInputWindow').val('');
-                $('#kwOutputWindow').val(data);
-            }
-        })
-    }
-
-    //새로운 댓글을 반영하여 리로드
-    function updateComment() {
-        $.ajax({
-            type: 'POST',
-            url: '/update_comment',
-            data: $('#commentForm .data'), {#서버로 데이터 전송시#}
-            dataType: 'JSON', {#서버에서 데이터 전송시#}
-            success: function (data) {
-                $('#cmInputWindow').val('');
-                var comments = '';
-                var i = 0;
-                while (i < data.length) {
-                    comments = comments + '<h3>' + data[i].userID + '</h3><textarea rows="4" cols="109">' + data[i].comment + '</textarea>';
-                    i++;
-                }
-                $('#cmOutputWindow').html(comments);
-            }
-        })
-    }
-
-    //개인 필터링 mode에 대한 정보를 서버로 전송
-    function sendPost(action, mode) {
-        var form = document.createElement('form');
-        form.setAttribute('method', 'post');
-        form.setAttribute('action', action);
-        document.charset = "utf-8";
-        var hiddenField = document.createElement('input');
-        hiddenField.setAttribute('type', 'hidden');
-        hiddenField.setAttribute('name', 'mode');
-        hiddenField.setAttribute('value', mode);
-        form.appendChild(hiddenField);
-        document.body.appendChild(form);
-        form.submit();
-    }
-
-    //개인 필터 버튼을 클릭하면 버튼의 내용을 바꾸고 서버로 모드 정보 전송
-    function filterMode(self) {
-        if (self.value === 'ICO Service on')
-            self.value = 'ICO Service off';
-        else
-            self.value = 'ICO Service on';
-        sendPost("{{ url_for('filter_mode') }}", self.value);
-    }
-</script>
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/updateInput.js') }}"></script>
+<script src="{{ url_for('static', filename='js/filterMode.js') }}"></script>
 </body>
 </html>

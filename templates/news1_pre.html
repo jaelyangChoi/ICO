@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>news1</title>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/news_layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+</head>
+<body>
+<div id="title">
+    <a href="{{ url_for('index') }}"><h1>ThisPatch</h1></a>
+    <h5> 뉴스는 '팩트'다</h5>
+</div>
+<div class="mainNews">
+    {% block headline %}
+    {% endblock %}
+</div>
+<div class="center">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<div class="commentArea">
+    {# Modal window #}
+    <input type="button" value="{{ mode }}" onclick="filterMode(this)">
+    <button id="MDbtn">ICO 설정하기</button>
+    <div id="Modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <br>
+            <form id="keywordForm">
+{#                <input type="hidden" class="data" name="userID" value="userID">#}
+                <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
+                <input type="button" value="입력" onclick="updateKeyword()">
+            </form>
+            <br>
+            <strong>차단 키워드</strong>
+            <br>
+            <textarea id="kwOutputWindow" rows="6" cols="40">{{ keywords }}</textarea>
+        </div>
+    </div>
+    <br>
+
+    {# Comment Input #}
+    <form id="commentForm">
+{#        <input type="hidden" class="data" name="userID" value="tempID">#}
+        <textarea id="cmInputWindow" class="data" rows="5" cols="70" name="comment"
+                  placeholder="댓글을 입력하십시오"></textarea>
+        <input type="button" value="입력" onclick="updateComment()">
+    </form>
+    <br>
+</div>
+
+{# Comments Area #}
+<div class="commentArea" id="cmOutputWindow">
+    {% if comments %}
+        {% for comment in comments %}
+            <h3>{{ comment['userID'] }}</h3>
+            <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<script>
+    //새로운 키워드를 반영하여 리로드
+    function updateKeyword() {
+        $.ajax({
+            type: 'POST',
+            url: '/update_keyword',
+            data: $('#keywordForm .data'), {#서버로 데이터 전송시#}
+            {#dataType: 'JSON',{#서버에서 데이터 전송시#}
+            success: function (data) {
+                $('#kwInputWindow').val('');
+                $('#kwOutputWindow').val(data);
+            }
+        })
+    }
+    //새로운 댓글을 반영하여 리로드
+    function updateComment() {
+        $.ajax({
+            type: 'POST',
+            url: '/update_comment',
+            data: $('#commentForm .data'), {#서버로 데이터 전송시#}
+            dataType: 'JSON', {#서버에서 데이터 전송시#}
+            success: function (data) {
+                $('#cmInputWindow').val('');
+                var comments = '';
+                var i = 0;
+                while (i < data.length) {
+                    comments = comments + '<h3>' + data[i].userID + '</h3><textarea rows="4" cols="109">' + data[i].comment + '</textarea>';
+                    i++;
+                }
+                $('#cmOutputWindow').html(comments);
+            }
+        })
+    }
+    //개인 필터링 mode에 대한 정보를 서버로 전송
+    function sendPost(action, mode) {
+        var form = document.createElement('form');
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', action);
+        document.charset = "utf-8";
+        var hiddenField = document.createElement('input');
+        hiddenField.setAttribute('type', 'hidden');
+        hiddenField.setAttribute('name', 'mode');
+        hiddenField.setAttribute('value', mode);
+        form.appendChild(hiddenField);
+        document.body.appendChild(form);
+        form.submit();
+    }
+    //개인 필터 버튼을 클릭하면 버튼의 내용을 바꾸고 서버로 모드 정보 전송
+    function filterMode(self) {
+        if (self.value === 'ICO Service on')
+            self.value = 'ICO Service off';
+        else
+            self.value = 'ICO Service on';
+        sendPost("{{ url_for('filter_mode') }}", self.value);
+    }
+</script>
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+</body>
+</html>

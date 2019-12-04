@@ -7,11 +7,18 @@ class DefaultKeywordDAO:
         self.db_conn = DBConnection()
 
     def select_keywords(self):
+        return self.execute_sql_for_list("""SELECT keyword
+                                            FROM DefaultKeyword""")
+
+    def select_split_keywords(self):
+        return self.execute_sql_for_list("""SELECT splited_keyword
+                                            FROM DefaultKeyword""")
+
+    def execute_sql_for_list(self, sql):
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = "SELECT word FROM DefaultKeywords"
             cursor.execute(sql)
 
             keyword_list = []
@@ -19,7 +26,6 @@ class DefaultKeywordDAO:
                 keyword_list.append(result[0])
 
             self.db_conn.close_db()
-
             return keyword_list
 
         except Exception as e:

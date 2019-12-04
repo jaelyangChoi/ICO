@@ -12,8 +12,8 @@ class PersonalKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = """SELECT keyword FROM PersonalKeywords, User
-                     WHERE PersonalKeywords.user = User._index
+            sql = """SELECT keyword FROM PersonalKeyword, User
+                     WHERE PersonalKeyword.user = User._index
                      AND User.id = %s"""
             cursor.execute(sql, id)
 
@@ -29,11 +29,11 @@ class PersonalKeywordDAO:
             return -1
 
     def insert_keyword(self, id, keyword):
-        self.sql = "INSERT INTO PersonalKeywords(keyword, user) VALUES(%s, %s)"
+        self.sql = "INSERT INTO PersonalKeyword(keyword, user) VALUES(%s, %s)"
         self.control_keyword(id, keyword)
 
     def delete_keyword(self, id, keyword):
-        self.sql = """DELETE FROM PersonalKeywords
+        self.sql = """DELETE FROM PersonalKeyword
                       WHERE keyword = %s AND user = %s"""
         self.control_keyword(id, keyword)
 

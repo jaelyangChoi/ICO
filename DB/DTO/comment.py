@@ -1,72 +1,71 @@
 class Comment:
     def __init__(self):
-        self._comment = {
-            "idx": 0,
-            "text": "",
-            "property":'+',
+        self._data = {
+            "index": 0,
+            "comment": "",
+            "property": "-",
             "ML_learning": 0,
             "url": "",
-            "writer": "",
+            "userID": "",
             "time": ""
         }
 
     # getter
-    def get_comment(self):
-        return self._comment
+    def get_data(self):
+        return self._data
 
     def get_index(self):
-        return self._comment['idx']
+        return self._data['index']
 
-    def get_text(self):
-        return self._comment['text']
+    def get_comment(self):
+        return self._data['comment']
 
     def get_property(self):
-        return self._comment['property']
+        return self._data['property']
 
     def get_learning(self):
-        return self._comment['ML_learning']
+        return self._data['ML_learning']
 
     def get_url(self):
-        return self._comment['url']
+        return self._data['url']
 
-    def get_writer(self):
-        return self._comment['writer']
+    def get_user_id(self):
+        return self._data['userID']
 
     def get_time(self):
-        return self._comment['time']
+        return self._data['time']
 
     # setter
-    def set_insert_comment(self, comment):
-        self._comment['writer'] = comment['userID']
-        self._comment['text'] = comment['comment']
-        self._comment['property'] = comment['property']
-        self._comment['url'] = comment['url']
-
+    def set_insert_data(self, comment):
+        self._data['userID'] = comment['userID']
+        self._data['comment'] = comment['comment']
+        self._data['property'] = comment['property']
+        self._data['url'] = comment['url']
 
     def set_all(self, data):
-        self._comment['idx'] = data[0]
-        self._comment['text'] = data[1]
-        self._comment['property'] = data[2]
-        self._comment['writer'] = data[3]
-        self._comment['time'] = data[4]
+        self._data['index'] = data[0]
+        self._data['comment'] = data[1]
+        self._data['property'] = data[2]
+        self._data['userID'] = data[3]
+        self._data['time'] = data[4]
 
-    def set_text(self, txt):
-        self._comment['text'] = txt
+    def set_comment(self, comment):
+        self._data['comment'] = comment
 
     def set_property(self, property):
-        if property == 0 or property == 1:
-            self._comment['property'] = property
+        if property == '+' or property == '-':
+            self._data['property'] = property
         else:
             return -1
 
     def set_learning(self, learning):
         if learning == 0 or learning == 1:
-            self._comment['ML_learning'] = learning
+            self._data['ML_learning'] = learning
         else:
             return -1
 
     def set_url(self, url):
-        self._comment['url'] = url
+        self._data['url'] = url
 
-    def set_writer(self, writer):
-        self._comment['writer'] = writer
+    def set_user_id(self, userID):
+        self._data['userID'] = userID
