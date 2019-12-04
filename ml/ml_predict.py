@@ -8,14 +8,14 @@ class ModelCombine:
         word_ml = wml.ModelByWord()
 
         pumsa_ml_result = pumsa_ml.predict(comment)
-        word_ml_result = word_ml.predict(comment)[0]
+        word_ml_result = str(word_ml.predict(comment)[0])
 
         print(pumsa_ml_result, word_ml_result, pumsa_ml.predict_score)
 
         if pumsa_ml_result == word_ml_result:
             return word_ml_result
         else:
-            if 0.6 < pumsa_ml.predict_score < 0.7:
+            if str(0.6) < pumsa_ml.predict_score < str(0.7):
                 return word_ml_result
             else:
                 return pumsa_ml_result
