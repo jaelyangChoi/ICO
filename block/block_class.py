@@ -11,7 +11,7 @@ from ml.ml_predict import ModelCombine
 
 class Block:
     def __init__(self):
-        self._default_keyword_list = DefaultKeywordDAO.select_all()
+        self._default_keyword_list = DefaultKeywordDAO().select_all()
 
     def _searchWord(self, word):
         # 사전 검색 url
@@ -163,21 +163,21 @@ class Block:
 
     # 개인키워드, 3차필터링
 
-    def runBlockComment(self, testComment):
+    def runBlockComment(self, comment):
         ml = ModelCombine()
 
-        filtering1 = self._StringMatch(testComment)
+        filtering1 = self._StringMatch(comment)
         # 1차 필터링~String일치로 판별
 
         if filtering1 == "+":
             # 1차 성공시 2차 필터링 시작
-            testTokenComment = self._tokenize(testComment)
+            testTokenComment = self._tokenize(comment)
             # 품사분리(명사만 추출)
             filtering2 = self._filteringSynk(testTokenComment)
             # 자모음 분리 후 2차 필터링
 
             if filtering2 == 1:
-                if ml.total_predict(testComment) == 1:
+                if ml.total_predict(comment) == 1:
                     return 1
                 else:
                     return 0
