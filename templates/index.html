@@ -17,9 +17,6 @@
         <div>
             <a href="/logout" onclick="signOut();">Sign out</a>
         </div>
-        <script type="javascript">
-            $(document).ready(storeToken(session['id_token']));
-        </script>
     {% else %}
         <div>
             <a href="/test/google/login">Google Login</a>
