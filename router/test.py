@@ -59,4 +59,4 @@ def filter():
     comment = request.args.get('comment')
     result = block.runBlockComment(comment)
 
-    return result
+    return str(result)

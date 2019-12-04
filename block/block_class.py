@@ -52,30 +52,28 @@ class Block:
         return [t for t in okt.nouns(comment)]
 
     # 댓글 품사분리함수(명사만 처리)
-    def _StringMatch(self,comment):
-        # load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
-        # load_ws = load_wb['Sheet1']
-
+    def _stringMatch(self,comment):
         block = 0
         _comment = ""
         default_keywords = self._default_keyword_list
-        print("**1차 필터링 시작**")
 
+        print("**1차 필터링 시작**")
         _comment = self._onlyHangul(comment)
 
         for default_keyword in default_keywords:
-            # 차단 키워드 갯수만큼 for문
-            if _comment.find(default_keyword.get_keyword()) != -1:
+        # 차단 키워드 갯수만큼 for문
+          if _comment.find(default_keyword.get_keyword()) != -1:
                 block = block + 1
                 print("매치된 기본 키워드: " + default_keyword.get_keyword())
                 break
         #    한글 이외의 것을 제거한 댓글과 키워드 매치
         if block != 0:
-            return "-"
+            return default_keyword
         else:
             return "+"
 
     # String 일치함수, 1차필터링
+
     def _onlyHangul(self, comment):
         # 특수문자 제거 함수
         _comment = ""
@@ -93,21 +91,20 @@ class Block:
         return _comment
 
     # 띄어쓰기,특수문자 제외 한글만 추출하는 함수
-    def _filteringSynk(self, comment):
+
+    def _stringSynk(self, comment):
         _comment = ""
-
-        # load_wb = load_workbook("/Users/77520769/Documents/문해긔/기본키워드_분리3.xlsx", data_only=True)
-        # load_ws = load_wb['Sheet']
-
         default_keywords = self._default_keyword_list
-
         block = 0
 
         print("**2차 필터링 시작**")
+
         for j in comment:
-            _comment = hgtk.text.decompose(j, "")
+
+            _comment = hgtk.text.decompose(j).replace("ᴥ", "").replace(" ", "")
 
             for default_keyword in default_keywords:
+
                 matchRatio = difflib.SequenceMatcher(None, default_keyword.get_split_keyword(), _comment).ratio()
 
                 if matchRatio >= 0.75:
@@ -116,15 +113,15 @@ class Block:
                         print("\t 존재하는 단어 :" + j + "이므로 차단하지 않습니다")
                         continue
                     else:
-                        # print("기본 키워드: " + load_ws['A' + str(i)].value)
-                        # print("댓글 내 단어: " + _comment)
-                        # print("일치율: " + str(matchRatio * 100) + "%")
+                        print("기본 키워드: " + default_keyword.get_split_keyword())
+                        print("댓글 내 단어: " + _comment)
+                        print("일치율: " + str(matchRatio * 100) + "%")
                         block = block + 1
                         break
             if block != 0:
                 break
         if block != 0:
-            return "-"
+            return default_keyword.get_split_keyword() + " & " + _comment + str(matchRatio * 100) + "%"
         else:
             return "+"
 
@@ -153,7 +150,7 @@ class Block:
                 #    한글 이외의 것을 제거한 댓글과 키워드 매치
 
                 if block != 0:
-                    comment['property'] = 0
+                    comment['property'] = '-'
                     # 차단할 개인 키워드가 있으면 -로 바꿈
                 else:
                     continue
@@ -166,25 +163,26 @@ class Block:
     def runBlockComment(self, comment):
         ml = ModelCombine()
 
-        filtering1 = self._StringMatch(comment)
+        filtering1 = self._stringMatch(comment)
         # 1차 필터링~String일치로 판별
 
         if filtering1 == "+":
             # 1차 성공시 2차 필터링 시작
-            testTokenComment = self._tokenize(comment)
+            tokenComment = self._tokenize(comment)
             # 품사분리(명사만 추출)
-            filtering2 = self._filteringSynk(testTokenComment)
+            print(tokenComment)
+            filtering2 = self._stringSynk(tokenComment)
             # 자모음 분리 후 2차 필터링
 
-            if filtering2 == 1:
-                if ml.total_predict(comment) == 1:
-                    return 1
+            if filtering2 == "+":
+                if str(ml.total_predict(comment)) == '1':
+                    return "+"
                 else:
-                    return 0
+                    return "-"
             ####################**********ML로 댓글 넘김***********#############
             else:
-                return 0
+                return "-"
             # 2차에서 걸린경우
         else:
-            return 0
+            return "-"
             # 1차에서 걸린경우
