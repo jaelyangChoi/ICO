@@ -27,7 +27,6 @@ CommentDAO = CommentDAO()
 personal_keywordDB = PersonalKeywordDAO()
 
 
-@app.route('/googleCallback')
 @app.route('/')
 def index():
     with open('credentials.json') as json_file:
@@ -50,12 +49,11 @@ def news():
     if session['mode'] == 'on':
         comments = filtering(comments)
 
-    return render_template('news1.html', comments=comments, keywords=keywords_str, mode=mode)
+    return render_template('news1.html', comments=comments, keywords=keywords_str, mode=session['mode'])
 
 
 @app.route('/filter_mode', methods=['POST'])
 def filter_mode():
-    global mode
     session['mode'] = request.form['mode']
     return redirect(url_for('news'))
 
