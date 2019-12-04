@@ -1,14 +1,11 @@
-from flask import Flask, render_template, Blueprint, request, redirect, url_for, jsonify, session
-
+from flask import Flask, render_template, request, redirect, url_for, session
 from router.update_comment import update_comment_bp
 from router.update_keyword import update_keyword_bp
-
+from DB.DAO.comment import CommentDAO
 from DB.DAO.personal_keyword import PersonalKeywordDAO
-from block import filtering
+from block.filtering import filtering
 import json
 import os
-from DB.DAO.comment import CommentDAO
-from flask import Flask, render_template, request, redirect, url_for
 from router import test
 from block import block
 
@@ -44,25 +41,25 @@ def index():
 # DB로부터 댓글과 키워드 받아와 필터링해 반환
 @app.route('/news')
 def news():
-    keywords = personal_keywordDB.select_keywords('1')
+    mode =True
+    keywords = personal_keywordDB.select_keywords('cjl0701')
     keywords_str = ', '.join(keywords)
     print(keywords_str)
 
     # 전체 댓글 리로드
-    comments = CommentDAO.select_comments_by_url('url')
+    comments = CommentDAO.select_comments_by_url('http://localhost:5000/news')
     # for comment in comments:
     #   print(comment.get_comment()) 반환 값 {'idx': 1, 'text': '왜구들이 미쳐 날뛰네', 'propriety': 0, 'ML_learning': 0, 'url': '', 'writer': '1', 'time': datetime.datetime(2019, 12, 2, 19, 5, 19)}
 
     # 필터링 서비스
-    if session['mode'] == 'ICO Service on':
+    if mode:
         comments = filtering(comments)
 
-    return render_template('news1.html', comments=comments, keywords=keywords_str, mode=mode)
+    return render_template('news1.html', comments=comments, keywords=keywords_str, mode='on')
 
 
 @app.route('/filter_mode', methods=['POST'])
 def filter_mode():
-    global mode
     session['mode'] = request.form['mode']
     return redirect(url_for('news'))
 

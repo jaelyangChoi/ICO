@@ -14,12 +14,12 @@ CommentDAO = CommentDAO()
 #댓글 필터링
 def filtering(comments):
     # DB에서 키워드 불러옴
-    keywords = personal_keywordDB.select_keywords(session['id'])
+    keywords = personal_keywordDB.select_keywords('cjl0701')
     # 개인 키워드 기반 적절성 유무 판단
     if keywords:
-        labeled_comments = block.privateKeywordMatch(comments, keywords)
+        comments = block.privateKeywordMatch(comments, keywords)
     # 부적절한 댓글 가리기
-    comments = conceal_bad_comment(labeled_comments)
+    comments = conceal_bad_comment(comments)
     return comments
 
 #부적절한 댓글 가리기

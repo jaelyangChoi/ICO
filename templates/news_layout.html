@@ -86,7 +86,7 @@
             url: '/update_comment',
             data: $('#commentForm .data'), {#서버로 데이터 전송시#}
             dataType: 'JSON', {#서버에서 데이터 전송시#}
-            success: function (data) {
+            "success": function (data) {
                 $('#cmInputWindow').val('');
                 var comments = '';
                 var i = 0;
@@ -116,10 +116,10 @@
 
     //개인 필터 버튼을 클릭하면 버튼의 내용을 바꾸고 서버로 모드 정보 전송
     function filterMode(self) {
-        if (self.value === 'ICO Service on')
-            self.value = 'ICO Service off';
+        if (self.value === 'on')
+            self.value = 'off';
         else
-            self.value = 'ICO Service on';
+            self.value = 'on';
         sendPost("{{ url_for('filter_mode') }}", self.value);
     }
 </script>

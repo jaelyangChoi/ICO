@@ -39,7 +39,7 @@ def google_login():
 
 @route_blue.route('/googleCallback')
 def googleCallback():
-    result = gl.google_callback()
+    result = gl.google_callback
     session['id_token'] = result['id_token']
     return redirect('/')
 
