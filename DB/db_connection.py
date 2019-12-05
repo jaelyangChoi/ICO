@@ -21,7 +21,7 @@ class DBConnection:
             return self.conn
 
         except Exception as e:
-            -1
+            print(e)
 
     def close_db(self):
         self.conn.close()
