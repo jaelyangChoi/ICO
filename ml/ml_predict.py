@@ -15,7 +15,7 @@ class ModelCombine:
         if pumsa_ml_result == word_ml_result:
             return word_ml_result
         else:
-            if 0.6 < pumsa_ml.predict_score < 0.7:
+            if 0.6 < pumsa_ml.predict_score < 0.8:
                 return word_ml_result
             else:
                 return pumsa_ml_result

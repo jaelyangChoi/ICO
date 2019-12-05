@@ -1,8 +1,8 @@
 from DAO.user import *
-from DTO.defaultKeyword import DefaultKeyword
 
 
 class DefaultKeywordDAO:
+
     def __init__(self):
         self.db_conn = DBConnection()
 
@@ -35,7 +35,7 @@ class DefaultKeywordDAO:
 
             devide_keyword_list = []
             for result in cursor.fetchall():
-                devide_keyword_list.append(result)
+                devide_keyword_list.append(result[1])
             self.db_conn.close_db()
 
             return devide_keyword_list
@@ -53,9 +53,10 @@ class DefaultKeywordDAO:
 
             keyword_list = []
             for result in cursor.fetchall():
-                keyword_list.append(result)
+                keyword_list.append(result[0])
 
             self.db_conn.close_db()
+
             return keyword_list
 
         except Exception as e:

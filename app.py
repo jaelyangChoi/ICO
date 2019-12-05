@@ -1,9 +1,11 @@
+# from block import block
 import json
 import os
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for
+from flask import session
 
-from DB.DAO.comment import CommentDAO
+from DAO.comment import CommentDAO
 from DB.DAO.personal_keyword import PersonalKeywordDAO
 from block.filtering import filtering
 from router import test
@@ -18,24 +20,26 @@ app.secret_key = 'abcdseijvxi'
 app.register_blueprint(update_comment_bp)
 app.register_blueprint(update_keyword_bp)
 app.register_blueprint(test.route_blue)
-# app.register_blueprint(db_connection.db_blue)
-# app.register_blueprint(block.block_blue)
 
+comments = [{'userID': 'cjl', 'comment': 'test data'}, ]
+keywords = ['sibal', 'byungsin']
+mode = 'ICO Service off'
 
-# 댓글, 키워드 db클래스 생성
-CommentDAO = CommentDAO()
+# 키워드 db클래스 생성
 personal_keywordDB = PersonalKeywordDAO()
 
 
+@app.route('/googleCallback')
 @app.route('/')
 def index():
     with open('credentials.json') as json_file:
         json_data = json.load(json_file)
+
     data = json_data['web']
+    return render_template('index1.html', cilent_id=data['client_id'])
 
-    return render_template('index.html', cilent_id=data['client_id'])
 
-
+# DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
 @app.route('/news')
 def news():
     user_info = session['info']
@@ -56,7 +60,8 @@ def news():
 
 @app.route('/filter_mode', methods=['POST'])
 def filter_mode():
-    session['mode'] = request.form['mode']
+    global mode
+    mode = request.form['mode']
     return redirect(url_for('news'))
 
 

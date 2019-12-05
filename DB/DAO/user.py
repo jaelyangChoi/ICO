@@ -1,9 +1,7 @@
 from DAO.index import *
-from DTO.user import User
 
 
 class UserDAO(Index):
-    __CHECK_BY_EMAIL = "SELECT _index, id, name, email FROM user WHERE email = %s";
 
     def select_index(self, user):
         return self.execute_sql_for_one_result(user,
@@ -11,14 +9,31 @@ class UserDAO(Index):
                                                FROM User
                                                WHERE id = %s""")
 
-    def is_correct_emial(self, emial):
-        if self.execute_sql_for_one_result(emial, UserDAO.__CHECK_BY_EMAIL) is None:
-            return -1;
-        return 0
+    def is_correct_password(self, id, pw):
+        if self.execute_sql_for_one_result(id,
+                                           """SELECT password
+                                           FROM User
+                                           WHERE id = %s""") == pw:
+            return True
+        return False
 
-    def select_by_email(self, email):
-        result = self.execute_sql_for_one_result(email, UserDAO.__CHECK_BY_EMAIL)
-        print(result)
-        user = User(result[1], result[2], result[3], result[0])
+    def update_password(self, id, old_pw, new_pw):
+        if self.is_correct_password(id, old_pw) is True:
+            try:
+                conn = self.db_conn.get_connection()
+                cursor = conn.cursor()
 
-        return user
+                sql = "UPDATE User SET password = %s WHERE id = %s"
+                cursor.execute(sql, (new_pw, id))
+                conn.commit()
+
+                self.db_conn.close_db()
+
+            except Exception as e:
+                return -1
+
+        else:
+            return 0
+
+    def insert_new_user(self):
+        pass
