@@ -8,6 +8,7 @@ from konlpy.tag import Okt
 from DB.DAO.default_keyword import DefaultKeywordDAO
 from ml.ml_predict import ModelCombine
 
+from openpyxl import load_workbook, Workbook
 
 class Block:
     def __init__(self):
@@ -68,7 +69,7 @@ class Block:
                 break
         #    한글 이외의 것을 제거한 댓글과 키워드 매치
         if block != 0:
-            return default_keyword
+            return default_keyword.get_keyword()
         else:
             return "+"
 
@@ -77,12 +78,12 @@ class Block:
     def _onlyHangul(self, comment):
         # 특수문자 제거 함수
         _comment = ""
-        for j in range(0, len(comment)):
+        for j in comment:
             # 댓글 길이만큼 for문
-            if hgtk.checker.is_hangul(comment[j]):
-                _comment += comment[j]
-            elif comment[j] == ' ':
-                _comment += comment[j]
+            if hgtk.checker.is_hangul(j):
+                _comment += j
+            elif j == ' ':
+                _comment += j
             #     코멘트 한글자마다 한글인지 파악
             #     한글일 경우 새 String인자에 추가
             else:
@@ -97,9 +98,18 @@ class Block:
         default_keywords = self._default_keyword_list
         block = 0
 
-        print("**2차 필터링 시작**")
+        if str(type(comment)) == "<class 'str'>":
+            comment_list = comment.split()
+            print("**2차 필터링 띄어쓰기 시작**")
+            print(comment_list)
+        else:
+            print("**2차 필터링 품사별 시작**")
+            comment_list = comment
+        #   품사 분리된 경우 그냥 하고 아니면 띄어쓰기로 구분
 
-        for j in comment:
+
+
+        for j in comment_list:
 
             _comment = hgtk.text.decompose(j).replace("ᴥ", "").replace(" ", "")
 
@@ -110,6 +120,7 @@ class Block:
                 if matchRatio >= 0.75:
                     # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
                     if self._wordExistCheck(j):
+                        print("\t 기본 키워드: " + default_keyword.get_split_keyword())
                         print("\t 존재하는 단어 :" + j + "이므로 차단하지 않습니다")
                         continue
                     else:
@@ -126,6 +137,7 @@ class Block:
             return "+"
 
     # 유사도판별함수, 2차필터링
+
     def _privateKeywordMatch(self, comments, keywords):
         block = 0
         _comment = ""
@@ -168,21 +180,82 @@ class Block:
 
         if filtering1 == "+":
             # 1차 성공시 2차 필터링 시작
-            tokenComment = self._tokenize(comment)
-            # 품사분리(명사만 추출)
-            print(tokenComment)
-            filtering2 = self._stringSynk(tokenComment)
-            # 자모음 분리 후s 2차 필터링
-
+            filtering2 = self._stringSynk(comment)
+            # 띄어쓰기로 구분해서 2차필터링
             if filtering2 == "+":
-                if str(ml.total_predict(comment)) == '1':
-                    return "+"
+
+                tokenComment = self._tokenize(comment)
+                # 품사분리(명사만 추출)
+                print(tokenComment)
+                filtering3 = self._stringSynk(tokenComment)
+                # 자모음 분리 후s 2차 필터링 한번 더
+
+                if filtering3 == "+":
+                    if str(ml.total_predict(comment)) == '1':
+                        return "+"
+                    # ML도 통과하면 긍정
+                    else:
+                        return "-"
+                #     ML에서 부정
                 else:
                     return "-"
-            ####################**********ML로 댓글 넘김***********#############
+                # 2-2차에서 부정
+                ####################**********ML로 댓글 넘김***********#############
             else:
                 return "-"
-            # 2차에서 걸린경우
+            #  2-1차에서 부정
         else:
             return "-"
-            # 1차에서 걸린경우
+            # 1차에서 부정
+
+    def runBlockCommentInExcel(self):
+        ml = ModelCombine()
+
+        load_wb = load_workbook("/Users/77520769/Documents/문해긔/댓글 수집2.xlsx", data_only=True)
+        load_ws = load_wb['시트1']
+        # 댓글 불러오기
+        write_wb = Workbook()
+        write_ws = write_wb.active
+        # # 저장할 새 엑셀
+
+        for i in range(1178, 1844):
+            testComment = load_ws['A' + str(i)].value
+            write_ws['A' + str(i)] = testComment
+            # 새 엑셀에 댓글 저장
+
+            filtering1 = self._stringMatch(testComment)
+            # 1차 필터링~String일치로 판별
+
+            if filtering1 == "+":
+                # 1차 성공시 2차 필터링 시작
+
+                filtering2 = self._stringSynk(testComment)
+                # 띄어쓰기로 구분해서 2차필터링
+
+                if filtering2 == "+":
+                    tokenComment = self._tokenize(testComment)
+                    # 품사분리(명사만 추출)
+                    print(tokenComment)
+                    filtering3 = self._stringSynk(tokenComment)
+                    # 자모음 분리 후s 2차 필터링 한번 더
+
+                    if filtering3 == "+":
+                        if str(ml.total_predict(testComment)) == '1':
+                            write_ws['B' + str(i)] = '2'
+                        else:
+                            write_ws['B' + str(i)] = '0'
+                    else:
+                        write_ws['B' + str(i)] = '0'
+                        write_ws['C' + str(i)] = filtering3
+                else:
+                    write_ws['B' + str(i)] = '0'
+                    write_ws['C' + str(i)] = filtering2
+
+                # 2차에서 걸리면 중간
+            else:
+                write_ws['B' + str(i)] = '0'
+                write_ws['C' + str(i)] = filtering1
+
+        write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_ML0.7_ver.xlsx')
+
+
