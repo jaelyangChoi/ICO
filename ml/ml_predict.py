@@ -19,5 +19,3 @@ class ModelCombine:
                 return word_ml_result
             else:
                 return pumsa_ml_result
-
-

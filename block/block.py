@@ -1,13 +1,12 @@
-import hgtk
-from flask import Blueprint, request, render_template, flash, redirect, url_for
-from openpyxl import load_workbook, Workbook
-from konlpy.tag import Okt
 import difflib
-import pymysql
 import urllib.request
+
+import hgtk
 from bs4 import BeautifulSoup
-from ml.ml_predict import ModelCombine
+from konlpy.tag import Okt
+
 from DB.DAO import default_keyword
+from ml.ml_predict import ModelCombine
 
 
 def searchWord(word):
@@ -30,7 +29,6 @@ def searchWord(word):
 
 
 # 국어사전 요청 쿼리함수
-
 def wordExistCheck(comment):
     # 검색 질의 요청
     res = searchWord(comment)
@@ -55,7 +53,6 @@ def tokenize(comment):
 
 
 # 댓글 품사분리함수(명사만 처리)
-
 def onlyHangul(comment):
     # 특수문자 제거 함수
     _comment = ""
@@ -74,9 +71,7 @@ def onlyHangul(comment):
 
 
 # 숫자, 영어, 특수문자 제외 한글만 추출하는 함수
-
 def stringMatch(comment):
-
     block = 0
     _comment = ""
     keywords = default_keyword.DefaultKeywordDAO()
@@ -109,11 +104,10 @@ def stringSynk(comment):
     print("**2차 필터링 시작**")
     for j in comment:
 
-        _comment = hgtk.text.decompose(j).replace("ᴥ", "")
-
-        for i in keywords.select_split_keywords():
-
-            matchRatio = difflib.SequenceMatcher(None, str(i), _comment).ratio()
+        default_keyword_list = keywords.select_split_keywords()
+        for keyword in default_keyword_list:
+            data = keyword.to_json()
+            matchRatio = difflib.SequenceMatcher(None, data['split_keyword'], _comment).ratio()
 
             if matchRatio >= 0.75:
                 # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
@@ -133,11 +127,11 @@ def stringSynk(comment):
     else:
         return "+"
 
+
 # 유사도판별함수, 2차필터링
 
 
 def privateKeywordMatch(comments, keywords):
-
     block = 0
     _comment = ""
 
@@ -161,13 +155,15 @@ def privateKeywordMatch(comments, keywords):
             #    한글 이외의 것을 제거한 댓글과 키워드 매치
 
             if block != 0:
-                comment['property'] = "-"
-                #차단할 개인 키워드가 있으면 -로 바꿈
+                comment['property'] = '+'
+                # 차단할 개인 키워드가 있으면 -로 바꿈
             else:
                 continue
-                #아니면 그대로
+                # 아니면 그대로
 
     return comments
+
+
 # 개인키워드, 3차필터링
 
 
@@ -184,21 +180,15 @@ def runBlockComment(testComment):
         filtering2 = stringSynk(testTokenComment)
         # 자모음 분리 후 2차 필터링
 
-        if filtering2 == "+":
-            if ml.total_predict(testComment) == '1':
-                return "+"
+        if filtering2 == '+':
+            if ml.total_predict(testComment) == 1:
+                return '+'
             else:
-                return "-"
+                return '-'
         ####################**********ML로 댓글 넘김***********#############
         else:
-            return "-"
+            return '-'
         # 2차에서 걸린경우
     else:
-        return "-"
+        return '-'
         # 1차에서 걸린경우
-
-
-print(runBlockComment("어머~ 두분 점점 닮아가세요. 보기좋아요"))
-# print(privateKeywordMatch([{'userID': 'cjl', 'comment': 'test data', 'property':'+'},{'userID': 'cjl2', 'comment': '안녕', 'property':'+'}], ["안뇽", "안용", "안녕"]))
-
-#### return 값:: + 긍정  - 부정

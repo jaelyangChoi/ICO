@@ -1,6 +1,10 @@
 from flask import Blueprint, jsonify, request, url_for, redirect, session
+from google.auth.transport import requests
+from google.oauth2 import id_token
 
 from DB.DAO import comment
+from DB.DAO.user import UserDAO
+from block.block_class import Block
 from login import googleLogin
 from ml import ml_predict
 
@@ -39,14 +43,33 @@ def google_login():
 
 @route_blue.route('/googleCallback')
 def googleCallback():
-    result = gl.google_callback()
-    session['id_token'] = result['id_token']
+    credentials = gl.google_callback()
+
+    token = credentials['id_token']
+    client_id = credentials['client_id']
+    id_info = id_token.verify_oauth2_token(token, requests.Request(), client_id)
+
+    user_dao = UserDAO()
+    user = user_dao.select_by_email(id_info['email'])
+
+    session['state'] = True
+    session['mode'] = 'off'
+    session['info'] = user.get_user()
+    session['credentials'] = credentials
     return redirect('/')
 
 
 @route_blue.route('/logout')
 def logout():
-    if 'state' in session:
-        del session['state']
+    session.clear()
 
     return redirect(url_for('index'))
+
+
+@route_blue.route('/test/filter')
+def filter():
+    block = Block()
+    comment = request.args.get('comment')
+    result = block.runBlockComment(comment)
+
+    return str(result)

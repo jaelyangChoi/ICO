@@ -1,4 +1,3 @@
-
 import pickle
 
 import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
@@ -42,7 +41,7 @@ class CommentPredict:
         pumsa_list = ["Adjective", "Adverb", "Alpha", "Determiner", "Exclamation",
                       "KoreanParticle", "Noun", "Verb"]
 
-        for row in token_label_sentences: # token_label_sentences ex)[([('마녀', 'Noun'), ('같다', 'Adjective')], '0')]
+        for row in token_label_sentences:  # token_label_sentences ex)[([('마녀', 'Noun'), ('같다', 'Adjective')], '0')]
 
             for token_word in row[0]:
                 if token_word[1] in pumsa_list:
@@ -83,7 +82,7 @@ class CommentPredict:
         f = open("./dataset_pumsa_ml/commonwords.pkl", "rb")
         selected_tokens = pickle.load(f)
         f.close()
-        token_data=self.remain_meaning_token([(self.tokenize(data), '0')])
+        token_data = self.remain_meaning_token([(self.tokenize(data), '0')])
         test_data = self.count_word_frequency(token_data, selected_tokens)
         return np.expand_dims(np.asarray(test_data).astype('float32'), axis=0)
 
@@ -94,7 +93,7 @@ class CommentPredict:
         score = float(self.model.predict(data))
         self.predict_score = score
         if score > 0.5:
-            self.predict_result = "1"
+            self.predict_result = 1
             return "1"
         else:
             self.predict_result = "0"

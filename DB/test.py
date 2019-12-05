@@ -1,5 +1,19 @@
 from DAO.comment import *
 from DTO import *
+from db_connection import *
+
+try:
+    db = DBConnection()
+    conn = db.get_connection()
+
+    if conn == -1:
+        print('-1')
+    else:
+        print('0')
+except Exception as e:
+    print(e)
+else:
+    print('끗')
 
 """
 cdao = CommentDAO()

@@ -32,7 +32,7 @@
             <span class="close">&times;</span>
             <br>
             <form id="keywordForm">
-                <input type="hidden" class="data" name="userID" value="userID">
+{#                <input type="hidden" class="data" name="userID" value="userID">#}
                 <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
                 <input type="button" value="입력" onclick="updateKeyword()">
             </form>
@@ -46,7 +46,7 @@
 
     {# Comment Input #}
     <form id="commentForm">
-        <input type="hidden" class="data" name="userID" value="tempID">
+{#        <input type="hidden" class="data" name="userID" value="tempID">#}
         <textarea id="cmInputWindow" class="data" rows="5" cols="70" name="comment"
                   placeholder="댓글을 입력하십시오"></textarea>
         <input type="button" value="입력" onclick="updateComment()">
@@ -86,7 +86,7 @@
             url: '/update_comment',
             data: $('#commentForm .data'), {#서버로 데이터 전송시#}
             dataType: 'JSON', {#서버에서 데이터 전송시#}
-            success: function (data) {
+            "success": function (data) {
                 $('#cmInputWindow').val('');
                 var comments = '';
                 var i = 0;
@@ -116,10 +116,10 @@
 
     //개인 필터 버튼을 클릭하면 버튼의 내용을 바꾸고 서버로 모드 정보 전송
     function filterMode(self) {
-        if (self.value === 'ICO Service on')
-            self.value = 'ICO Service off';
+        if (self.value === 'on')
+            self.value = 'off';
         else
-            self.value = 'ICO Service on';
+            self.value = 'on';
         sendPost("{{ url_for('filter_mode') }}", self.value);
     }
 </script>
