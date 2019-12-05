@@ -15,9 +15,10 @@ function sendPost(action, mode) {
 
 //개인 필터 버튼을 클릭하면 버튼의 내용을 바꾸고 서버로 모드 정보 전송
 function filterMode(self) {
-    if (self.value === 'on')
-        self.value = 'off';
+    if (self.value === 'ICO Service off')
+        mode = 'on';
+
     else
-        self.value = 'on';
-    sendPost("{{ url_for('filter_mode') }}", self.value);
+        mode = 'off';
+    sendPost("/filter_mode", mode);
 }

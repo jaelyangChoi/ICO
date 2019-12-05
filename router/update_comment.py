@@ -28,7 +28,7 @@ def update_comment():
     new_comment['property'] = result
 
     # db에 댓글 insert
-    CommentDTO.set_insert_comment(new_comment)
+    CommentDTO.set_insert_data(new_comment)
     CommentDAO.insert_comment(CommentDTO)
 
     # 전체 댓글 리로드

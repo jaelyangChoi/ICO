@@ -34,10 +34,17 @@ def index():
 
 @app.route('/news')
 def news():
+    if session['mode'] == 'off':
+        mode = 'ICO Service off'
+    else:
+        mode = 'ICO Service on'
+
     user_info = session['info']
+
+    # 키워드 리로드
     keywords = personal_keywordDB.select_keywords(user_info['id'])
     keywords_str = ', '.join(keywords)
-    print(keywords_str)
+
     # 전체 댓글 리로드
     comments = CommentDAO.select_comments_by_url(url_for('news'))
 
@@ -45,7 +52,7 @@ def news():
     if session['mode'] == 'on':
         comments = filtering(comments)
 
-    return render_template('news1.html', comments=comments, keywords=keywords_str, mode=session['mode'])
+    return render_template('news1.html', comments=comments, keywords=keywords_str, mode=mode)
 
 
 @app.route('/filter_mode', methods=['POST'])

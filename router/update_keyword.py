@@ -15,7 +15,7 @@ def update_keyword():
     # db에 추출한 keyword, id 넣기
     personal_keywordDB.insert_keyword(user_info['id'], request.form['keyword'])
 
-    # id가 cjl0701인 키워드 전부 출력
+    # 키워드 전부 출력
     keywords = personal_keywordDB.select_keywords(user_info['id'])
 
     # 키워드를 string 으로
