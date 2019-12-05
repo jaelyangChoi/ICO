@@ -11,7 +11,7 @@ class DefaultKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = "SELECT _index, keyword, split_keyword FROM DefaultKeywords"
+            sql = "SELECT _index, keyword, split_keyword FROM DefaultKeyword"
             cursor.execute(sql)
 
             devide_keyword_list = []
@@ -30,7 +30,7 @@ class DefaultKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = "SELECT splited_keyword FROM DefaultKeywords"
+            sql = "SELECT splited_keyword FROM DefaultKeyword"
             cursor.execute(sql)
 
             devide_keyword_list = []
@@ -48,7 +48,7 @@ class DefaultKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = "SELECT keyword FROM DefaultKeywords"
+            sql = "SELECT keyword FROM DefaultKeyword"
             cursor.execute(sql)
 
             keyword_list = []
@@ -59,4 +59,5 @@ class DefaultKeywordDAO:
             return keyword_list
 
         except Exception as e:
+            print(e)
             return -1

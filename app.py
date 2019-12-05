@@ -38,10 +38,10 @@ def index():
 
 @app.route('/news')
 def news():
-    mode = True
-    keywords = personal_keywordDB.select_keywords('cjl0701')
+    user_info = session['info']
+    keywords = personal_keywordDB.select_keywords(user_info['id'])
     keywords_str = ', '.join(keywords)
-    print(keywords_str)
+
     # 전체 댓글 리로드
     comments = CommentDAO.select_comments_by_url('http://localhost:5000/news')
     # for comment in comments:
