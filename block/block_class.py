@@ -10,6 +10,7 @@ from ml.ml_predict import ModelCombine
 
 from openpyxl import load_workbook, Workbook
 
+
 class Block:
     def __init__(self):
         self._default_keyword_list = DefaultKeywordDAO().select_all()
@@ -48,22 +49,23 @@ class Block:
 
     # 국어사전 검색함수
     def _tokenize(self, comment):
-        print("**품사 분리 시작**")
+        print("**문장 내 명사 분리 시작**")
         okt = Okt()
         return [t for t in okt.nouns(comment)]
 
     # 댓글 품사분리함수(명사만 처리)
-    def _stringMatch(self,comment):
+    def _stringMatch(self, comment):
         block = 0
         _comment = ""
         default_keywords = self._default_keyword_list
 
         print("**1차 필터링 시작**")
+        print("[" + comment + "]")
         _comment = self._onlyHangul(comment)
 
         for default_keyword in default_keywords:
-        # 차단 키워드 갯수만큼 for문
-          if _comment.find(default_keyword.get_keyword()) != -1:
+            # 차단 키워드 갯수만큼 for문
+            if _comment.find(default_keyword.get_keyword()) != -1:
                 block = block + 1
                 print("매치된 기본 키워드: " + default_keyword.get_keyword())
                 break
@@ -82,8 +84,8 @@ class Block:
             # 댓글 길이만큼 for문
             if hgtk.checker.is_hangul(j):
                 _comment += j
-            elif j == ' ':
-                _comment += j
+            # elif j == ' ':
+            #     _comment += j
             #     코멘트 한글자마다 한글인지 파악
             #     한글일 경우 새 String인자에 추가
             else:
@@ -93,21 +95,21 @@ class Block:
 
     # 띄어쓰기,특수문자 제외 한글만 추출하는 함수
 
-    def _stringSynk(self, comment):
+    def _stringJamoMatch(self, comment):
         _comment = ""
         default_keywords = self._default_keyword_list
         block = 0
 
-        if str(type(comment)) == "<class 'str'>":
-            comment_list = comment.split()
-            print("**2차 필터링 띄어쓰기 시작**")
-            print(comment_list)
-        else:
-            print("**2차 필터링 품사별 시작**")
-            comment_list = comment
-        #   품사 분리된 경우 그냥 하고 아니면 띄어쓰기로 구분
+        # if str(type(comment)) == "<class 'str'>":
+        #     comment_list = comment.split()
+        #     print("**2차 필터링 띄어쓰기 시작**")
+        #     print(comment_list)
+        # else:
+        # 띄어쓰기 하면 긍정 오차가 많아져서 잠시 보류합니다
 
-
+        print("**2차 필터링 시작**")
+        comment_list = comment
+        #   명사 분리된 경우 그냥 하고 아니면 띄어쓰기로 구분
 
         for j in comment_list:
 
@@ -117,12 +119,12 @@ class Block:
 
                 matchRatio = difflib.SequenceMatcher(None, default_keyword.get_split_keyword(), _comment).ratio()
 
-                if matchRatio >= 0.75:
+                if matchRatio >= 0.8:
                     # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
                     if self._wordExistCheck(j):
                         print("\t 기본 키워드: " + default_keyword.get_split_keyword())
                         print("\t 존재하는 단어 :" + j + "이므로 차단하지 않습니다")
-                        continue
+                        break
                     else:
                         print("기본 키워드: " + default_keyword.get_split_keyword())
                         print("댓글 내 단어: " + _comment)
@@ -180,30 +182,25 @@ class Block:
 
         if filtering1 == "+":
             # 1차 성공시 2차 필터링 시작
-            filtering2 = self._stringSynk(comment)
-            # 띄어쓰기로 구분해서 2차필터링
+
+            tokenComment = self._tokenize(comment)
+            # 품사분리(명사만 추출)
+            print(tokenComment)
+            filtering2 = self._stringJamoMatch(tokenComment)
+            # 자모음 분리 후s 2차 필터링 한번 더
+
             if filtering2 == "+":
-
-                tokenComment = self._tokenize(comment)
-                # 품사분리(명사만 추출)
-                print(tokenComment)
-                filtering3 = self._stringSynk(tokenComment)
-                # 자모음 분리 후s 2차 필터링 한번 더
-
-                if filtering3 == "+":
-                    if str(ml.total_predict(comment)) == '1':
-                        return "+"
-                    # ML도 통과하면 긍정
-                    else:
-                        return "-"
+               if str(ml.total_predict(comment)) == '1':
+                   return "+"
+              # ML도 통과하면 긍정
+               else:
+                   return "-"
                 #     ML에서 부정
-                else:
-                    return "-"
-                # 2-2차에서 부정
+
                 ####################**********ML로 댓글 넘김***********#############
             else:
                 return "-"
-            #  2-1차에서 부정
+                 #  2차에서 부정
         else:
             return "-"
             # 1차에서 부정
@@ -218,7 +215,7 @@ class Block:
         write_ws = write_wb.active
         # # 저장할 새 엑셀
 
-        for i in range(1178, 1844):
+        for i in range(2, 1178):
             testComment = load_ws['A' + str(i)].value
             write_ws['A' + str(i)] = testComment
             # 새 엑셀에 댓글 저장
@@ -228,34 +225,25 @@ class Block:
 
             if filtering1 == "+":
                 # 1차 성공시 2차 필터링 시작
-
-                filtering2 = self._stringSynk(testComment)
-                # 띄어쓰기로 구분해서 2차필터링
+                tokenComment = self._tokenize(testComment)
+                # 품사분리(명사만 추출)
+                print(tokenComment)
+                filtering2 = self._stringJamoMatch(tokenComment)
+                # 자모음 분리 후s 2차 필터링 한번 더
 
                 if filtering2 == "+":
-                    tokenComment = self._tokenize(testComment)
-                    # 품사분리(명사만 추출)
-                    print(tokenComment)
-                    filtering3 = self._stringSynk(tokenComment)
-                    # 자모음 분리 후s 2차 필터링 한번 더
-
-                    if filtering3 == "+":
-                        if str(ml.total_predict(testComment)) == '1':
-                            write_ws['B' + str(i)] = '2'
-                        else:
-                            write_ws['B' + str(i)] = '0'
+                    if str(ml.total_predict(testComment)) == '1':
+                        write_ws['B' + str(i)] = 2
                     else:
-                        write_ws['B' + str(i)] = '0'
-                        write_ws['C' + str(i)] = filtering3
+                        write_ws['B' + str(i)] = 0
                 else:
-                    write_ws['B' + str(i)] = '0'
+                    write_ws['B' + str(i)] = 0
                     write_ws['C' + str(i)] = filtering2
 
                 # 2차에서 걸리면 중간
             else:
-                write_ws['B' + str(i)] = '0'
+                write_ws['B' + str(i)] = 0
                 write_ws['C' + str(i)] = filtering1
 
-        write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_ML0.7_ver.xlsx')
-
-
+        write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_ML0.7부정_띄어쓰기차단X.xlsx')
+                                                
