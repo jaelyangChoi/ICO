@@ -1,7 +1,7 @@
 from DAO.comment import *
-from DTO.comment import *
-from DAO.default_keyword import *
-from DAO.personal_keyword import *
+from DTO.comment_ver_dic import *
+from DAO.defaultKeyword import *
+from DAO.personalKeyword import *
 from DAO.user import *
 
 cdao = CommentDAO()

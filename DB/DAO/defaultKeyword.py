@@ -1,5 +1,6 @@
-from DAO.user import *
 from DTO.defaultKeyword import *
+from DAO.user import *
+from SQL.comment import *
 
 
 class DefaultKeywordDAO:
@@ -11,28 +12,25 @@ class DefaultKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = "SELECT * FROM DefaultKeyword"
-            cursor.execute(sql)
+            cursor.execute(SQL.SELECT_ALL_FROM_DEFAULT_KEYWORD)
 
-            keyword_list = []
+            keywords = []
             for result in cursor.fetchall():
                 default_keyword = DefaultKeyword()
                 default_keyword.set_all(result)
-                keyword_list.append(default_keyword)
+                keywords.append(default_keyword)
 
             self.db_conn.close_db()
-            return keyword_list
+            return keywords
 
         except Exception as e:
-            return -1
+            return e
 
     def select_keywords(self):
-        return self.execute_sql_for_one_component_list("""SELECT keyword
-                                            FROM DefaultKeyword""")
+        return self.execute_sql_for_one_component_list(SQL.SELECT_KEYWORD_FROM_DEFAULT_KEYWORD)
 
     def select_split_keywords(self):
-        return self.execute_sql_for_one_component_list("""SELECT splited_keyword
-                                            FROM DefaultKeyword""")
+        return self.execute_sql_for_one_component_list(SQL.SELECT_SPLIT_KEYWORD_FROM_DEFAULT_KEYWORD)
 
     def execute_sql_for_one_component_list(self, sql):
         try:
@@ -49,4 +47,4 @@ class DefaultKeywordDAO:
             return keyword_list
 
         except Exception as e:
-            return -1
+            return e

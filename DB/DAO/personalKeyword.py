@@ -1,8 +1,8 @@
 from DAO.user import *
+from SQL.personalKeyword import *
 
 
 class PersonalKeywordDAO:
-
     def __init__(self):
         self.db_conn = DBConnection()
         self.sql = ""
@@ -12,10 +12,7 @@ class PersonalKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            sql = """SELECT keyword FROM PersonalKeyword, User
-                     WHERE PersonalKeyword.user = User._index
-                     AND User.id = %s"""
-            cursor.execute(sql, id)
+            cursor.execute(SQL.SELECT, id)
 
             keyword_list = []
             for result in cursor.fetchall():
@@ -26,15 +23,14 @@ class PersonalKeywordDAO:
             return keyword_list
 
         except Exception as e:
-            return -1
+            return e
 
     def insert_keyword(self, id, keyword):
-        self.sql = "INSERT INTO PersonalKeyword(keyword, user) VALUES(%s, %s)"
+        self.sql = SQL.INSERT
         self.control_keyword(id, keyword)
 
     def delete_keyword(self, id, keyword):
-        self.sql = """DELETE FROM PersonalKeyword
-                      WHERE keyword = %s AND user = %s"""
+        self.sql = SQL.DELETE
         self.control_keyword(id, keyword)
 
     def control_keyword(self, id, keyword):
@@ -51,4 +47,4 @@ class PersonalKeywordDAO:
             self.db_conn.close_db()
 
         except Exception as e:
-            print(e)
+            return e

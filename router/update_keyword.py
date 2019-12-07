@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session
 
-from DB.DAO.personal_keyword import PersonalKeywordDAO
+from DB.DAO.personalKeyword import PersonalKeywordDAO
 
 update_keyword_bp = Blueprint('update_keyword', __name__)
 

@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify, session
 
 from DB.DAO.comment import CommentDAO
-from DB.DAO.personal_keyword import PersonalKeywordDAO
-from DB.DTO.comment import Comment
+from DB.DAO.personalKeyword import PersonalKeywordDAO
+from DB.DTO.comment_ver_dic import Comment
 from block.block import runBlockComment
 from block.filtering import filtering
 

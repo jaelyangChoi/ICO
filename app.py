@@ -4,7 +4,7 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, session
 
 from DB.DAO.comment import CommentDAO
-from DB.DAO.personal_keyword import PersonalKeywordDAO
+from DB.DAO.personalKeyword import PersonalKeywordDAO
 from block.filtering import filtering
 from router import test
 from router.update_comment import update_comment_bp

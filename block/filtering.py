@@ -1,9 +1,9 @@
 from flask import Blueprint, session
 from block import block
-from DB.DAO.personal_keyword import PersonalKeywordDAO
+from DB.DAO.personalKeyword import PersonalKeywordDAO
 
 from DB.DAO.comment import CommentDAO
-from DB.DTO.comment import Comment
+from DB.DTO.comment_ver_dic import Comment
 
 update_comment_bp = Blueprint('update_comment', __name__)
 
