@@ -23,5 +23,7 @@ def add_keyword():
 
 def get_keywords_by_id(id):
     keywords = personal_keywordDB.select_keywords(id) #리스트 반환
-    # keywords_str = ', '.join(keywords)
+    print(keywords)
+    keywords_str = ', '.join(keywords)
+    print(keywords_str)
     return keywords
