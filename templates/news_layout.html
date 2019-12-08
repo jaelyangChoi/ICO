@@ -33,7 +33,7 @@
             <br>
             <form id="keywordForm">
                 <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
-                <input type="button" value="입력" onclick="updateKeyword()">
+                <input type="button" value="입력" onclick="addkeyword()">
             </form>
             <br>
             <strong>차단 키워드</strong>
@@ -47,7 +47,7 @@
     <form id="commentForm">
         <textarea id="cmInputWindow" class="data" rows="5" cols="70" name="comment"
                   placeholder="댓글을 입력하십시오"></textarea>
-        <input type="button" value="입력" onclick="updateComment()">
+        <input type="button" value="입력" onclick="addComment()">
     </form>
     <br>
 </div>
@@ -64,6 +64,6 @@
 
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/filterMode.js') }}"></script>
-<script src="{{ url_for('static', filename='js/updateData.js') }}"></script>
+<script src="{{ url_for('static', filename='js/addData.js') }}"></script>
 </body>
 </html>

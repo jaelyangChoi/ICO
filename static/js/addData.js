@@ -1,10 +1,10 @@
 //새로운 키워드를 반영하여 리로드
-function updateKeyword() {
+function addkeyword() {
     $.ajax({
         type: 'POST',
-        url: '/update_keyword',
-        data: $('#keywordForm .data'), //{#서버로 데이터 전송시#}
-        success: function (data) {
+        url: '/add_keyword',
+        data: $('#keywordForm .data'), //서버로 데이터 전송시
+        success: function reloadKeywords (data) {  // string 넘어옴
             $('#kwInputWindow').val('');
             $('#kwOutputWindow').val(data);
         }
@@ -12,13 +12,13 @@ function updateKeyword() {
 }
 
 //새로운 댓글을 반영하여 리로드
-function updateComment() {
+function addComment() {
     $.ajax({
         type: 'POST',
-        url: '/update_comment',
+        url: '/add_comment',
         data: $('#commentForm .data'), //{#서버로 데이터 전송시#}
         dataType: 'JSON',// {#서버에서 데이터 전송시#}
-        "success": function (data) {
+        "success": function reloadComments (data) {//dict list 넘어옴
             $('#cmInputWindow').val('');
             var comments = '';
             var i = 0;

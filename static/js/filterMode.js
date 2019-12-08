@@ -1,5 +1,5 @@
 //개인 필터링 mode에 대한 정보를 서버로 전송
-function sendPost(action, mode) {
+function submitByPost(action, mode) {
     var form = document.createElement('form');
     form.setAttribute('method', 'post');
     form.setAttribute('action', action);
@@ -20,5 +20,5 @@ function filterMode(self) {
 
     else
         mode = 'off';
-    sendPost("/filter_mode", mode);
+    submitByPost("/filter_mode", mode);
 }

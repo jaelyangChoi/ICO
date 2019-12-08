@@ -19,9 +19,9 @@ def filtering(comments):
     keywords = personal_keywordDB.select_keywords(user_info['id'])
     # 개인 키워드 기반 적절성 유무 판단
     if keywords:
-        comments = block.privateKeywordMatch(comments, keywords)
+        comments = block.privateKeywordMatch(comments, keywords) #딕셔너리 리스트 받음
     # 부적절한 댓글 가리기
-    comments = conceal_bad_comment(comments)
+    conceal_bad_comment(comments)
     return comments
 
 
@@ -31,4 +31,3 @@ def conceal_bad_comment(comments):
         if comment.get_property() == '-':
             comment.set_comment('부적절한 댓글입니다.')
 
-    return comments
