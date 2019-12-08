@@ -31,7 +31,6 @@ class PersonalKeywordDAO:
 
     def delete_keyword(self, id, keyword):
         self.sql = SQL.DELETE
-        self.control_keyword(id, keyword)
 
     def control_keyword(self, id, keyword):
         try:
@@ -40,8 +39,7 @@ class PersonalKeywordDAO:
 
             user_dao = UserDAO()
 
-            user_index = user_dao.select_index(id)
-            cursor.execute(self.sql, (keyword, user_index))
+            cursor.execute(self.sql, (keyword, user_dao.select_index(id)))
             conn.commit()
 
             self.db_conn.close_db()

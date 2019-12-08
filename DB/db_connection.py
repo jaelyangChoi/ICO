@@ -6,7 +6,7 @@ import pymysql
 class DBConnection:
     # 생성자
     def __init__(self):
-        pass  # 함수에서 아무것도 안할 때 사용
+        self.conn = None
 
     def get_connection(self):
         # 예외처리
@@ -21,7 +21,7 @@ class DBConnection:
             return self.conn
 
         except Exception as e:
-            -1
+            print(e)
 
     def close_db(self):
         self.conn.close()

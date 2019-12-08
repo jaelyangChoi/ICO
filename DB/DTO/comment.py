@@ -61,17 +61,3 @@ class Comment:
     def set_property(self, property):
         if property == '+' or property == '-':
             self._property = property
-        else:
-            return -1
-
-    def set_learning(self, learning):
-        if learning == 0 or learning == 1:
-            self._learning = learning
-        else:
-            return -1
-
-    def set_url(self, url):
-        self._url= url
-
-    def set_user_id(self, userID):
-        self._userID = userID

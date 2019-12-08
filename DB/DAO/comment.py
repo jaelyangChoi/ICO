@@ -1,7 +1,7 @@
 from DTO.comment import *
 from DAO.url import *
 from DAO.user import *
-from SQL.comment import *
+from SQL.comment import SQL as sql
 
 
 class CommentDAO:
@@ -16,7 +16,7 @@ class CommentDAO:
             url = UrlDAO()
             user = UserDAO()
 
-            cursor.execute(SQL.INSERT, (data.get_comment(),
+            cursor.execute(sql.INSERT, (data.get_comment(),
                                         data.get_property(),
                                         data.get_learning(),
                                         url.select_index(data.get_url()),
@@ -33,7 +33,7 @@ class CommentDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            cursor.execute(SQL.SELECT, url)
+            cursor.execute(sql.SELECT, url)
 
             comments = []
             for result in cursor.fetchall():

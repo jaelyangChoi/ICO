@@ -8,11 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/DB" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
-=======
-    <orderEntry type="jdk" jdkName="Python 3.7 (2)" jdkType="Python SDK" />
->>>>>>> b734b317a72beebefb08b458d5316a65cf3346fe
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

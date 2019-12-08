@@ -1,10 +1,17 @@
+# from block import block
 import json
 import os
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for
+from flask import session
 
+<<<<<<< HEAD
 from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
+=======
+from DAO.comment import CommentDAO
+from DB.DAO.personal_keyword import PersonalKeywordDAO
+>>>>>>> 02cb37244403d70346eecb46bd7b8958d8896ede
 from block.filtering import filtering
 from router import test
 from router.update_comment import update_comment_bp
@@ -18,30 +25,32 @@ app.secret_key = 'abcdseijvxi'
 app.register_blueprint(update_comment_bp)
 app.register_blueprint(update_keyword_bp)
 app.register_blueprint(test.route_blue)
-# app.register_blueprint(db_connection.db_blue)
-# app.register_blueprint(block.block_blue)
 
+comments = [{'userID': 'cjl', 'comment': 'test data'}, ]
+keywords = ['sibal', 'byungsin']
+mode = 'ICO Service off'
 
-# 댓글, 키워드 db클래스 생성
-CommentDAO = CommentDAO()
+# 키워드 db클래스 생성
 personal_keywordDB = PersonalKeywordDAO()
 
 
+@app.route('/googleCallback')
 @app.route('/')
 def index():
     with open('credentials.json') as json_file:
         json_data = json.load(json_file)
+
     data = json_data['web']
+    return render_template('index1.html', cilent_id=data['client_id'])
 
-    return render_template('index.html', cilent_id=data['client_id'])
 
-
+# DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
 @app.route('/news')
 def news():
-    mode = True
-    keywords = personal_keywordDB.select_keywords('cjl0701')
+    user_info = session['info']
+    keywords = personal_keywordDB.select_keywords(user_info['id'])
     keywords_str = ', '.join(keywords)
-    print(keywords_str)
+
     # 전체 댓글 리로드
     comments = CommentDAO.select_comments_by_url('http://localhost:5000/news')
     # for comment in comments:
@@ -56,7 +65,8 @@ def news():
 
 @app.route('/filter_mode', methods=['POST'])
 def filter_mode():
-    session['mode'] = request.form['mode']
+    global mode
+    mode = request.form['mode']
     return redirect(url_for('news'))
 
 

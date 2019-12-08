@@ -29,7 +29,6 @@ def searchWord(word):
 
 
 # 국어사전 요청 쿼리함수
-
 def wordExistCheck(comment):
     # 검색 질의 요청
     res = searchWord(comment)
@@ -45,8 +44,6 @@ def wordExistCheck(comment):
 
 
 # 국어사전 검색함수
-
-
 def tokenize(comment):
     print("**품사 분리 시작**")
     okt = Okt()
@@ -54,8 +51,6 @@ def tokenize(comment):
 
 
 # 댓글 품사분리함수(명사만 처리)
-<<<<<<< HEAD
-
 def onlyHangul(comment):
     # 특수문자 제거 함수
     _comment = ""
@@ -74,14 +69,7 @@ def onlyHangul(comment):
 
 
 # 숫자, 영어, 특수문자 제외 한글만 추출하는 함수
-
 def stringMatch(comment):
-=======
-def StringMatch(comment):
-    # load_wb = load_workbook("/Users/77520769/Documents/문해긔/공용keyword-3.xlsx", data_only=True)
-    # load_ws = load_wb['Sheet1']
->>>>>>> b734b317a72beebefb08b458d5316a65cf3346fe
-
     block = 0
     _comment = ""
     keywords = defaultKeyword.DefaultKeywordDAO()
@@ -103,10 +91,7 @@ def StringMatch(comment):
 
 
 # String 일치함수, 1차필터링
-
-
 def stringSynk(comment):
-
     _comment = ""
     keywords = defaultKeyword.DefaultKeywordDAO()
     block = 0
@@ -114,18 +99,11 @@ def stringSynk(comment):
     print("**2차 필터링 시작**")
     for j in comment:
 
-<<<<<<< HEAD
         _comment = hgtk.text.decompose(j).replace("ᴥ", "")
 
         for i in keywords.select_split_keywords():
 
             matchRatio = difflib.SequenceMatcher(None, str(i), _comment).ratio()
-=======
-        default_keyword_list = keywords.select_split_keywords()
-        for keyword in default_keyword_list:
-            data = keyword.to_json()
-            matchRatio = difflib.SequenceMatcher(None, data['split_keyword'], _comment).ratio()
->>>>>>> b734b317a72beebefb08b458d5316a65cf3346fe
 
             if matchRatio >= 0.75:
                 # 일치도 75%이상일시 단어가 국어사전에존재하는지 여부 확인, 존재하면 욕X,아니면 욕
@@ -147,8 +125,6 @@ def stringSynk(comment):
 
 
 # 유사도판별함수, 2차필터링
-
-
 def privateKeywordMatch(comments, keywords):
     block = 0
     _comment = ""
@@ -173,7 +149,7 @@ def privateKeywordMatch(comments, keywords):
             #    한글 이외의 것을 제거한 댓글과 키워드 매치
 
             if block != 0:
-                comment['property'] = '+'
+                comment['property'] = "-"
                 # 차단할 개인 키워드가 있으면 -로 바꿈
             else:
                 continue
@@ -198,15 +174,15 @@ def runBlockComment(testComment):
         filtering2 = stringSynk(testTokenComment)
         # 자모음 분리 후 2차 필터링
 
-        if filtering2 == '+':
-            if ml.total_predict(testComment) == 1:
-                return '+'
+        if filtering2 == "+":
+            if ml.total_predict(testComment) == '1':
+                return "+"
             else:
-                return '-'
+                return "-"
         ####################**********ML로 댓글 넘김***********#############
         else:
-            return '-'
+            return "-"
         # 2차에서 걸린경우
     else:
-        return '-'
+        return "-"
         # 1차에서 걸린경우

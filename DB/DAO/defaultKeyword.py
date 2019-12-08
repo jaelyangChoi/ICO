@@ -1,6 +1,6 @@
 from DTO.defaultKeyword import *
 from DAO.user import *
-from SQL.comment import *
+from SQL.defaultKeyword import SQL as sql
 
 
 class DefaultKeywordDAO:
@@ -12,39 +12,39 @@ class DefaultKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            cursor.execute(SQL.SELECT_ALL_FROM_DEFAULT_KEYWORD)
+            cursor.execute(sql.SELECT_ALL)
 
-            keywords = []
+            data = []
             for result in cursor.fetchall():
                 default_keyword = DefaultKeyword()
                 default_keyword.set_all(result)
-                keywords.append(default_keyword)
+                data.append(default_keyword)
 
             self.db_conn.close_db()
-            return keywords
+            return data
 
         except Exception as e:
             return e
 
     def select_keywords(self):
-        return self.execute_sql_for_one_component_list(SQL.SELECT_KEYWORD_FROM_DEFAULT_KEYWORD)
+        return self.execute_sql_for_one_component_list(sql.SELECT_KEYWORDS)
 
     def select_split_keywords(self):
-        return self.execute_sql_for_one_component_list(SQL.SELECT_SPLIT_KEYWORD_FROM_DEFAULT_KEYWORD)
+        return self.execute_sql_for_one_component_list(sql.SELECT_SPLIT_KEYWORDS)
 
-    def execute_sql_for_one_component_list(self, sql):
+    def execute_sql_for_one_component_list(self, query):
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            cursor.execute(sql)
+            cursor.execute(query)
 
-            keyword_list = []
+            keywords = []
             for result in cursor.fetchall():
-                keyword_list.append(result[0])
+                keywords.append(result[0])
 
             self.db_conn.close_db()
-            return keyword_list
+            return keywords
 
         except Exception as e:
             return e
