@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from DB.DAO.comment import CommentDAO
-from DB.DAO.personal_keyword import PersonalKeywordDAO
+from DB.DAO.personalKeyword import PersonalKeywordDAO
 from block.filtering import filtering
 from router import test
 from router.add_comment import add_comment_bp
@@ -43,9 +43,9 @@ def news():
     # 전체 댓글 리로드 -> 함수화
     comment_objs = CommentDAO.select_comments_by_url(url_for('news'))
     comments = []
-    for comment_obj in comment_objs:
-        print(comment_obj)
-        comments.append(comment_obj.get_data())
+    for comment_obj in comment_objs: #객체 리스트
+        print(comment_obj) #객체
+        comments.append(comment_obj.to_json())
     print(comments)
 
     # 필터링 서비스

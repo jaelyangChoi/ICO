@@ -50,11 +50,11 @@ def googleCallback():
     id_info = id_token.verify_oauth2_token(token, requests.Request(), client_id)
 
     user_dao = UserDAO()
-    user = user_dao.select_by_email(id_info['email'])
+    user = user_dao.select_user_by_email(id_info['email'])
 
     session['state'] = True
     session['mode'] = 'off'
-    session['info'] = user.get_user()
+    session['info'] = user.to_json()
     session['credentials'] = credentials
     return redirect('/')
 

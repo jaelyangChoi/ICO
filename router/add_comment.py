@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, session, url_for
 from DB.DAO.comment import CommentDAO
-from DB.DAO.personal_keyword import PersonalKeywordDAO
+from DB.DAO.personalKeyword import PersonalKeywordDAO
 from DB.DTO.comment import Comment
 from block.block import runBlockComment
 from block.filtering import filtering

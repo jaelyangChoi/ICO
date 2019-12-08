@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, session
-from DB.DAO.personal_keyword import PersonalKeywordDAO
+from DB.DAO.personalKeyword import PersonalKeywordDAO
 
 add_keyword_bp = Blueprint('add_keyword', __name__)
 

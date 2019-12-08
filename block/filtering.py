@@ -1,7 +1,7 @@
 from flask import Blueprint, session
 
 from DB.DAO.comment import CommentDAO
-from DB.DAO.personal_keyword import PersonalKeywordDAO
+from DB.DAO.personalKeyword import PersonalKeywordDAO
 from DB.DTO.comment import Comment
 from block import block
 
