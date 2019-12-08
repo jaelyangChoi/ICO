@@ -6,7 +6,15 @@ function addkeyword() {
         data: $('#keywordForm .data'), //서버로 데이터 전송시
         success: function reloadKeywords (data) {  // string 넘어옴
             $('#kwInputWindow').val('');
-            $('#kwOutputWindow').val(data);
+            // $('#kwOutputWindow').val(data);
+             $('#kwInputWindow').val('');
+            var keywords = '';
+            var i = 0;
+            while (i < data.length) {
+                keywords = keywords + '<input type="text" value="' + data[i] + '"><input type="button" value="삭제" onclick=""><br>';
+                i++;
+            }
+            $('#kwOutputWindow').html(keywords);
         }
     })
 }

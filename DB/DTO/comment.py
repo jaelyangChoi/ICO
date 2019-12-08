@@ -11,11 +11,11 @@ class Comment:
     def to_json(self):
         return {
             "index": self._index,
-            "comment": self._text,
-            "property": self._propriety,
+            "comment": self._comment,
+            "property": self._property,
             "ML_learning": self._learning,
             "url": self._url,
-            "userID": self._writer,
+            "userID": self._userID,
             "time": self._time
         }
 
@@ -61,3 +61,17 @@ class Comment:
     def set_property(self, property):
         if property == '+' or property == '-':
             self._property = property
+        else:
+            return -1
+
+    def set_learning(self, learning):
+        if learning == 0 or learning == 1:
+            self._learning = learning
+        else:
+            return -1
+
+    def set_url(self, url):
+        self._url = url
+
+    def set_user_id(self, id):
+        self._userID = id

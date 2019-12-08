@@ -25,11 +25,19 @@
 
 <div class="commentArea">
     {# Modal window #}
-    <input type="button" value="{{ mode }}" onclick="filterMode(this)">
+    {#    <input type="button" value="{{ mode }}" onclick="ChangeMode(this)">#}
+    <span> ICO Service : {{ mode }} &nbsp </span>
     <button id="MDbtn">ICO 설정하기</button>
     <div id="Modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
+            <br>
+            <form>
+                <input type="checkbox" name="off" value="off" onclick="ChangeMode(this)"> Off<br>
+                <input type="checkbox" name="level_1" value="level_1" onclick="ChangeMode(this)"> Level 1 : 욕설<br>
+                <input type="checkbox" name="level_2" value="level_2" onclick="ChangeMode(this)"> Level 2 : 악성 댓글<br>
+                <input type="checkbox" name="level_3" value="level_3" onclick="ChangeMode(this)"> Level 3 : 개인 키워드<br>
+            </form>
             <br>
             <form id="keywordForm">
                 <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
@@ -38,7 +46,16 @@
             <br>
             <strong>차단 키워드</strong>
             <br>
-            <textarea id="kwOutputWindow" rows="6" cols="40">{{ keywords }}</textarea>
+            {#            <textarea id="kwOutputWindow" rows="6" cols="30">{{ keywords }}</textarea>#}
+            <div id="kwOutputWindow">
+                {% if keywords %}
+                    {% for keyword in keywords %}
+                        <input type="text" value="{{ keyword }}">
+                        <input type="button" value="삭제" onclick="">
+                        <br>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </div>
     <br>

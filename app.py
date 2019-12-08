@@ -3,7 +3,7 @@ from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
 from block.filtering import filtering
 from router import test
-from router.add_comment import add_comment_bp
+from router.add_comment import add_comment_bp, load_comments_from_DB
 from router.add_keyword import add_keyword_bp, get_keywords_by_id
 import json
 import os
@@ -34,37 +34,34 @@ def index():
 
 @app.route('/news')
 def news():
-    mode = mode_info()
     user_info = session['info']
 
     # DB에서 키워드 get
     keywords = get_keywords_by_id(user_info['id'])
 
-    # 전체 댓글 리로드 -> 함수화
-    comment_objs = CommentDAO.select_comments_by_url(url_for('news'))
-    comments = []
-    for comment_obj in comment_objs: #객체 리스트
-        print(comment_obj) #객체
-        comments.append(comment_obj.to_json())
-    print(comments)
+    # 전체 댓글 리로드
+    comments = load_comments_from_DB(url_for('news'))
 
     # 필터링 서비스
-    if session['mode'] == 'on':
+    if session['mode'] != 'off':
         comments = filtering(comments)
 
-    return render_template('news1.html', comments=comments, keywords=keywords, mode=mode)
+    return render_template('news1.html', comments=comments, keywords=keywords, mode=session['mode'])
 
 
 @app.route('/filter_mode', methods=['POST'])
 def filter_mode():
+    print(session['mode'])
     session['mode'] = request.form['mode']
+    print(session['mode'])
+
     return redirect(url_for('news'))
 
-def mode_info():
-    if session['mode'] == 'off':
-        return 'ICO Service off'
-    else:
-        return 'ICO Service on'
+# def mode_info():
+#     if session['mode'] == 'off':
+#         return 'ICO Service off'
+#     else:
+#         return 'ICO Service on'
 
 if __name__ == '__main__':
     app.run()

@@ -12,6 +12,22 @@ CommentDTO = Comment()
 CommentDAO = CommentDAO()
 
 
+def filtering_by_level(comments, mode):
+    if mode == 'level_2':
+        # ml 악플 필터링
+        print(mode)
+    elif mode == 'level_3':
+        user_info = session['info']
+        # DB 에서 키워드 불러옴
+        keywords = personal_keywordDB.select_keywords(user_info['id'])
+        if keywords:
+            comments = block.privateKeywordMatch(comments, keywords)  # 딕셔너리 리스트 받음
+    else:
+        print(mode)
+
+    return comments
+
+
 # 댓글 필터링
 def filtering(comments):
     user_info = session['info']
