@@ -1,60 +1,70 @@
-from flask import Flask, render_template, request, redirect, url_for
-
-from block import block
+from flask import Flask, render_template, request, redirect, url_for, session
+from DB.DAO.comment import CommentDAO
+from DB.DAO.personalKeyword import PersonalKeywordDAO
+from block.filtering import filtering
 from router import test
-from router.view import view_blueprint
+from router.add_comment import add_comment_bp
+from router.add_keyword import add_keyword_bp, get_keywords_by_id
+import json
+import os
 
 app = Flask(__name__, template_folder="templates")
+app.secret_key = 'abcdseijvxi'
 
+app.register_blueprint(add_comment_bp)
+app.register_blueprint(add_keyword_bp)
 app.register_blueprint(test.route_blue)
-app.register_blueprint(view_blueprint)
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+
+# 댓글, 키워드 db클래스 생성
+CommentDAO = CommentDAO()
+personal_keywordDB = PersonalKeywordDAO()
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    with open('credentials.json') as json_file:
+        json_data = json.load(json_file)
+    data = json_data['web']
+
+    return render_template('index.html', cilent_id=data['client_id'])
 
 
-@app.route('/news', methods=["GET", "POST"])
+@app.route('/news')
 def news():
-    keywords = ['sibal', 'byungsin']
-    keywordList = ', '.join(keywords)
-    # posts = Post.query.all()
-    comments = [{'userID': 'cjl', 'comment': 'aaaaaa\n'}]
-    if request.method == 'POST':
-        new_comment = request.form
-        comments.append(new_comment)
-    # if request.form['keyword']:
-    #     new_keyword = request.form['keywords']
-    #     keywords.append(new_keyword)
+    mode = mode_info()
+    user_info = session['info']
 
-    return render_template('news1.html', comments=comments, keywords=keywordList)
+    # DB에서 키워드 get
+    keywords = get_keywords_by_id(user_info['id'])
 
+    # 전체 댓글 리로드 -> 함수화
+    comment_objs = CommentDAO.select_comments_by_url(url_for('news'))
+    comments = []
+    for comment_obj in comment_objs: #객체 리스트
+        print(comment_obj) #객체
+        comments.append(comment_obj.to_json())
+    print(comments)
 
-@app.route('/commentInput', methods=['POST'])
-def comment():
-    if request.method == 'POST':
-        return redirect(url_for('news'), code=307)  # 307은 원래 전송 된대로 요청 유형을 보존
+    # 필터링 서비스
+    if session['mode'] == 'on':
+        comments = filtering(comments)
 
-
-@app.route('/keyword', methods=['POST'])
-def keyword():
-    # keywords = {'userID': 'cjl', 'keyword': ('sipal', 'pig')}
-    keywords = ['sibal', 'byungsin']
-    keywords.append(request.form['keyword'])
-    keywordList = ', '.join(keywords)
-    return render_template('news1.html', keywords=keywordList)
+    return render_template('news1.html', comments=comments, keywords=keywords, mode=mode)
 
 
-# return redirect(url_for('news'), code=307)
-# form 요소:ImmutableMultiDict([('userID', 'userID'), ('comment', 'zzz\r\n')])
+@app.route('/filter_mode', methods=['POST'])
+def filter_mode():
+    session['mode'] = request.form['mode']
+    return redirect(url_for('news'))
 
-
-# @app.route('/fetchtest', methods=['POST'])
-# def fetchtest():
-#     keywords = ['test', 'byungsin']
-#     keywordList = ', '.join(keywords)
-#     return keywordList
+def mode_info():
+    if session['mode'] == 'off':
+        return 'ICO Service off'
+    else:
+        return 'ICO Service on'
 
 if __name__ == '__main__':
     app.run()

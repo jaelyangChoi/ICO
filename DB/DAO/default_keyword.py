@@ -27,6 +27,7 @@ class DefaultKeywordDAO:
             return -1
 
     def select_keywords(self):
+<<<<<<< HEAD
         return self.execute_sql_for_one_component_list("""SELECT keyword
                                             FROM DefaultKeyword""")
 
@@ -35,6 +36,16 @@ class DefaultKeywordDAO:
                                             FROM DefaultKeyword""")
 
     def execute_sql_for_one_component_list(self, sql):
+=======
+        return self.execute_sql_for_list("""SELECT keyword
+                                            FROM DefaultKeyword""")
+
+    def select_split_keywords(self):
+        return self.execute_sql_for_list("""SELECT splited_keyword
+                                            FROM DefaultKeyword""")
+
+    def execute_sql_for_list(self, sql):
+>>>>>>> fd41c3694998fd2a9f4b8a15e41187d503de3691
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()

@@ -1,5 +1,8 @@
 from DAO.comment import *
-from DTO import *
+from DTO.comment_ver_dic import *
+from DAO.defaultKeyword import *
+from DAO.personalKeyword import *
+from DAO.user import *
 
 """
 cdao = CommentDAO()

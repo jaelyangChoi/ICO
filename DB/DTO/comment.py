@@ -1,35 +1,33 @@
 class Comment:
     def __init__(self):
-        self._index = 0
-        self._text = ""
-        self._propriety = 0
-        self._learning = 0
-        self._url = ""
-        self._writer = ""
-        self._time = ""
+        self._index = None
+        self._comment = None
+        self._property = None
+        self._learning = None
+        self._url = None
+        self._userID = None
+        self._time = None
 
     def to_json(self):
-        result = {
-            "idx": self._index,
-            "text": self._text,
-            "propriety": self._propriety,
+        return {
+            "index": self._index,
+            "comment": self._comment,
+            "property": self._property,
             "ML_learning": self._learning,
             "url": self._url,
-            "writer": self._writer,
+            "userID": self._userID,
             "time": self._time
         }
-
-        return result
 
     # getter
     def get_index(self):
         return self._index
 
-    def get_text(self):
-        return self._text
+    def get_comment(self):
+        return self._comment
 
-    def get_propriety(self):
-        return self._propriety
+    def get_property(self):
+        return self._property
 
     def get_learning(self):
         return self._learning
@@ -37,33 +35,43 @@ class Comment:
     def get_url(self):
         return self._url
 
-    def get_writer(self):
-        return self._writer
+    def get_user_id(self):
+        return self._userID
 
     def get_time(self):
         return self._time
 
     # setter
-    def set_all(self, data):
-        self._index = data[0]
-        self._text = data[1]
-        self._propriety = data[2]
-        self._writer = data[3]
-        self._time = data[4]
+    def set_insert_data(self, comment):
+        self._userID = comment['userID']
+        self._comment = comment['comment']
+        self._property = comment['property']
+        self._url = comment['url']
 
-    def set_text(self, txt):
-        self._text = txt
+    def set_all(self, result):
+        self._index = result[0]
+        self._comment = result[1]
+        self._property = result[2]
+        self._userID = result[3]
+        self._time = result[4]
 
-    def set_propriety(self, propriety):
-        if 0 <= propriety <= 2:
-            self._propriety = propriety
+    def set_comment(self, comment):
+        self._comment = comment
+
+    def set_property(self, property):
+        if property == '+' or property == '-':
+            self._property = property
+        else:
+            return -1
 
     def set_learning(self, learning):
         if learning == 0 or learning == 1:
             self._learning = learning
+        else:
+            return -1
 
     def set_url(self, url):
         self._url = url
 
-    def set_writer(self, writer):
-        self._writer = writer
+    def set_user_id(self, id):
+        self._userID = id

@@ -1,11 +1,10 @@
 from DTO.comment import *
 from DAO.url import *
 from DAO.user import *
+from SQL.comment import SQL as sql
 
 
 class CommentDAO:
-    # db_conn = None
-
     def __init__(self):
         self.db_conn = DBConnection()
 
@@ -14,44 +13,41 @@ class CommentDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            url_dao = UrlDAO()
-            user_dao = UserDAO()
+            url = UrlDAO()
+            user = UserDAO()
 
-            sql = "INSERT INTO comments(text, propriety, MLlearning, URL, writer) VALUES(%s, %s, %s, %s, %s)"
-            cursor.execute(sql, (data.get_text(),
-                                 data.get_propriety(),
-                                 data.get_learning(),
-                                 url_dao.select_index(data.get_url()),
-                                 user_dao.select_index(data.get_writer())))
+            cursor.execute(sql.INSERT, (data.get_comment(),
+                                        data.get_property(),
+                                        data.get_learning(),
+                                        url.select_index(data.get_url()),
+                                        user.select_index(data.get_user_id())))
             conn.commit()
 
             self.db_conn.close_db()
 
         except Exception as e:
-            return -1
+            return e
 
     def select_comments_by_url(self, url):
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
+            cursor.execute(sql.SELECT, url)
 
-            sql = """SELECT Comments._index, text, propriety, User.id, time
-                    FROM Comments, User, Articles
-                    WHERE Comments.writer = User._index
-                    AND Comments.URL = Articles._index
-                    AND Articles.URL = %s"""
-            cursor.execute(sql, url)
-
-            data_list = []
-
+            comments = []
             for result in cursor.fetchall():
-                data = Comment()
-                data.set_all(result)
-                data_list.append(data)
+                comment = Comment()
+                comment.set_all(result)
+                comments.append(comment)
 
             self.db_conn.close_db()
-
-            return data_list
+            return comments
 
         except Exception as e:
-            return -1
+            return e
+
+    def update_my_comment(self):
+        pass
+
+    def delete_my_comment(self):
+        pass
