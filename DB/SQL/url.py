@@ -1,2 +1,2 @@
 class SQL:
-    SELECT = "SELECT _index FROM Article WHERE URL = %s"
+    SELECT = "SELECT _index FROM article WHERE URL = %s"

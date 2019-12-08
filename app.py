@@ -2,16 +2,11 @@
 import json
 import os
 
+from DB.DAO.personalKeyword import PersonalKeywordDAO
 from flask import Flask, render_template, request, redirect, url_for
 from flask import session
 
-<<<<<<< HEAD
-from DB.DAO.comment import CommentDAO
-from DB.DAO.personalKeyword import PersonalKeywordDAO
-=======
 from DAO.comment import CommentDAO
-from DB.DAO.personal_keyword import PersonalKeywordDAO
->>>>>>> 02cb37244403d70346eecb46bd7b8958d8896ede
 from block.filtering import filtering
 from router import test
 from router.update_comment import update_comment_bp
