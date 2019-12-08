@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, render_template, request, jsonify, session
-from block import block, filtering
+from block import filtering
 from DB.DAO.personal_keyword import PersonalKeywordDAO
 
 from DB.DAO.comment import CommentDAO

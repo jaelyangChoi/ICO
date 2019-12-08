@@ -171,7 +171,6 @@ class Block:
                     # 아니면 그대로
 
         return comments
-
     # 개인키워드, 3차필터링
 
     def runBlockComment(self, comment):
@@ -191,18 +190,18 @@ class Block:
 
             if filtering2 == "+":
                if str(ml.total_predict(comment)) == '1':
-                   return "+"
+                   return comment
               # ML도 통과하면 긍정
                else:
-                   return "-"
+                   return "ML 부정 : 비꼬는 댓글"
                 #     ML에서 부정
 
                 ####################**********ML로 댓글 넘김***********#############
             else:
-                return "-"
+                return "2차 부정 : 유사 욕설"
                  #  2차에서 부정
         else:
-            return "-"
+            return "1차 부정 : 욕설"
             # 1차에서 부정
 
     def runBlockCommentInExcel(self):
@@ -245,5 +244,6 @@ class Block:
                 write_ws['B' + str(i)] = 0
                 write_ws['C' + str(i)] = filtering1
 
-        write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_ML0.7부정_띄어쓰기차단X.xlsx')
-                                                
+        write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_ML0.7부정_DB수정.xlsx')
+
+    #엑셀 댓글 저장용

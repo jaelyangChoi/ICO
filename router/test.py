@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request, url_for, redirect, session
 
 from DB.DAO import comment
+from block.block_class import Block
 from login import googleLogin
 from ml import ml_predict
-from block.block_class import Block
 
 route_blue = Blueprint('route_blue', __name__)
 
@@ -55,8 +55,8 @@ def logout():
 
 @route_blue.route('/test/filter')
 def filter():
-    block = Block()
+    block_class = Block()
     comment = request.args.get('comment')
-    result = block.runBlockComment(comment)
+    result = block_class.runBlockCommentInExcel()
 
     return str(result)

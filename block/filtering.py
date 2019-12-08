@@ -1,5 +1,5 @@
 from flask import Blueprint, session
-from block import block
+from block import block_class
 from DB.DAO.personal_keyword import PersonalKeywordDAO
 
 from DB.DAO.comment import CommentDAO
@@ -17,7 +17,7 @@ def filtering(comments):
     keywords = personal_keywordDB.select_keywords(session['id'])
     # 개인 키워드 기반 적절성 유무 판단
     if keywords:
-        labeled_comments = block.privateKeywordMatch(comments, keywords)
+        labeled_comments = block_class.privateKeywordMatch(comments, keywords)
     # 부적절한 댓글 가리기
     comments = conceal_bad_comment(labeled_comments)
     return comments
