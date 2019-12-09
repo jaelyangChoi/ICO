@@ -17,7 +17,6 @@ app.register_blueprint(test.route_blue)
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-
 # 댓글, 키워드 db클래스 생성
 CommentDAO = CommentDAO()
 personal_keywordDB = PersonalKeywordDAO()
@@ -34,6 +33,7 @@ def index():
 
 @app.route('/news')
 def news():
+    # mode = mode_info()
     user_info = session['info']
 
     # DB에서 키워드 get
@@ -46,7 +46,7 @@ def news():
     if session['mode'] != 'off':
         comments = filtering(comments)
 
-    return render_template('news1.html', comments=comments, keywords=keywords, mode=session['mode'])
+    return render_template('news1.html', comments=comments, keywords=keywords, mode=mode_info())
 
 
 @app.route('/filter_mode', methods=['POST'])
@@ -57,11 +57,13 @@ def filter_mode():
 
     return redirect(url_for('news'))
 
-# def mode_info():
-#     if session['mode'] == 'off':
-#         return 'ICO Service off'
-#     else:
-#         return 'ICO Service on'
+
+def mode_info():
+    if session['mode'] == 'off':
+        return 'ICO Service 켜기'
+    else:
+        return 'ICO Service 끄기'
+
 
 if __name__ == '__main__':
     app.run()

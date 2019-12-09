@@ -8,14 +8,13 @@ function addkeyword() {
         "success": function reloadKeywords (data) {//list 넘어옴
             // $('#kwOutputWindow').val(data);
              $('#kwInputWindow').val('');
-            var keywordsHTML = '';
+            var keywords = '';
             var i = 0;
             while (i < data.length) { //js에서 배열길이는 length로
-                keywordsHTML = keywordsHTML + '<input type="text" value="' + data[i] + '"><input type="button" value="삭제"><br>';
+                keywords = keywords + '<input type="text" value="' + data[i] + '"><input type="button" value="삭제"><br>';
                 i++;
-                console.log(keywordsHTML)
             }
-            $('#kwOutputWindow').html(keywordsHTML);
+            $('#kwOutputWindow').html(keywords);
         }
     })
 }

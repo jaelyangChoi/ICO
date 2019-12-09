@@ -24,24 +24,24 @@ def add_comment():
                    'property': '+',
                    'url': url_for('news')}
 
-    # 댓글 적절성 판단 (level_1)
+    # 댓글 적절성 판단
     properness_judge(new_comment)
 
-    # db에 댓글 insert -> 예외처리
+    # db에 댓글 insert
     add_comment_to_DB(new_comment)
 
     # 전체 댓글 리로드
     comments = load_comments_from_DB(url_for('news'))
 
-    # 필터링 서비스(level_2,3)
-    if session['mode'] != 'off':
+    # 필터링 서비스
+    if session['mode'] == 'on':
         comments = filtering(comments)
 
     return jsonify(comments)
 
 
 def properness_judge(new_comment):
-    result = runBlockComment(new_comment['comment'])  # level에 따른 필터링, mode값 인자로 전달할 것.
+    result = runBlockComment(new_comment['comment'])
     new_comment['property'] = result
 
 
