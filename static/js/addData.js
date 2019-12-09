@@ -4,14 +4,13 @@ function addkeyword() {
         type: 'POST',
         url: '/add_keyword',
         data: $('#keywordForm .data'), //서버로 데이터 전송시
-        dataType: 'JSON',// 서버에서 데이터 전송시
-        "success": function reloadKeywords (data) {//list 넘어옴
+        success: function reloadKeywords (data) {  // string 넘어옴
+            $('#kwInputWindow').val('');
             // $('#kwOutputWindow').val(data);
-             $('#kwInputWindow').val('');
             var keywords = '';
             var i = 0;
-            while (i < data.length) { //js에서 배열길이는 length로
-                keywords = keywords + '<input type="text" value="' + data[i] + '"><input type="button" value="삭제"><br>';
+            while (i < data.length) {
+                keywords = keywords + '<input type="text" value="' + data[i] + '"><input type="button" value="삭제" onclick=""><br>';
                 i++;
             }
             $('#kwOutputWindow').html(keywords);
@@ -24,8 +23,8 @@ function addComment() {
     $.ajax({
         type: 'POST',
         url: '/add_comment',
-        data: $('#commentForm .data'), //서버로 데이터 전송시
-        dataType: 'JSON',// 서버에서 데이터 전송시
+        data: $('#commentForm .data'), //{#서버로 데이터 전송시#}
+        dataType: 'JSON',// {#서버에서 데이터 전송시#}
         "success": function reloadComments (data) {//dict list 넘어옴
             $('#cmInputWindow').val('');
             var comments = '';

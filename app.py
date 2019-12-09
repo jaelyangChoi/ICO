@@ -36,7 +36,7 @@ def news():
     # mode = mode_info()
     user_info = session['info']
 
-    # DB에서 키워드 get
+    # DB 에서 키워드 get
     keywords = get_keywords_by_id(user_info['id'])
 
     # 전체 댓글 리로드
