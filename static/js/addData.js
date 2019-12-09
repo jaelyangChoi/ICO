@@ -7,7 +7,6 @@ function addkeyword() {
         success: function reloadKeywords (data) {  // string 넘어옴
             $('#kwInputWindow').val('');
             // $('#kwOutputWindow').val(data);
-             $('#kwInputWindow').val('');
             var keywords = '';
             var i = 0;
             while (i < data.length) {
