@@ -41,9 +41,9 @@
             <div id="kwOutputWindow">
                 {% if keywords %}
                     {% for keyword in keywords %}
-                        <input type="text" value="{{ keyword }}">
-                        <input type="button" value="삭제" onclick="">
-                        <br>
+                            <input type="text" class="data" value="{{ keyword }}">
+                            <input type="button" value="삭제" onclick="deleteKeyword('{{ keyword }}')">
+                            <br>
                     {% endfor %}
                 {% endif %}
             </div>
@@ -64,15 +64,19 @@
 <div class="commentArea" id="cmOutputWindow">
     {% if comments %}
         {% for comment in comments %}
-            <strong>{{ comment['userID'] }}</strong>
-            <button onclick="alert('삭제')">삭제</button><br>
-            <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea><br>
+            <form id="cmDeleteForm">
+                <strong>{{ comment['userID'] }}</strong>
+                <button onclick="deleteComment('{{ comment }}')">삭제</button>
+                <br>
+                <textarea class="data" rows="4" cols="109">{{ comment['comment'] }}</textarea><br>
+            </form>
         {% endfor %}
     {% endif %}
 </div>
 
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/filterMode.js') }}"></script>
-<script src="{{ url_for('static', filename='js/addData.js') }}"></script>
+<script src="{{ url_for('static', filename='js/commentUpdate.js') }}"></script>
+<script src="{{ url_for('static', filename='js/keywordUpdate.js') }}"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@ import hgtk
 from bs4 import BeautifulSoup
 from konlpy.tag import Okt
 
-from DB.DAO import default_keyword
+from DB.DAO import defaultKeyword
 from ml.ml_predict import ModelCombine
 
 
@@ -79,7 +79,7 @@ def stringMatch(comment):
 
     block = 0
     _comment = ""
-    keywords = default_keyword.DefaultKeywordDAO()
+    keywords = defaultKeyword.DefaultKeywordDAO()
     print("**1차 필터링 시작**")
 
     _comment = onlyHangul(comment)
@@ -103,7 +103,7 @@ def stringMatch(comment):
 def stringSynk(comment):
 
     _comment = ""
-    keywords = default_keyword.DefaultKeywordDAO()
+    keywords = defaultKeyword.DefaultKeywordDAO()
     block = 0
 
     print("**2차 필터링 시작**")

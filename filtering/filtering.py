@@ -12,10 +12,7 @@ CommentDAO = CommentDAO()
 
 
 # 댓글 필터링
-def filtering(comments):
-    user_info = session['info']
-    # DB 에서 키워드 불러옴
-    keywords = personal_keywordDB.select_keywords(user_info['id'])
+def filtering(comments, keywords):
     # 개인 키워드 기반 적절성 유무 판단
     if keywords:
         comments = block.privateKeywordMatch(comments, keywords)  # 딕셔너리 리스트 받음
