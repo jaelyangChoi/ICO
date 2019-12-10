@@ -1,12 +1,14 @@
+import json
+import os
+
 from flask import Flask, render_template, request, redirect, url_for, session
+
 from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
 from block.filtering import filtering
 from router import test
 from router.add_comment import add_comment_bp, load_comments_from_DB
 from router.add_keyword import add_keyword_bp, get_keywords_by_id
-import json
-import os
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = 'abcdseijvxi'
