@@ -4,6 +4,7 @@ from google.oauth2 import id_token
 
 from DAO.user import UserDAO
 from DB.DAO import comment
+from block.block import Block
 from login import googleLogin
 from ml import ml_predict
 
@@ -62,3 +63,12 @@ def googleCallback():
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+
+@route_blue.route('/test/filter')
+def filter():
+    block = Block()
+    comment = request.args.get('comment')
+    result = block.runBlockCommentInExcel()
+
+    return str(result)

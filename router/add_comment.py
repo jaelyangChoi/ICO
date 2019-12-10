@@ -3,8 +3,8 @@ from flask import Blueprint, request, jsonify, session, url_for
 from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
 from DB.DTO.comment import Comment
-from block.block import runBlockComment
 from block.filtering import filtering
+from block.block import Block
 
 add_comment_bp = Blueprint('add_comment', __name__)
 
@@ -42,7 +42,8 @@ def add_comment():
 
 
 def properness_judge(new_comment):
-    result = runBlockComment(new_comment['comment'])
+    block = Block()
+    result = block.runBlockComment(new_comment['comment'])
     new_comment['property'] = result
 
 
