@@ -43,7 +43,7 @@ function commentToHTML(commentList) {
     var comments = '';
     var i = 0;
     while (i < commentList.length) {
-        comments = comments + '<h3>' + commentList[i].userID + '</h3><textarea rows="4" cols="109">' + commentList[i].comment + '</textarea>';
+        comments = comments + '<strong>' + commentList[i].userID + '</strong><button onclick="alert(\'삭제\')">삭제</button><br><textarea rows="4" cols="109">' + commentList[i].comment + '</textarea><br>';
         i++;
     }
     return comments;

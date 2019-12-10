@@ -64,8 +64,9 @@
 <div class="commentArea" id="cmOutputWindow">
     {% if comments %}
         {% for comment in comments %}
-            <h3>{{ comment['userID'] }}</h3>
-            <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea>
+            <strong>{{ comment['userID'] }}</strong>
+            <button onclick="alert('삭제')">삭제</button><br>
+            <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea><br>
         {% endfor %}
     {% endif %}
 </div>

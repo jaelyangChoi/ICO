@@ -3,7 +3,7 @@ from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
 from DB.DTO.comment import Comment
 from block.block import runBlockComment
-from block.filtering import filtering
+from filtering.filtering import filtering
 
 add_comment_bp = Blueprint('add_comment', __name__)
 
