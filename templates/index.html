@@ -6,13 +6,23 @@
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+    <meta name="google-signin-client_id" content={{ cilent_id }}>
+    <script src="../static/js/loginScript.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="989019791931-7sknrf9kk5eotfrtmfjimj2fhlsfr6u7.apps.googleusercontent.com">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
 <div id="title">
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-    <a href="{{ url_for('index') }}"><h1>ThisPatch</h1></a>
+    {% if session['state'] %}
+        <div>
+            <a href="/logout" onclick="signOut();">Sign out</a>
+        </div>
+    {% else %}
+        <div>
+            <a href="/test/google/login">Google Login</a>
+        </div>
+    {% endif %}
+    <a href="{{ url_for('index') }}" class="text-white"><h1>ThisPatch</h1></a>
     <h5> 뉴스는 '팩트'다</h5>
 </div>
 <div class="mainNews">
@@ -21,7 +31,7 @@
 <div id="category">
     <div id="photoCategory">
         <h4>Ranking News</h4>
-        <a href="{{ url_for('news') }}" class="RankingNews">
+        <a href="/news" class="RankingNews">
             <img src="{{ url_for('static', filename='Image/news1.jpg') }}" width="100%">
             <div>박성광 "송이 매니저, 악플로 고생하다 퇴사..정말 미안"</div>
         </a>
