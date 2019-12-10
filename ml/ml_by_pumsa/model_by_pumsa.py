@@ -1,149 +1,124 @@
-import csv
-import pandas as pd
-from konlpy.tag import Okt  # Okt(Open Korean Text) 클래스
-import nltk  # 자연어 처리 패키지 문서탐색용, Test 클래스
-import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
+import data_preprocessing as dp
 from tensorflow.keras import models
 from tensorflow.keras import layers
 from tensorflow.keras import optimizers
 from tensorflow.keras import losses
 from tensorflow.keras import metrics
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import linear_model
+from sklearn.naive_bayes import GaussianNB
+
 import pickle
+ML_FILE_PATH = "../../dataset_pumsa_ml/"
 
 
-def read_csv_file(csv_file_name):
-    """csv파일을 dataframe 형식으로 가져오기"""
-    df = pd.read_csv("../../dataset_pumsa_ml/" + csv_file_name + ".csv")
-    return df
+class ModelByPumsa:
+    def __init__(self):
+        self.x_train, self.x_test, self.y_train, self.y_test = dp.DataPreprocessing().preprocessing_data_by_pumsa()
+        self.common_words_list=self.load_pickle_file("common_words_list")
 
+    def save_as_pickle_file(self, pickle_file_name, pickle_data):
+        """pickle file 생성"""
 
-def tokenize(sentence):
-    """품사"""
+        f = open(ML_FILE_PATH+pickle_file_name+".pkl", "wb")
+        pickle.dump(pickle_data, f)
+        f.close()
+        return f
 
-    okt = Okt()
-    return okt.pos(sentence, norm=True, stem=True)
+    def load_pickle_file(self, pickle_file_name):
+        f = open(ML_FILE_PATH+pickle_file_name+".pkl", "rb")
+        pickle_data = pickle.load(f)
+        f.close()
+        return pickle_data
 
+    def save_tensor_model(self,model, tensor_model_name):
+        model_json = model.to_json()
+        with open(ML_FILE_PATH+tensor_model_name+".json", "w") as json_file:  # 학습된 모델저장
+            json_file.write(model_json)
+        model.save_weights(ML_FILE_PATH+tensor_model_name+".h5")  # 가중치저장
 
-def delete_non_meaning_pumsa(token_label_sentences):
-    """의미없는 품사 제거"""
+    def learning_tensor_model(self, layer_units_list, epochs_count, model_name):
+        """모델 생성 및 학습"""
 
-    deleted_pumsa_data = []
-    pumsa_list = ["Adjective", "Adverb", "Alpha", "Determiner", "Exclamation",
-                  "KoreanParticle", "Noun", "Verb"]
+        model = models.Sequential()
+        input_layer_unit = [layer_units_list[0]]
+        inter_layer_unit = layer_units_list[1:-1]
+        output_layer_unit = [layer_units_list.pop()]
 
-    # token_label_sentences ex)[([('마녀', 'Noun'), ('같다', 'Adjective')], '0')]
+        model.add(layers.Dense(input_layer_unit.pop(), activation='relu', input_shape=(100,)))
+        for inter_unit in input_layer_unit:
+            model.add(layers.Dense(inter_unit, activation='relu'))
+        model.add(layers.Dense(output_layer_unit.pop(), activation='sigmoid'))
 
-    for row in token_label_sentences:
-        for token_word in row[0]:
-            if token_word[1] in pumsa_list:
-                deleted_pumsa_data.append([token_word[0], token_word[1], row[1]])
-    return deleted_pumsa_data
+        model.compile(optimizer=optimizers.RMSprop(lr=0.001),
+                      loss=losses.binary_crossentropy,
+                      metrics=[metrics.binary_accuracy])
 
+        model.fit(self.x_train, self.y_train, epochs=epochs_count, batch_size=500)
 
-def delete_stop_words(token_label_words):
-    """의미없는 단어(불용어) 제거"""
+        self.save_tensor_model(model, model_name)
+        return model
 
-    deleted_stop_words = []
-    stop_words_list = []
+    def tensor_model_evaluate(self, model):
+        return model.evaluate(self.x_test, self.y_test)
 
-    stop_words = read_csv_file("stop_words")
-    stop_words_list = stop_words['stopword'].tolist()
-    for row in token_label_words:
-        if row[0] not in stop_words_list:
-            deleted_stop_words.append(row)
-    return deleted_stop_words
+    def learning_decisionTree_model(self, model_name):
+        dcf = DecisionTreeClassifier(max_depth=4)
+        dcf.fit(self.x_train, self.y_train)
+        self.save_as_pickle_file(model_name, dcf)
+        return dcf
 
+    def learning_randomForest_model(self, model_name):
+        rcf = RandomForestClassifier(max_depth=4, n_estimators=100, max_features=1 )
+        rcf.fit(self.x_train, self.y_train)
+        self.save_as_pickle_file(model_name, rcf)
+        return rcf
 
-def remain_meaning_token(token_data):
-    """토큰 전처리"""
+    def learning_linear_model(self, model_name):
+        lcf = linear_model.LogisticRegression()
+        lcf.fit(self.x_train,self.y_train)
+        self.save_as_pickle_file(model_name, lcf)
+        return lcf
 
-    deleted_pumsa_data = delete_non_meaning_pumsa(token_data)
-    meaning_tokens = delete_stop_words(deleted_pumsa_data)
-    return meaning_tokens
+    def learning_naive_bayes_model(self, model_name):
+        ncf = GaussianNB()
+        ncf.fit(self.x_train,self.y_train)
+        self.save_as_pickle_file(model_name, ncf)
+        return ncf
+# tf_result=[]
+# ###epochs###
+# tm1=ModelByPumsa()
+# tf_result.append(tm1.tensor_model_evaluate(tm1.learning_tensor_model([64,64,1],10,"tensor1")))
+# tm2=ModelByPumsa()
+# tf_result.append(tm2.tensor_model_evaluate(tm2.learning_tensor_model([64,64,1],20,"tensor2")))
+# tm3=ModelByPumsa()
+# tf_result.append(tm3.tensor_model_evaluate(tm3.learning_tensor_model([64,64,1],30,"tensor3")))
+# tm4=ModelByPumsa()
+# tf_result.append(tm4.tensor_model_evaluate(tm4.learning_tensor_model([64,64,1],50,"tensor4")))
+# tm5=ModelByPumsa()
+# ###units 숫자###
+# tf_result.append(tm5.tensor_model_evaluate(tm5.learning_tensor_model([16,16,1],20,"tensor5")))
+# tm6=ModelByPumsa()
+# tf_result.append(tm6.tensor_model_evaluate(tm6.learning_tensor_model([64,64,1],20,"tensor6")))
+# tm7=ModelByPumsa()
+# tf_result.append(tm7.tensor_model_evaluate(tm7.learning_tensor_model([128,128,1],20,"tensor7")))
+# ###레이어 층수###
+# tm8=ModelByPumsa()
+# tf_result.append(tm8.tensor_model_evaluate(tm8.learning_tensor_model([64,32,32,1],20,"tensor8")))
+# tm9=ModelByPumsa()
+# tf_result.append(tm9.tensor_model_evaluate(tm9.learning_tensor_model([64,32,32,32,32,1],20,"tensor9")))
+#
+# fp=open(ML_FILE_PATH+"tensor_result_sample.txt","w")
+# fp.write(str(tf_result))
+# fp.close()
 
-
-def count_word_frequency(token_sentence, selected_words):
-    """단어 빈도수 측정"""
-
-    token_words = []
-    for token_word in token_sentence:
-        token_words.append(token_word[0])  # 단어+품사에서 단어만 추가
-    return [token_words.count(word) for word in selected_words]
-
-
-def reindex(data):
-    """인덱스 재정렬"""
-
-    data.reset_index(drop=True)
-    return data
-
-
-def devide_train_test(comments):
-    """test/train data 분리"""
-
-    train_data = comments.sample(frac=0.7, random_state=2019)  # 7:3 비율로 train, test data 분리
-    test_data = comments.drop(train_data.index)
-    reindex(train_data)
-    reindex(test_data)
-    return train_data, test_data
-
-
-def data_preprocessing(data_file):
-    """데이터 전처리"""
-
-    comments = read_csv_file(data_file)
-    train_data, test_data = devide_train_test(comments)
-
-    train_token_data = [(tokenize(train_data['comment'][ind]), train_data['labeling'][ind]) for ind in
-                        train_data.index]  # data 토큰화, 단어+품사+라벨
-    test_token_data = [(tokenize(test_data['comment'][ind]), test_data['labeling'][ind]) for ind in test_data.index]
-
-    meaning_tokens = remain_meaning_token(train_token_data)  # 무의미 품사, 불용어 제거, 단어+품사+라벨
-    tokens = [meaning_token[0] for meaning_token in meaning_tokens]  # 단어
-    text = nltk.Text(tokens, name='NMSC')
-    selected_tokens = [common_word[0] for common_word in text.vocab().most_common(100)]  # 자주쓰이는 단어
-
-    f=open("../../dataset_pumsa_ml/commonwords.pkl", "wb")
-    pickle.dump(selected_tokens, f)
-    f.close()
-
-    train_x = [count_word_frequency(train_token_row[0], selected_tokens) for train_token_row in
-               train_token_data]  # x : 단어 빈도수 벡터화 y : 0,1,2 라벨
-    test_x = [count_word_frequency(test_token_row[0], selected_tokens) for test_token_row in test_token_data]
-    train_y = [train_token_row[1] for train_token_row in train_token_data]
-    test_y = [test_token_row[1] for test_token_row in test_token_data]
-
-    x_train = np.asarray(train_x).astype('float32')
-    x_test = np.asarray(test_x).astype('float32')
-    y_train = np.asarray(train_y).astype('float32')
-    y_test = np.asarray(test_y).astype('float32')
-
-    return x_train, x_test, y_train, y_test, selected_tokens
-
-
-def learning_ml():
-    """학습"""
-
-    x_train, x_test, y_train, y_test, selected_tokens = data_preprocessing('comments2')
-    model = models.Sequential()
-    model.add(layers.Dense(64, activation='relu', input_shape=(100,)))
-    model.add(layers.Dense(64, activation='relu'))
-    model.add(layers.Dense(1, activation='sigmoid'))
-
-    model.compile(optimizer=optimizers.RMSprop(lr=0.001),
-                  loss=losses.binary_crossentropy,
-                  metrics=[metrics.binary_accuracy])
-
-    model.fit(x_train, y_train, epochs=20, batch_size=512)
-
-    results = model.evaluate(x_test, y_test)
-
-
-    model_json = model.to_json()
-    with open("../../dataset_pumsa_ml/model.json", "w") as json_file: #학습된 모델저장
-        json_file.write(model_json)
-    model.save_weights("../../dataset_pumsa_ml/model.h5") #가중치저장
-
-    return model
-
-learning_ml()
+# ml1=ModelByPumsa()
+# ml1.learning_decisionTree_model("decisiontree")
+# ml2=ModelByPumsa()
+# ml2.learning_randomForest_model("randomforest")
+# ml3=ModelByPumsa()
+# ml3.learning_linear_model("linear")
+# ml4=ModelByPumsa()
+# ml4.learning_naive_bayes_model("naive_bayes")
