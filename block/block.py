@@ -117,6 +117,8 @@ class Block:
 
             for default_keyword in default_keywords:
 
+                if default_keyword.get_split_keyword() == None:
+                    continue
                 matchRatio = difflib.SequenceMatcher(None, default_keyword.get_split_keyword(), _comment).ratio()
 
                 if matchRatio >= 0.8:
@@ -193,15 +195,15 @@ class Block:
                    return comment
               # ML도 통과하면 긍정
                else:
-                   return "ML 부정 : 비꼬는 댓글"
+                   return "-"
                 #     ML에서 부정
 
                 ####################**********ML로 댓글 넘김***********#############
             else:
-                return "2차 부정 : 유사 욕설"
+                return "-"
                  #  2차에서 부정
         else:
-            return "1차 부정 : 욕설"
+            return "-"
             # 1차에서 부정
 
     def runBlockCommentInExcel(self):
