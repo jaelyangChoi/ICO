@@ -1,18 +1,13 @@
 import pickle
+
+import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
 from konlpy.tag import Okt  # Okt(Open Korean Text) 클래스
-import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
 from sklearn.externals import joblib
-from tensorflow.keras import losses
-from tensorflow.keras import metrics
-from tensorflow.keras import optimizers
-from tensorflow.keras.models import model_from_json
-import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 수 있도록 지원하는 파이썬의 라이브러리
-import pandas as pd
-import time
 
 ML_FILE_PATH = "./dataset_pumsa_ml/"
-#MODELNAME="tensor4"
-MODELNAME="linear"
+# MODELNAME="tensor4"
+MODELNAME = "linear"
+
 
 class CommentPredict:
     def __init__(self):
@@ -27,14 +22,13 @@ class CommentPredict:
         # self.model.compile(optimizer=optimizers.RMSprop(lr=0.001),
         #                    loss=losses.binary_crossentropy,
         #                    metrics=[metrics.binary_accuracy])
-        self.model=joblib.load(ML_FILE_PATH+MODELNAME+".pkl")
+        self.model = joblib.load(ML_FILE_PATH + MODELNAME + ".pkl")
 
     def load_pickle_file(self, pickle_file_name):
-        f = open(ML_FILE_PATH+pickle_file_name+".pkl", "rb")
+        f = open(ML_FILE_PATH + pickle_file_name + ".pkl", "rb")
         pickle_data = pickle.load(f)
         f.close()
         return pickle_data
-
 
     def tokenize(self, sentence):
         """품사"""

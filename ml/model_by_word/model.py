@@ -50,6 +50,8 @@ class ModelByWord:
         data = self._preprocess(comment)
         predict = self._model.predict(data)
 
+        print(self._model.predict_proba(data))
+
         return predict
 
     def _word_store_in_dataframe(self, split_word):

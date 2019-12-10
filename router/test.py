@@ -1,3 +1,6 @@
+import time
+
+import pandas as pd
 from flask import Blueprint, jsonify, request, url_for, redirect, session
 from google.auth.transport import requests
 from google.oauth2 import id_token
@@ -7,6 +10,7 @@ from DB.DAO import comment
 from block.block import Block
 from login import googleLogin
 from ml import ml_predict
+from ml.model_by_word.model import ModelByWord
 
 route_blue = Blueprint('route_blue', __name__)
 
@@ -24,6 +28,17 @@ def select_comments(url):
         temp.append(data.to_json())
 
     return jsonify(temp)
+
+
+@route_blue.route('/test/ml/list')
+def test_list():
+    dd = ModelByWord()
+    df = pd.read_csv("./dataset_pumsa_ml/comments_test.csv")
+    comments_list = df['comment'].tolist()
+    start_time = time.time()
+    for comment in comments_list:
+        print(str(dd.predict(comment)[0]))
+    print("실행시간:" + str(time.time() - start_time))
 
 
 @route_blue.route('/test/ml')
