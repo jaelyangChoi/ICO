@@ -19,4 +19,5 @@ class SqlExecution:
             return result[0]
 
         except Exception as e:
+            print(e)
             return e
