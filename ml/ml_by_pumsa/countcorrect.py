@@ -2,7 +2,7 @@ import numpy as np  # 행렬, 대규모 다차원 배열을 쉽게 처리 할 �
 import pandas as pd
 import time
 
-ML_FILE_PATH = "../../dataset_pumsa_ml/"
+ML_FILE_PATH = "./"
 
 df=pd.read_csv(ML_FILE_PATH+"compare_correct.csv")
 answer=df['answer'].tolist()
@@ -76,6 +76,39 @@ i=0
 count=0
 while i<len(answer):
     if answer[i]==tensor9[i]:
+        count=count+1
+    i += 1
+print(count)
+print("=======================================")
+decisiontree=df['decisiontree'].tolist()
+i=0
+count=0
+while i<len(answer):
+    if answer[i]==decisiontree[i]:
+        count=count+1
+    i += 1
+print(count)
+randomforest=df['randomforest'].tolist()
+i=0
+count=0
+while i<len(answer):
+    if answer[i]==randomforest[i]:
+        count=count+1
+    i += 1
+print(count)
+linear=df['linear'].tolist()
+i=0
+count=0
+while i<len(answer):
+    if answer[i]==linear[i]:
+        count=count+1
+    i += 1
+print(count)
+naive_bayes=df['naive_bayes'].tolist()
+i=0
+count=0
+while i<len(answer):
+    if answer[i]==naive_bayes[i]:
         count=count+1
     i += 1
 print(count)
