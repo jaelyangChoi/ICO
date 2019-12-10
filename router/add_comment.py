@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, session, url_for
+
 from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
 from DB.DTO.comment import Comment

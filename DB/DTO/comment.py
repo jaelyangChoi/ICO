@@ -4,8 +4,8 @@ class Comment:
         self._comment = None
         self._property = None
         self._learning = None
-        self._url = None
-        self._userID = None
+        self._url_index = None
+        self._user_index = None
         self._time = None
 
     def to_json(self):
@@ -14,8 +14,8 @@ class Comment:
             "comment": self._comment,
             "property": self._property,
             "ML_learning": self._learning,
-            "url": self._url,
-            "userID": self._userID,
+            "url": self._url_index,
+            "userID": self._user_index,
             "time": self._time
         }
 
@@ -33,26 +33,26 @@ class Comment:
         return self._learning
 
     def get_url(self):
-        return self._url
+        return self._url_index
 
     def get_user_id(self):
-        return self._userID
+        return self._user_index
 
     def get_time(self):
         return self._time
 
     # setter
     def set_insert_data(self, comment):
-        self._userID = comment['userID']
+        self._user_index = comment['userID']
         self._comment = comment['comment']
         self._property = comment['property']
-        self._url = comment['url']
+        self._url_index = comment['url']
 
     def set_all(self, result):
         self._index = result[0]
         self._comment = result[1]
         self._property = result[2]
-        self._userID = result[3]
+        self._user_index = result[3]
         self._time = result[4]
 
     def set_comment(self, comment):
@@ -71,7 +71,7 @@ class Comment:
             return -1
 
     def set_url(self, url):
-        self._url = url
+        self._url_index = url
 
     def set_user_id(self, id):
-        self._userID = id
+        self._user_index = id

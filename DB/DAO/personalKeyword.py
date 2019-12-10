@@ -1,5 +1,5 @@
 from DAO.user import *
-from SQL.personalKeyword import *
+from SQL.personalKeyword import PersonalKeywordSQL as SQL
 
 
 class PersonalKeywordDAO:
@@ -12,7 +12,7 @@ class PersonalKeywordDAO:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            cursor.execute(SQL.SELECT, id)
+            cursor.execute(SQL.SELECT_KEYWORDS, id)
 
             keyword_list = []
             for result in cursor.fetchall():
@@ -26,11 +26,12 @@ class PersonalKeywordDAO:
             return e
 
     def insert_keyword(self, id, keyword):
-        self.sql = SQL.INSERT
+        self.sql = SQL.INSERT_KEYWORD
         self.control_keyword(id, keyword)
 
     def delete_keyword(self, id, keyword):
-        self.sql = SQL.DELETE
+        self.sql = SQL.DELETE_KEYWORD
+        self.control_keyword(id, keyword)
 
     def control_keyword(self, id, keyword):
         try:
