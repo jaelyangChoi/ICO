@@ -1,5 +1,5 @@
 from DAO.user import *
-from SQL.personalKeyword import *
+from SQL.personalKeyword import PersonalKeywordSQL as SQL
 
 
 class PersonalKeywordDAO:
@@ -31,6 +31,7 @@ class PersonalKeywordDAO:
 
     def delete_keyword(self, id, keyword):
         self.sql = SQL.DELETE
+        self.control_keyword(id, keyword)
 
     def control_keyword(self, id, keyword):
         try:

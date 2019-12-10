@@ -1,13 +1,12 @@
 from DAO.comment import *
-from DTO.comment_ver_dic import *
 from DAO.defaultKeyword import *
 from DAO.personalKeyword import *
 from DAO.user import *
 
-"""
 cdao = CommentDAO()
-kdao = KeywordDAO()
+pkdao = PersonalKeywordDAO()
 
+"""
 print('댓글 입력')
 data = Comment()
 
@@ -48,15 +47,15 @@ for i in data_list:
     print(i._time)
 
     print()
-
+"""
 print('개인 키워드 입력')
 id = input('id : ')
 keyword = input('input keyword : ')
 
-kdao.insert_personal_keyword(id, keyword)
+pkdao.insert_keyword(id, keyword)
 
 print('\n<' + id + '>의 개인 키워드 검색')
-keyword_list = kdao.select_personal_keywords_by_user(id)
+keyword_list = pkdao.select_keywords(id)
 
 cnt = 1
 for i in keyword_list:
@@ -68,17 +67,17 @@ print('개인 키워드 삭제')
 id = input('id : ')
 keyword = input('input keyword : ')
 
-kdao.delete_personal_keyword(id, keyword)
+pkdao.delete_keyword(id, keyword)
 
 print('\n<' + id + '>의 개인 키워드 검색')
-keyword_list = kdao.select_personal_keywords_by_user(id)
+keyword_list = pkdao.select_keywords(id)
 
 cnt = 1
 for i in keyword_list:
     print(str(cnt) + 'th keyword : ' + i)
     cnt += 1
 print()
-
+"""
 url = input("URL : ")
 url_dao = UrlDAO()
 print("index : " + str(url_dao.select_index(url)))
