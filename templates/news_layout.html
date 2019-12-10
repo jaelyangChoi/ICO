@@ -38,7 +38,15 @@
             <br>
             <strong>차단 키워드</strong>
             <br>
-            <textarea id="kwOutputWindow" rows="6" cols="40">{{ keywords }}</textarea>
+            <div id="kwOutputWindow">
+                {% if keywords %}
+                    {% for keyword in keywords %}
+                        <input type="text" value="{{ keyword }}">
+                        <input type="button" value="삭제" onclick="">
+                        <br>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </div>
     <br>
@@ -61,7 +69,6 @@
         {% endfor %}
     {% endif %}
 </div>
-
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/filterMode.js') }}"></script>
 <script src="{{ url_for('static', filename='js/addData.js') }}"></script>

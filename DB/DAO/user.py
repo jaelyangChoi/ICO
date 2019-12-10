@@ -13,15 +13,13 @@ class UserDAO(Index):
             cursor = conn.cursor()
 
             cursor.execute(SQL.SELECT_USER, email)
+            result = cursor.fetchone()
 
-            user_list = []
-            for result in cursor.fetchall():
-                user = User()
-                user.set_all(result)
-                user_list.append(user)
+            user = User()
+            user.set_all(result)
 
             self.db_conn.close_db()
-            return user_list
+            return user
 
         except Exception as e:
             return e

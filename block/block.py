@@ -5,7 +5,7 @@ import hgtk
 from bs4 import BeautifulSoup
 from konlpy.tag import Okt
 
-from DB.DAO import default_keyword
+from DB.DAO import defaultKeyword
 from ml.ml_predict import ModelCombine
 
 
@@ -29,7 +29,6 @@ def searchWord(word):
 
 
 # 국어사전 요청 쿼리함수
-
 def wordExistCheck(comment):
     # 검색 질의 요청
     res = searchWord(comment)
@@ -45,8 +44,6 @@ def wordExistCheck(comment):
 
 
 # 국어사전 검색함수
-
-
 def tokenize(comment):
     print("**품사 분리 시작**")
     okt = Okt()
@@ -54,7 +51,6 @@ def tokenize(comment):
 
 
 # 댓글 품사분리함수(명사만 처리)
-
 def onlyHangul(comment):
     # 특수문자 제거 함수
     _comment = ""
@@ -73,13 +69,10 @@ def onlyHangul(comment):
 
 
 # 숫자, 영어, 특수문자 제외 한글만 추출하는 함수
-
 def stringMatch(comment):
-
-
     block = 0
     _comment = ""
-    keywords = default_keyword.DefaultKeywordDAO()
+    keywords = defaultKeyword.DefaultKeywordDAO()
     print("**1차 필터링 시작**")
 
     _comment = onlyHangul(comment)
@@ -98,12 +91,9 @@ def stringMatch(comment):
 
 
 # String 일치함수, 1차필터링
-
-
 def stringSynk(comment):
-
     _comment = ""
-    keywords = default_keyword.DefaultKeywordDAO()
+    keywords = defaultKeyword.DefaultKeywordDAO()
     block = 0
 
     print("**2차 필터링 시작**")
@@ -135,8 +125,6 @@ def stringSynk(comment):
 
 
 # 유사도판별함수, 2차필터링
-
-
 def privateKeywordMatch(comments, keywords):
     block = 0
     _comment = ""
@@ -184,15 +172,15 @@ def runBlockComment(testComment):
         filtering2 = stringSynk(testTokenComment)
         # 자모음 분리 후 2차 필터링
 
-        if filtering2 == '+':
-            if ml.total_predict(testComment) == 1:
-                return '+'
+        if filtering2 == "+":
+            if ml.total_predict(testComment) == '1':
+                return "+"
             else:
-                return '-'
+                return "-"
         ####################**********ML로 댓글 넘김***********#############
         else:
-            return '-'
+            return "-"
         # 2차에서 걸린경우
     else:
-        return '-'
+        return "-"
         # 1차에서 걸린경우

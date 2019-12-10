@@ -12,7 +12,7 @@ personal_keywordDB = PersonalKeywordDAO()
 def add_keyword():
     user_info = session['info']
 
-    # db에 추출한 keyword, id 넣기
+    # DB에 키워드 입력
     personal_keywordDB.insert_keyword(user_info['id'], request.form['keyword'])
 
     # 키워드 전부 출력
@@ -22,6 +22,6 @@ def add_keyword():
 
 
 def get_keywords_by_id(id):
-    keywords = personal_keywordDB.select_keywords(id)
-    keywords_str = ', '.join(keywords)
-    return keywords_str
+    keywords = personal_keywordDB.select_keywords(id) #리스트 반환
+    #keywords_str = ', '.join(keywords)
+    return keywords

@@ -10,9 +10,12 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
 >>>>>>> fd41c3694998fd2a9f4b8a15e41187d503de3691
+=======
+>>>>>>> 8e891073f0ffce1f47d9a724e9b881dfcf79a88e
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
@@ -28,5 +31,8 @@
       </list>
     </option>
 >>>>>>> fd41c3694998fd2a9f4b8a15e41187d503de3691
+  </component>
+  <component name="TestRunnerService">
+    <option name="PROJECT_TEST_RUNNER" value="Unittests" />
   </component>
 </module>
