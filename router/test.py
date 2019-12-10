@@ -31,7 +31,6 @@ def ml_comment():
     predict = ml_predict.ModelCombine()
     comment = request.args.get('comment')
     result = predict.total_predict(comment)
-
     return str(result)
 
 
