@@ -44,6 +44,7 @@ def add_comment():
 def properness_judge(new_comment):
     block = Block()
     result = block.runBlockComment(new_comment['comment'])
+    print("적절성 : " + result)
     new_comment['property'] = result
 
 

@@ -68,6 +68,6 @@ def logout():
 def filter():
     block = Block()
     comment = request.args.get('comment')
-    result = block.runBlockCommentInExcel()
+    result = block.runBlockComment(comment)
 
     return str(result)

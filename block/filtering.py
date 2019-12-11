@@ -3,7 +3,7 @@ from flask import Blueprint, session
 from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
 from DB.DTO.comment import Comment
-from block import block
+from block.block import Block
 
 update_comment_bp = Blueprint('update_comment', __name__)
 
@@ -18,6 +18,7 @@ def filtering(comments):
     # DB 에서 키워드 불러옴
     keywords = personal_keywordDB.select_keywords(user_info['id'])
     # 개인 키워드 기반 적절성 유무 판단
+    block = Block()
     if keywords:
         comments = block.privateKeywordMatch(comments, keywords)  # 딕셔너리 리스트 받음
     # 부적절한 댓글 가리기
