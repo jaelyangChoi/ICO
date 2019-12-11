@@ -1,12 +1,9 @@
-from DAO.index import *
+from DAO.sqlExecution import *
 from DTO.user import *
 from SQL.user import UserSQL as SQL
 
 
-class UserDAO(Index):
-    def select_index(self, user):
-        return self.execute_sql_for_one_result(user, SQL.SELECT_INDEX)
-
+class UserDAO(SqlExecution):
     def select_user_by_email(self, email):
         try:
             conn = self.db_conn.get_connection()
@@ -22,6 +19,7 @@ class UserDAO(Index):
             return user
 
         except Exception as e:
+            print(e)
             return e
 
     def is_existing_email(self, email):

@@ -1,26 +1,29 @@
 import json
 import os
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, url_for
 from flask import session
 
-from DB.DAO.personalKeyword import PersonalKeywordDAO
-from block.filtering import filtering
-from router import test
+from filtering.filter_mode import mode_info, filter_mode_bp
+from filtering.filtering import filtering
+from router import login, test
 from router.add_comment import add_comment_bp, load_comments_from_DB
 from router.add_keyword import add_keyword_bp, get_keywords_by_id
+from router.delete_comment import delete_comment_bp
+from router.delete_keyword import delete_keyword_bp
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = 'abcdseijvxi'
 
+app.register_blueprint(delete_comment_bp)
+app.register_blueprint(delete_keyword_bp)
+app.register_blueprint(filter_mode_bp)
 app.register_blueprint(add_comment_bp)
 app.register_blueprint(add_keyword_bp)
-app.register_blueprint(test.route_blue)
+app.register_blueprint(login.login_blue)
+app.register_blueprint(test.test_blue)
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-
-# 키워드 db클래스 생성
-personal_keywordDB = PersonalKeywordDAO()
 
 
 @app.route('/')
@@ -39,32 +42,16 @@ def news():
     user_info = session['info']
 
     # DB 에서 키워드 get
-    keywords = get_keywords_by_id(user_info['id'])
+    keywords = get_keywords_by_id(user_info['index'])
 
     # 전체 댓글 리로드
     comments = load_comments_from_DB(url_for('news'))
 
     # 필터링 서비스
     if session['mode'] != 'off':
-        comments = filtering(comments)
+        comments = filtering(comments, keywords)
 
     return render_template('news1.html', comments=comments, keywords=keywords, mode=mode_info())
-
-
-@app.route('/filter_mode', methods=['POST'])
-def filter_mode():
-    print(session['mode'])
-    session['mode'] = request.form['mode']
-    print(session['mode'])
-
-    return redirect(url_for('news'))
-
-
-def mode_info():
-    if session['mode'] == 'off':
-        return 'ICO Service 켜기'
-    else:
-        return 'ICO Service 끄기'
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
-    <meta name="google-signin-client_id" content={{ cilent_id }}>
+    <meta name="google-signin-client_id" content={{ client_id }}>
     <script src="../static/js/loginScript.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -19,7 +19,7 @@
         </div>
     {% else %}
         <div>
-            <a href="/test/google/login">Google Login</a>
+            <a href="/google/login">Google Login</a>
         </div>
     {% endif %}
     <a href="{{ url_for('index') }}" class="text-white"><h1>ThisPatch</h1></a>

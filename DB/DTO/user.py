@@ -37,7 +37,7 @@ class User:
         self._id = id
 
     def set_name(self, name):
-        self._data['name'] = name
+        self._name = name
 
     def set_email(self, email):
-        self._data['email'] = email
+        self._email = email

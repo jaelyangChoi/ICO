@@ -4,11 +4,10 @@ import urllib.request
 import hgtk
 from bs4 import BeautifulSoup
 from konlpy.tag import Okt
+from openpyxl import load_workbook, Workbook
 
 from DB.DAO.defaultKeyword import DefaultKeywordDAO
 from ml.ml_predict import ModelCombine
-
-from openpyxl import load_workbook, Workbook
 
 
 class Block:
@@ -178,8 +177,8 @@ class Block:
                     # 아니면 그대로
 
         return comments
-    # 개인키워드, 3차필터링
 
+    # 개인키워드, 3차필터링
     def runBlockComment(self, comment):
         ml = ModelCombine()
 
@@ -196,12 +195,12 @@ class Block:
             # 자모음 분리 후s 2차 필터링 한번 더
 
             if filtering2 == "+":
+
                if str(ml.total_predict(comment)) == '1':
                    return "+"
               # ML도 통과하면 긍정
                else:
                    return "-"
-                #     ML에서 부정
 
                 ####################**********ML로 댓글 넘김***********#############
             else:
@@ -252,5 +251,3 @@ class Block:
                 write_ws['C' + str(i)] = filtering1
 
         write_wb.save('/Users/77520769/Documents/문해긔/댓글필터링_ML0.7부정_DB수정.xlsx')
-
-    #엑셀 댓글 저장용
