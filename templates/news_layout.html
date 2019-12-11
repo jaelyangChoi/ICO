@@ -31,9 +31,9 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <br>
-            <form id="keywordForm">
+            <form id="keywordForm" action="{{ url_for('add_keyword.add_keyword') }}" method="post">
                 <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
-                <input type="button" value="입력" onclick="addkeyword()">
+                <input type="submit" value="입력">
             </form>
             <br>
             <strong>차단 키워드</strong>
@@ -41,9 +41,9 @@
             <div id="kwOutputWindow">
                 {% if keywords %}
                     {% for keyword in keywords %}
-                            <input type="text" class="data" value="{{ keyword }}">
-                            <input type="button" value="삭제" onclick="deleteKeyword('{{ keyword }}')">
-                            <br>
+                        <input type="text" class="data" value="{{ keyword }}">
+                        <input type="button" value="삭제" onclick="deleteKeyword('{{ keyword }}')">
+                        <br>
                     {% endfor %}
                 {% endif %}
             </div>
@@ -79,6 +79,6 @@
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/filterMode.js') }}"></script>
 <script src="{{ url_for('static', filename='js/commentUpdate.js') }}"></script>
-<script src="{{ url_for('static', filename='js/keywordUpdate.js') }}"></script>
+<script src="{{ url_for('static', filename='js/deleteKeyword.js') }}"></script>
 </body>
 </html>

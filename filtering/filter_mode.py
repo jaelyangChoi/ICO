@@ -1,5 +1,7 @@
-from flask import Flask, request, redirect, url_for, session, Blueprint
+from flask import request, redirect, url_for, session, Blueprint
+
 filter_mode_bp = Blueprint('filter_mode', __name__)
+
 
 @filter_mode_bp.route('/filter_mode', methods=['POST'])
 def filter_mode():

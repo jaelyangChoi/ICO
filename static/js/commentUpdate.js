@@ -13,8 +13,8 @@ function addComment() {
     })
 }
 
-function deleteComment(commentindex) {
-    alert(commentindex);
+function deleteComment(commentIndex) {
+    // alert(commentIndex);
     $.ajax({
         type: 'POST',
         url: '/delete_comment',
@@ -22,7 +22,7 @@ function deleteComment(commentindex) {
             "Content-Type": "application/json"
         },
         data: {
-            'comment_index' : commentindex
+            'comment_index' : commentIndex
         }, //서버로 댓글 딕셔너리 전송
         dataType: 'JSON', //서버에서 데이터 전송시
         "success": function reloadComments(data) { //dict list 넘어옴

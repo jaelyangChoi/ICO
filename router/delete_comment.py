@@ -20,8 +20,6 @@ def delete_comment():
     # 유저 정보 추출
     user_info = session['info']
 
-    print(request.form['comment_index'])
-
     # 댓글 삭제
     CommentDAO.delete_comment(request.form['comment_index'])
 
