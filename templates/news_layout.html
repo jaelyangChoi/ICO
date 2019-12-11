@@ -32,24 +32,30 @@
             <span class="close">&times;</span>
             <br>
             <form id="keywordForm">
-{#                <input type="hidden" class="data" name="userID" value="userID">#}
                 <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
-                <input type="button" value="입력" onclick="updateKeyword()">
+                <input type="button" value="입력" onclick="addkeyword()">
             </form>
             <br>
             <strong>차단 키워드</strong>
             <br>
-            <textarea id="kwOutputWindow" rows="6" cols="40">{{ keywords }}</textarea>
+            <div id="kwOutputWindow">
+                {% if keywords %}
+                    {% for keyword in keywords %}
+                        <input type="text" value="{{ keyword }}">
+                        <input type="button" value="삭제" onclick="">
+                        <br>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </div>
     <br>
 
     {# Comment Input #}
     <form id="commentForm">
-{#        <input type="hidden" class="data" name="userID" value="tempID">#}
         <textarea id="cmInputWindow" class="data" rows="5" cols="70" name="comment"
                   placeholder="댓글을 입력하십시오"></textarea>
-        <input type="button" value="입력" onclick="updateComment()">
+        <input type="button" value="입력" onclick="addComment()">
     </form>
     <br>
 </div>
@@ -58,71 +64,15 @@
 <div class="commentArea" id="cmOutputWindow">
     {% if comments %}
         {% for comment in comments %}
-            <h3>{{ comment['userID'] }}</h3>
-            <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea>
+            <strong>{{ comment['userID'] }}</strong>
+            <button onclick="alert('삭제')">삭제</button><br>
+            <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea><br>
         {% endfor %}
     {% endif %}
 </div>
 
-<script>
-    //새로운 키워드를 반영하여 리로드
-    function updateKeyword() {
-        $.ajax({
-            type: 'POST',
-            url: '/update_keyword',
-            data: $('#keywordForm .data'), {#서버로 데이터 전송시#}
-            {#dataType: 'JSON',{#서버에서 데이터 전송시#}
-            success: function (data) {
-                $('#kwInputWindow').val('');
-                $('#kwOutputWindow').val(data);
-            }
-        })
-    }
-
-    //새로운 댓글을 반영하여 리로드
-    function updateComment() {
-        $.ajax({
-            type: 'POST',
-            url: '/update_comment',
-            data: $('#commentForm .data'), {#서버로 데이터 전송시#}
-            dataType: 'JSON', {#서버에서 데이터 전송시#}
-            success: function (data) {
-                $('#cmInputWindow').val('');
-                var comments = '';
-                var i = 0;
-                while (i < data.length) {
-                    comments = comments + '<h3>' + data[i].userID + '</h3><textarea rows="4" cols="109">' + data[i].comment + '</textarea>';
-                    i++;
-                }
-                $('#cmOutputWindow').html(comments);
-            }
-        })
-    }
-
-    //개인 필터링 mode에 대한 정보를 서버로 전송
-    function sendPost(action, mode) {
-        var form = document.createElement('form');
-        form.setAttribute('method', 'post');
-        form.setAttribute('action', action);
-        document.charset = "utf-8";
-        var hiddenField = document.createElement('input');
-        hiddenField.setAttribute('type', 'hidden');
-        hiddenField.setAttribute('name', 'mode');
-        hiddenField.setAttribute('value', mode);
-        form.appendChild(hiddenField);
-        document.body.appendChild(form);
-        form.submit();
-    }
-
-    //개인 필터 버튼을 클릭하면 버튼의 내용을 바꾸고 서버로 모드 정보 전송
-    function filterMode(self) {
-        if (self.value === 'on')
-            self.value = 'off';
-        else
-            self.value = 'on';
-        sendPost("{{ url_for('filter_mode') }}", self.value);
-    }
-</script>
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/filterMode.js') }}"></script>
+<script src="{{ url_for('static', filename='js/addData.js') }}"></script>
 </body>
 </html>

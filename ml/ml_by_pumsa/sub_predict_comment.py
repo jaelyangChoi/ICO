@@ -11,23 +11,21 @@ import pandas as pd
 import time
 
 ML_FILE_PATH = "./dataset_pumsa_ml/"
-#MODELNAME="tensor4"
-MODELNAME="linear"
+MODELNAME="tensor4"
 
 class CommentPredict:
     def __init__(self):
         self.common_words_list = self.load_pickle_file("common_words_list")
-        # json_file = open(ML_FILE_PATH+MODELNAME+".json", "r")
-        # loaded_model_json = json_file.read()
-        # json_file.close()
-        # self.predict_score = 0
-        # self.predict_result = "0"
-        # self.model = model_from_json(loaded_model_json)
-        # self.model.load_weights(ML_FILE_PATH+MODELNAME+".h5")
-        # self.model.compile(optimizer=optimizers.RMSprop(lr=0.001),
-        #                    loss=losses.binary_crossentropy,
-        #                    metrics=[metrics.binary_accuracy])
-        self.model=joblib.load(ML_FILE_PATH+MODELNAME+".pkl")
+        json_file = open(ML_FILE_PATH+MODELNAME+".json", "r")
+        loaded_model_json = json_file.read()
+        json_file.close()
+        self.predict_score = 0
+        self.predict_result = "0"
+        self.model = model_from_json(loaded_model_json)
+        self.model.load_weights(ML_FILE_PATH+MODELNAME+".h5")
+        self.model.compile(optimizer=optimizers.RMSprop(lr=0.001),
+                           loss=losses.binary_crossentropy,
+                           metrics=[metrics.binary_accuracy])
 
     def load_pickle_file(self, pickle_file_name):
         f = open(ML_FILE_PATH+pickle_file_name+".pkl", "rb")
@@ -62,15 +60,14 @@ class CommentPredict:
         """예측"""
 
         data = self.preprocessing_data_by_pumsa(comment)
-        return str(self.model.predict(data))
-        # score = float(self.model.predict(data))
-        # self.predict_score = score
-        # if score > 0.7:
-        #     self.predict_result = "1"
-        #     return "1"
-        # else:
-        #     self.predict_result = "0"
-        #     return "0"
+        score = float(self.model.predict(data))
+        self.predict_score = score
+        if score > 0.7:
+            self.predict_result = "1"
+            return "1"
+        else:
+            self.predict_result = "0"
+            return "0"
 
 # dd=CommentPredict()
 # df=pd.read_csv(ML_FILE_PATH+"comments_test.csv")

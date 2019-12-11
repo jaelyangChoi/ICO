@@ -105,4 +105,6 @@ class ModelByWord:
                 else:
                     temp_dict['special_characters']['etc'] += 1
 
+            letter_count += 1
+
         return temp_dict, letter_count

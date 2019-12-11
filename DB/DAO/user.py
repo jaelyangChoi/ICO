@@ -1,39 +1,31 @@
 from DAO.index import *
+from DTO.user import *
+from SQL.user import UserSQL as SQL
 
 
 class UserDAO(Index):
-
     def select_index(self, user):
-        return self.execute_sql_for_one_result(user,
-                                               """SELECT _index
-                                               FROM User
-                                               WHERE id = %s""")
+        return self.execute_sql_for_one_result(user, SQL.SELECT_INDEX)
 
-    def is_correct_password(self, id, pw):
-        if self.execute_sql_for_one_result(id,
-                                           """SELECT password
-                                           FROM User
-                                           WHERE id = %s""") == pw:
+    def select_user_by_email(self, email):
+        try:
+            conn = self.db_conn.get_connection()
+            cursor = conn.cursor()
+
+            cursor.execute(SQL.SELECT_USER, email)
+            result = cursor.fetchone()
+
+            user = User()
+            user.set_all(result)
+
+            self.db_conn.close_db()
+            return user
+
+        except Exception as e:
+            return e
+
+    def is_existing_email(self, email):
+        if self.execute_sql_for_one_result(email, SQL.CHECK_EMAIL) == 1:
             return True
-        return False
-
-    def update_password(self, id, old_pw, new_pw):
-        if self.is_correct_password(id, old_pw) is True:
-            try:
-                conn = self.db_conn.get_connection()
-                cursor = conn.cursor()
-
-                sql = "UPDATE User SET password = %s WHERE id = %s"
-                cursor.execute(sql, (new_pw, id))
-                conn.commit()
-
-                self.db_conn.close_db()
-
-            except Exception as e:
-                return -1
-
         else:
-            return 0
-
-    def insert_new_user(self):
-        pass
+            return False

@@ -5,7 +5,7 @@ import hgtk
 from bs4 import BeautifulSoup
 from konlpy.tag import Okt
 
-from DB.DAO.default_keyword import DefaultKeywordDAO
+from DB.DAO.defaultKeyword import DefaultKeywordDAO
 from ml.ml_predict import ModelCombine
 
 from openpyxl import load_workbook, Workbook
@@ -119,6 +119,8 @@ class Block:
 
                 if default_keyword.get_split_keyword() == None:
                     continue
+                #     기본키워드 중 자모음 키워드만 삭제된 경우
+
                 matchRatio = difflib.SequenceMatcher(None, default_keyword.get_split_keyword(), _comment).ratio()
 
                 if matchRatio >= 0.8:
@@ -142,15 +144,17 @@ class Block:
 
     # 유사도판별함수, 2차필터링
 
-    def _privateKeywordMatch(self, comments, keywords):
-        block = 0
+    def privateKeywordMatch(self, comments, keywords):
+
         _comment = ""
 
         print("**개인 키워드 필터링 시작**")
 
         for comment in comments:
 
-            if comment['property'] == 0:
+            block = 0
+
+            if comment['property'] == '-':
                 continue
             # 이미 차단된 댓글인 경우 판단하지 않음
             else:
@@ -166,6 +170,7 @@ class Block:
                 #    한글 이외의 것을 제거한 댓글과 키워드 매치
 
                 if block != 0:
+
                     comment['property'] = '-'
                     # 차단할 개인 키워드가 있으면 -로 바꿈
                 else:
@@ -192,7 +197,7 @@ class Block:
 
             if filtering2 == "+":
                if str(ml.total_predict(comment)) == '1':
-                   return comment
+                   return "+"
               # ML도 통과하면 긍정
                else:
                    return "-"
