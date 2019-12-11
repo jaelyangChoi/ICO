@@ -1,5 +1,4 @@
 from flask import Blueprint, session
-
 from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
 from DB.DTO.comment import Comment
@@ -13,10 +12,9 @@ CommentDAO = CommentDAO()
 
 
 # 댓글 필터링
-def filtering(comments):
-    user_info = session['info']
-    # DB 에서 키워드 불러옴
-    keywords = personal_keywordDB.select_keywords(user_info['id'])
+def filtering(comments, keywords):
+    block = Block()
+
     # 개인 키워드 기반 적절성 유무 판단
     block = Block()
     if keywords:
@@ -27,7 +25,8 @@ def filtering(comments):
 
 
 # 부적절한 댓글 가리기
-def conceal_bad_comment(comments):  # 딕셔너리 리스트
+def conceal_bad_comment(comments):
+    #딕셔너리 리스트
     for comment in comments:
         if comment['property'] == '-':
             comment['comment'] = '부적절한 댓글입니다.'

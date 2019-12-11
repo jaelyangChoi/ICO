@@ -31,9 +31,9 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <br>
-            <form id="keywordForm">
+            <form id="keywordForm" action="{{ url_for('add_keyword.add_keyword') }}" method="post">
                 <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
-                <input type="button" value="입력" onclick="addkeyword()">
+                <input type="submit" value="입력">
             </form>
             <br>
             <strong>차단 키워드</strong>
@@ -41,8 +41,8 @@
             <div id="kwOutputWindow">
                 {% if keywords %}
                     {% for keyword in keywords %}
-                        <input type="text" value="{{ keyword }}">
-                        <input type="button" value="삭제" onclick="">
+                        <input type="text" class="data" value="{{ keyword }}">
+                        <input type="button" value="삭제" onclick="deleteKeyword('{{ keyword }}')">
                         <br>
                     {% endfor %}
                 {% endif %}
@@ -64,15 +64,21 @@
 <div class="commentArea" id="cmOutputWindow">
     {% if comments %}
         {% for comment in comments %}
-            <strong>{{ comment['userID'] }}</strong>
-            <button onclick="alert('삭제')">삭제</button><br>
-            <textarea rows="4" cols="109">{{ comment['comment'] }}</textarea><br>
+            <form id="cmDeleteForm">
+                <strong>{{ comment['userID'] }}</strong>
+                <button type="button" onclick='deleteComment({{ comment['index'] }})'>삭제</button>
+                <br>
+                <label>
+                    <textarea class="data" rows="4" cols="109">{{ comment['comment'] }}</textarea>
+                </label><br>
+            </form>
         {% endfor %}
     {% endif %}
 </div>
 
 <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 <script src="{{ url_for('static', filename='js/filterMode.js') }}"></script>
-<script src="{{ url_for('static', filename='js/addData.js') }}"></script>
+<script src="{{ url_for('static', filename='js/commentUpdate.js') }}"></script>
+<script src="{{ url_for('static', filename='js/deleteKeyword.js') }}"></script>
 </body>
 </html>

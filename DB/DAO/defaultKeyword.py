@@ -24,6 +24,7 @@ class DefaultKeywordDAO:
             return data_list
 
         except Exception as e:
+            print(e)
             return e
 
     def select_keywords(self):
@@ -47,4 +48,5 @@ class DefaultKeywordDAO:
             return keyword_list
 
         except Exception as e:
+            print(e)
             return e

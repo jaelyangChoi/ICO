@@ -7,7 +7,7 @@ from block.block import Block
 from filtering.filtering import filtering
 from router.add_keyword import get_keywords_by_id
 
-add_comment_bp = Blueprint('add_comment', __name__)
+delete_comment_bp = Blueprint('delete_comment', __name__)
 
 personal_keywordDB = PersonalKeywordDAO()
 CommentDTO = Comment()
@@ -15,22 +15,13 @@ CommentDAO = CommentDAO()
 
 
 # 입력받은 댓글 db에 업로드 후 리로드
-@add_comment_bp.route('/add_comment', methods=['POST'])
-def add_comment():
+@delete_comment_bp.route('/delete_comment', methods=['POST'])
+def delete_comment():
     # 유저 정보 추출
     user_info = session['info']
 
-    # 입력된 댓글 추출
-    new_comment = {'userID': user_info['id'],
-                   'comment': request.form['comment'],
-                   'property': '+',
-                   'url': url_for('news')}
-
-    # 댓글 적절성 판단
-    properness_judge(new_comment)
-
-    # db에 댓글 insert
-    add_comment_to_DB(new_comment, user_info['index'])
+    # 댓글 삭제
+    CommentDAO.delete_comment(request.form['comment_index'])
 
     # 전체 댓글 리로드
     comments = load_comments_from_DB(url_for('news'))
@@ -47,14 +38,13 @@ def add_comment():
 def properness_judge(new_comment):
     block = Block()
     result = block.runBlockComment(new_comment['comment'])
-    print("적절성 : " + result)
     new_comment['property'] = result
 
 
-def add_comment_to_DB(new_comment, user_index):
+def add_comment_to_DB(new_comment):
     CommentDTO.set_insert_data(new_comment)
     try:
-        CommentDAO.insert_comment(CommentDTO, user_index)
+        CommentDAO.insert_comment(CommentDTO)
     except Exception:
         return 'DB에 댓글 입력 오류'
 

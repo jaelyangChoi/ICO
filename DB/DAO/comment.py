@@ -1,6 +1,6 @@
-from DTO.comment import *
 from DAO.url import *
 from DAO.user import *
+from DTO.comment import *
 from SQL.comment import CommentSQL as SQL
 
 
@@ -8,20 +8,18 @@ class CommentDAO:
     def __init__(self):
         self.db_conn = DBConnection()
 
-    def insert_comment(self, data):
+    def insert_comment(self, data, user_index):
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
             url = UrlDAO()
-            user = UserDAO()
-
             cursor.execute(SQL.INSERT_COMMENT,
                            (data.get_comment(),
                             data.get_property(),
                             data.get_learning(),
                             url.select_index(data.get_url()),
-                            user.select_index(data.get_user_id())))
+                            user_index))
             conn.commit()
 
             self.db_conn.close_db()
@@ -47,6 +45,7 @@ class CommentDAO:
             return comment_list
 
         except Exception as e:
+            print(e)
             return e
 
     def update_comment(self, data):
@@ -60,6 +59,7 @@ class CommentDAO:
             conn.commit()
 
         except Exception as e:
+            print(e)
             return e
 
     def delete_comment(self, index):
@@ -71,4 +71,5 @@ class CommentDAO:
             conn.commit()
 
         except Exception as e:
+            print(e)
             return e

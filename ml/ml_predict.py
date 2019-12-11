@@ -13,7 +13,7 @@ class ModelCombine:
         pumsa_ml_result = str(pumsa_ml.predict(comment)[1])
         word_ml_result = str(word_ml.predict(comment)[0])
 
-        print(pumsa_ml_result, sub_pumsa_result, word_ml_result)
+        print(pumsa_ml_result, sub_pumsa_result, sub_pumsa_ml.predict_score, word_ml_result)
 
         if pumsa_ml_result == sub_pumsa_result:
             return sub_pumsa_result
