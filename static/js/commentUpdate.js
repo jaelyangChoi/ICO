@@ -37,8 +37,14 @@ function commentToHTML(commentList) {
     var comments = '';
     var i = 0;
     while (i < commentList.length) {
-        comments = comments + '<strong>' + commentList[i].userID + '</strong><button onclick="deleteComment(\'' + commentList[i] + '\')">삭제</button><br><textarea rows="4" cols="109">' + commentList[i].comment + '</textarea><br>';
+        comments = comments + '<strong>' + commentList[i].userID + '&nbsp</strong><button onclick="deleteComment(\'' + commentList[i] + '\')">삭제</button><br><textarea rows="4" cols="109">' + commentList[i].comment + '</textarea><br>';
         i++;
     }
     return comments;
 }
+
+    // comments = comments + '<form id="cmDeleteForm"><strong>'+ commentList[i].userID
+    // +'&nbsp;</strong><button type="button" onclick="deleteComment(\'' + commentList[i].index
+    // +'\'}})">삭제</button><br><label><textarea class="data" rows="4" cols="109">' + commentList[i].comment
+    // +'</textarea></label><br></form>';
+// comments = comments + '<strong>' + commentList[i].userID + '&nbsp</strong><button onclick="deleteComment(\'' + commentList[i] + '\')">삭제</button><br><textarea rows="4" cols="109">' + commentList[i].comment + '</textarea><br>';

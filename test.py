@@ -5,7 +5,7 @@ from flask import Blueprint, request
 
 from DB.DAO import comment
 from block.block import Block
-from login import googleLogin
+from router.login import googleLogin
 from ml import ml_predict
 from ml.model_by_word.model import ModelByWord
 
@@ -41,41 +41,3 @@ def ml_comment():
     comment = request.args.get('comment')
     result = predict.total_predict(comment)
     return str(result)
-
-
-# @route_blue.route('/test/google/login')
-# def google_login():
-#     redirect_url = gl.login()
-#     return redirect_url
-#
-#
-# @route_blue.route('/googleCallback')
-# def googleCallback():
-#     credentials = gl.google_callback()
-#
-#     token = credentials['id_token']
-#     client_id = credentials['client_id']
-#     id_info = id_token.verify_oauth2_token(token, requests.Request(), client_id)
-#
-#     user_dao = UserDAO()
-#     user = user_dao.select_user_by_email(id_info['email'])
-#
-#     session['state'] = True
-#     session['mode'] = 'off'
-#     session['info'] = user.to_json()
-#     session['credentials'] = credentials
-#     return redirect('/')
-#
-#
-# @route_blue.route('/logout')
-# def logout():
-#     session.clear()
-#     return redirect(url_for('index'))
-#
-#
-# @route_blue.route('/test/filter')
-# def filter():
-#     block = Block()
-#     comment = request.args.get('comment')
-#     result = block.runBlockComment(comment)
-#     return str(result)

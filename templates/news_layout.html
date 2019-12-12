@@ -65,7 +65,7 @@
     {% if comments %}
         {% for comment in comments %}
             <form id="cmDeleteForm">
-                <strong>{{ comment['userID'] }}</strong>
+                <strong>{{ comment['userID'] }}&nbsp;</strong>
                 <button type="button" onclick='deleteComment({{ comment['index'] }})'>삭제</button>
                 <br>
                 <label>

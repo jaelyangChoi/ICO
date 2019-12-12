@@ -4,13 +4,14 @@ import os
 from flask import Flask, render_template, url_for
 from flask import session
 
-from filtering.filter_mode import mode_info, filter_mode_bp
-from filtering.filtering import filtering
-from router import login, test
-from router.add_comment import add_comment_bp, load_comments_from_DB
-from router.add_keyword import add_keyword_bp, get_keywords_by_id
-from router.delete_comment import delete_comment_bp
-from router.delete_keyword import delete_keyword_bp
+from router.filtering.filter_mode import mode_info, filter_mode_bp
+from router.filtering.filtering import filtering
+from router import login
+import test
+from router.comment.add_comment import add_comment_bp, load_comments_from_DB
+from router.keyword.add_keyword import add_keyword_bp, get_keywords_by_id
+from router.comment.delete_comment import delete_comment_bp
+from router.keyword.delete_keyword import delete_keyword_bp
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = 'abcdseijvxi'
