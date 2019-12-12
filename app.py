@@ -1,16 +1,14 @@
 import json
 import os
 
-from flask import Flask, render_template, url_for
-from flask import session
+from flask import Flask, render_template, url_for, session
 
+from router import login
+from router.comment.add_comment import add_comment_bp, load_comments_from_DB
+from router.comment.delete_comment import delete_comment_bp
 from router.filtering.filter_mode import mode_info, filter_mode_bp
 from router.filtering.filtering import filtering
-from router import login
-import test
-from router.comment.add_comment import add_comment_bp, load_comments_from_DB
 from router.keyword.add_keyword import add_keyword_bp, get_keywords_by_id
-from router.comment.delete_comment import delete_comment_bp
 from router.keyword.delete_keyword import delete_keyword_bp
 
 app = Flask(__name__, template_folder="templates")
@@ -22,7 +20,7 @@ app.register_blueprint(filter_mode_bp)
 app.register_blueprint(add_comment_bp)
 app.register_blueprint(add_keyword_bp)
 app.register_blueprint(login.login_blue)
-app.register_blueprint(test.test_blue)
+# app.register_blueprint(test.test_blue)
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
