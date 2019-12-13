@@ -38,7 +38,7 @@ class ModelByWord:
         return result
 
     def _preprocess(self, comment):
-        comment_decompose = text.decompose(comment)
+        comment_decompose = self.__decompose(comment)
         removed_space_word = list(filter(lambda word: word != ' ', comment_decompose.split(' ')))
         split_word = list(filter(lambda element: element != '', removed_space_word))
 
