@@ -200,4 +200,11 @@ fabric.properties
 .idea/**/markdown-navigator.xml
 .idea/**/markdown-navigator/
 
+DB/db_config.py
+DB/test.py
+dataset_pumsa_ml
+dataset
+
+credentials.json
+
 # End of https://www.gitignore.io/api/flask,pycharm

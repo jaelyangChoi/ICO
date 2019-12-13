@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>news1</title>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap&subset=korean" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/title.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/news_layout.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+</head>
+<body>
+<div id="title">
+    <a href="{{ url_for('index') }}"><h1>ThisPatch</h1></a>
+    <h5> 뉴스는 '팩트'다</h5>
+</div>
+<div class="mainNews">
+    {% block headline %}
+    {% endblock %}
+</div>
+<div class="center">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<div class="commentArea">
+    {# Modal window #}
+    <input type="button" value="{{ mode }}" onclick="filterMode(this)">
+    <button id="MDbtn">ICO 설정하기</button>
+    <div id="Modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <br>
+            <form id="keywordForm" action="{{ url_for('add_keyword.add_keyword') }}" method="post">
+                <input type="text" class="data" id="kwInputWindow" name="keyword" placeholder="차단할 단어를 입력하세요">
+                <input type="submit" value="입력">
+            </form>
+            <br>
+            <strong>차단 키워드</strong>
+            <br>
+            <div id="kwOutputWindow">
+                {% if keywords %}
+                    {% for keyword in keywords %}
+                        <input type="text" class="data" value="{{ keyword }}">
+                        <input type="button" value="삭제" onclick="deleteKeyword('{{ keyword }}')">
+                        <br>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <br>
+
+    {# Comment Input #}
+    <form id="commentForm">
+        <textarea id="cmInputWindow" class="data" rows="5" cols="70" name="comment"
+                  placeholder="댓글을 입력하십시오"></textarea>
+        <input type="button" value="입력" onclick="addComment()">
+    </form>
+    <br>
+</div>
+
+{# Comments Area #}
+<div class="commentArea" id="cmOutputWindow">
+    {% if comments %}
+        {% for comment in comments %}
+            <form id="cmDeleteForm">
+                <strong>{{ comment['userID'] }}</strong>
+                <button type="button" onclick='deleteComment({{ comment['index'] }})'>삭제</button>
+                <br>
+                <label>
+                    <textarea class="data" rows="4" cols="109">{{ comment['comment'] }}</textarea>
+                </label><br>
+            </form>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script src="{{ url_for('static', filename='js/filterMode.js') }}"></script>
+<script src="{{ url_for('static', filename='js/commentUpdate.js') }}"></script>
+<script src="{{ url_for('static', filename='js/deleteKeyword.js') }}"></script>
+</body>
+</html>
