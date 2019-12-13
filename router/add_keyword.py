@@ -13,15 +13,19 @@ def add_keyword():
     user_info = session['info']
 
     # DB에 키워드 입력
-    personal_keywordDB.insert_keyword(user_info['id'], request.form['keyword'])
-
+    print(user_info['index'])
+    print(request.form['keyword'])
+    personal_keywordDB.insert_keyword(user_info['index'], request.form['keyword'])
+    print('입력 성공')
     # 키워드 전부 출력
-    keywords = get_keywords_by_id(user_info['id'])
+    keywords = get_keywords_by_id(user_info['index'])
+    print('keywords : ')
+    print(keywords)
 
     return jsonify(keywords)
 
 
-def get_keywords_by_id(id):
-    keywords = personal_keywordDB.select_keywords(id) #리스트 반환
+def get_keywords_by_id(user_index):
+    keywords = personal_keywordDB.select_keywords(user_index) #리스트 반환
     #keywords_str = ', '.join(keywords)
     return keywords

@@ -5,7 +5,7 @@ import hgtk
 from bs4 import BeautifulSoup
 from konlpy.tag import Okt
 
-from DB.DAO.default_keyword import DefaultKeywordDAO
+from DB.DAO.defaultKeyword import DefaultKeywordDAO
 from ml.ml_predict import ModelCombine
 
 
