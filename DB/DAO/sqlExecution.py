@@ -1,4 +1,3 @@
-from abc import *
 from db_connection import *
 
 

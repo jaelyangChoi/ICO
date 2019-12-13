@@ -1,5 +1,4 @@
 from DAO.user import *
-from SQL.personalKeyword import *
 
 
 class PersonalKeywordDAO:
