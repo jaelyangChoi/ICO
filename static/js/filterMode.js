@@ -18,17 +18,3 @@ function ChangeMode(self) {
     }
 }
 
-// //data를 서버로 전송
-// function submitModeInfo(action, data) {
-//     var form = document.createElement('form');
-//     form.setAttribute('method', 'post');
-//     form.setAttribute('action', action);
-//     document.charset = "utf-8";
-//     var hiddenField = document.createElement('input');
-//     hiddenField.setAttribute('type', 'hidden');
-//     hiddenField.setAttribute('name', 'mode');
-//     hiddenField.setAttribute('value', data);
-//     form.appendChild(hiddenField);
-//     document.body.appendChild(form);
-//     form.submit();
-// }

@@ -1,5 +1,4 @@
 function deleteComment(commentIndex) {
-    // alert(commentIndex);
     $.ajax({
         type: 'POST',
         url: '/delete_comment',

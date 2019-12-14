@@ -20,7 +20,7 @@ app.register_blueprint(filter_mode_bp)
 app.register_blueprint(add_comment_bp)
 app.register_blueprint(add_keyword_bp)
 app.register_blueprint(login.login_blue)
-# app.register_blueprint(test.test_blue)
+
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -34,10 +34,9 @@ def index():
     return render_template('index.html', client_id=data['client_id'])
 
 
-# DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
+# news page rendering
 @app.route('/news')
 def news():
-    # mode = mode_info()
     user_info = session['info']
 
     # DB 에서 키워드 get

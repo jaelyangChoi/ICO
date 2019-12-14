@@ -1,7 +1,7 @@
-from DAO.url import *
-from DAO.user import *
-from DTO.comment import *
-from SQL.comment import CommentSQL as SQL
+from DB.DAO.url import *
+from DB.DAO.user import *
+from DB.DTO.comment import *
+from DB.SQL.comment import CommentSQL as SQL
 
 
 class CommentDAO:
