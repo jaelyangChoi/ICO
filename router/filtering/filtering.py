@@ -11,6 +11,12 @@ personal_keywordDB = PersonalKeywordDAO()
 CommentDTO = Comment()
 CommentDAO = CommentDAO()
 
+# 댓글 적절성 판단
+def properness_judge(new_comment):
+    block = Block()
+    result = block.runBlockComment(new_comment['comment'])
+    print("적절성 : " + result)
+    new_comment['property'] = result
 
 # 댓글 필터링
 def filtering(comments, keywords):

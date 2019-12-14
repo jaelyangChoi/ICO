@@ -5,7 +5,7 @@ from flask import Blueprint, request
 
 from DB.DAO import comment
 from block.block import Block
-from login import googleLogin
+from router.login import googleLogin
 from ml import ml_predict
 from ml.model_by_word.model import ModelByWord
 

@@ -4,8 +4,8 @@ from DB.DAO.comment import CommentDAO
 from DB.DAO.personalKeyword import PersonalKeywordDAO
 from DB.DTO.comment import Comment
 from block.block import Block
-from filtering.filtering import filtering
-from router.add_keyword import get_keywords_by_id
+from router.filtering.filtering import filtering, properness_judge
+from router.keyword.add_keyword import get_keywords_by_id
 
 add_comment_bp = Blueprint('add_comment', __name__)
 
@@ -14,7 +14,7 @@ CommentDTO = Comment()
 CommentDAO = CommentDAO()
 
 
-# 입력받은 댓글 db에 업로드 후 리로드
+# 입력받은 댓글을 db에 업로드 후 리로드
 @add_comment_bp.route('/add_comment', methods=['POST'])
 def add_comment():
     # 유저 정보 추출
@@ -44,21 +44,16 @@ def add_comment():
     return jsonify(comments)
 
 
-def properness_judge(new_comment):
-    block = Block()
-    result = block.runBlockComment(new_comment['comment'])
-    print("적절성 : " + result)
-    new_comment['property'] = result
-
-
+# db에 댓글 insert
 def add_comment_to_DB(new_comment, user_index):
     CommentDTO.set_insert_data(new_comment)
     try:
         CommentDAO.insert_comment(CommentDTO, user_index)
     except Exception:
-        return 'DB에 댓글 입력 오류'
+        return 'fail to add comment to DB'
 
 
+# 전체 댓글 리로드
 def load_comments_from_DB(url):
     comment_objs = CommentDAO.select_comments_by_url(url)
     comments = []

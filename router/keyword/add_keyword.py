@@ -20,5 +20,4 @@ def add_keyword():
 
 def get_keywords_by_id(user_index):
     keywords = personal_keywordDB.select_keywords(user_index)  # 리스트 반환
-    # keywords_str = ', '.join(keywords)
     return keywords

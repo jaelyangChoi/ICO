@@ -1,16 +1,15 @@
 import json
 import os
 
-from flask import Flask, render_template, url_for
-from flask import session
+from flask import Flask, render_template, url_for, session
 
-from filtering.filter_mode import mode_info, filter_mode_bp
-from filtering.filtering import filtering
-from router import login, test
-from router.add_comment import add_comment_bp, load_comments_from_DB
-from router.add_keyword import add_keyword_bp, get_keywords_by_id
-from router.delete_comment import delete_comment_bp
-from router.delete_keyword import delete_keyword_bp
+from router import login
+from router.comment.add_comment import add_comment_bp, load_comments_from_DB
+from router.comment.delete_comment import delete_comment_bp
+from router.filtering.filter_mode import mode_info, filter_mode_bp
+from router.filtering.filtering import filtering
+from router.keyword.add_keyword import add_keyword_bp, get_keywords_by_id
+from router.keyword.delete_keyword import delete_keyword_bp
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = 'abcdseijvxi'
@@ -21,7 +20,7 @@ app.register_blueprint(filter_mode_bp)
 app.register_blueprint(add_comment_bp)
 app.register_blueprint(add_keyword_bp)
 app.register_blueprint(login.login_blue)
-app.register_blueprint(test.test_blue)
+
 
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
@@ -35,10 +34,9 @@ def index():
     return render_template('index.html', client_id=data['client_id'])
 
 
-# DB로부터 댓글과 키워드 받아옴 ->3차필터링 유무
+# news page rendering
 @app.route('/news')
 def news():
-    # mode = mode_info()
     user_info = session['info']
 
     # DB 에서 키워드 get
