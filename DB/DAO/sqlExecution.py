@@ -1,4 +1,3 @@
-from abc import *
 from db_connection import *
 
 
@@ -16,8 +15,7 @@ class SqlExecution:
             result = cursor.fetchone()
             self.db_conn.close_db()
 
-            return result[0]
+            return result
 
         except Exception as e:
-            print(e)
             return e

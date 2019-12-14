@@ -7,12 +7,12 @@ class PersonalKeywordDAO:
         self.db_conn = DBConnection()
         self.sql = ""
 
-    def select_keywords(self, user_index):
+    def select_keywords(self, id):
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
 
-            cursor.execute(SQL.SELECT_KEYWORDS, user_index)
+            cursor.execute(SQL.SELECT_KEYWORDS, id)
 
             keyword_list = []
             for result in cursor.fetchall():
@@ -23,7 +23,6 @@ class PersonalKeywordDAO:
             return keyword_list
 
         except Exception as e:
-            print(e)
             return e
 
     def insert_keyword(self, user_index, keyword):

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ICO" uuid="c3831eb7-38c0-4ccc-b7e7-2b4def896476">
+    <data-source source="LOCAL" name="ICO" uuid="199b31cf-b2fc-4e5c-a066-9cba6a102723">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

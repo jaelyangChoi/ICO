@@ -1,5 +1,5 @@
-from DTO.defaultKeyword import *
 from DAO.user import *
+from DTO.defaultKeyword import *
 from SQL.defaultKeyword import DefaultKeywordSQL as SQL
 
 
@@ -11,7 +11,6 @@ class DefaultKeywordDAO:
         try:
             conn = self.db_conn.get_connection()
             cursor = conn.cursor()
-
             cursor.execute(SQL.SELECT_ALL)
 
             data_list = []

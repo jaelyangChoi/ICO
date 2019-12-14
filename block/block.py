@@ -99,13 +99,6 @@ class Block:
         default_keywords = self._default_keyword_list
         block = 0
 
-        # if str(type(comment)) == "<class 'str'>":
-        #     comment_list = comment.split()
-        #     print("**2차 필터링 띄어쓰기 시작**")
-        #     print(comment_list)
-        # else:
-        # 띄어쓰기 하면 긍정 오차가 많아져서 잠시 보류합니다
-
         print("**2차 필터링 시작**")
         comment_list = comment
         #   명사 분리된 경우 그냥 하고 아니면 띄어쓰기로 구분

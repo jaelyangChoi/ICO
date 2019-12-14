@@ -20,7 +20,7 @@ class UserDAO(SqlExecution):
 
         except Exception as e:
             print(e)
-            return e
+            raise e
 
     def is_existing_email(self, email):
         if self.execute_sql_for_one_result(email, SQL.CHECK_EMAIL) == 1:
