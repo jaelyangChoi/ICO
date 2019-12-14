@@ -4,7 +4,7 @@
 
 
 
-
+#
 ## ICO service의 차별점
 >기존보다 엄격한 필터링 서비스와 개인 맞춤 기능을 제공한다.  
 #### 1. 엄격한 필터링  
@@ -14,7 +14,7 @@
 
 
 
-
+#
 ## contributers
 |직책|이름|
 |:---:|:---:|
@@ -26,7 +26,7 @@
 
 
 
-
+#
 ## 개발 환경
 >IDE: Pycharm  
 >Python framework: flask  
@@ -36,14 +36,14 @@
 
 
 
-
+#
 ### Running the tests
 
 >localhost:5000
 
 
 
-
+#
 ### License
 
 >This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
