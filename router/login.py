@@ -19,7 +19,7 @@ def google_login():
 
 
 @login_blue.route('/googleCallback')
-def googleCallback():
+def google_callback():
     credentials = gl.google_callback()
 
     token = credentials['id_token']
