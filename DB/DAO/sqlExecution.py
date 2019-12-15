@@ -19,3 +19,21 @@ class SqlExecution:
 
         except Exception as e:
             return e
+
+    def execute_sql_for_one_component_list(self, sql):
+        try:
+            conn = self.db_conn.get_connection()
+            cursor = conn.cursor()
+
+            cursor.execute(sql)
+
+            keyword_list = []
+            for result in cursor.fetchall():
+                keyword_list.append(result[0])
+
+            self.db_conn.close_db()
+            return keyword_list
+
+        except Exception as e:
+            print(e)
+            return e
