@@ -26,6 +26,7 @@
 
 
 ## 개발 환경
+Language: python 3.7.x이상  
 IDE: Pycharm  
 Python framework: flask  
 DB: Mysql  
