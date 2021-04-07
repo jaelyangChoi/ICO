@@ -13,7 +13,15 @@
  ![그림3](https://user-images.githubusercontent.com/55947154/113479552-bb343e80-94ca-11eb-895d-408ea0e1d999.png)
 
 <br>
-   
+
+
+## 개발 환경 및 기술 스택
+Language: python 3.7.x   
+Framework: flask  
+DB: Mysql  
+ML: anaconda package  
+IDE: Pycharm  
+<br> 
 
 ## 시스템 전체 구조
 ![그림2](https://user-images.githubusercontent.com/55947154/113479550-b8d1e480-94ca-11eb-8516-b73b3912c630.png)
@@ -22,7 +30,7 @@
 - 3차 필터링: 개인 키워드 기반 필터링   
 
 <br> 
-   
+
 ## contributers
 |직책|이름|
 |:---:|:---:|
@@ -33,22 +41,14 @@
 |팀원|정혜원|
 
 > 나의 역할
-> - Server   
+> - **Server**   
 >    팀원들이 구현한 1,2차 필터링 모듈과 DAO를 활용해 클라이언트에게 필터링된 댓글 전달
-> - Client   
+> - **Client**   
 >    테스트를 위한 웹 사이트 개발
-> - 3차 필터링 모듈   
+> - **3차 필터링 모듈**   
 >   사용자로부터 개인 키워드를 입력 받아, 사용자 개개인의 필요에 따라 3차 필터링 서비스 제공
 
 </br>
-
-## 개발 환경
-Language: python 3.7.x이상  
-IDE: Pycharm  
-Python framework: flask  
-DB: Mysql  
-ML: anaconda package  
-
 
 
 
